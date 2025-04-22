@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { json } from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import connectDB from './configs/mongodb.js'
@@ -14,11 +14,10 @@ await connectDB()
 
 //Global Middlewares
 app.use(cors())
-app.use(express.json())
 
 //Routes
 app.get('/', (req, res)=> res.send('API Working'))
-app.post('/clerk', clerkWebhooks)
+app.post('/clerk',express.json(), clerkWebhooks)
 
 
 
