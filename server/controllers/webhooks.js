@@ -8,8 +8,6 @@ export const clerkWebhooks = async (req, res) => {
     try{
         const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
 
-        console.log(req.body)
-
         await whook.verify(JSON.stringify(req.body), {
             'svix-id': req.headers['svix-id'],
             "svix-timestamp": req.headers['svix-timestamp'],
@@ -30,7 +28,6 @@ export const clerkWebhooks = async (req, res) => {
                     imageUrl: data.image_url
                 }
 
-                console.log(userData)
                 await User.create(userData)
 
                 res.json({})

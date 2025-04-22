@@ -14,10 +14,11 @@ await connectDB()
 
 //Global Middlewares
 app.use(cors())
+app.use(express.json())
 
 //Routes
 app.get('/', (req, res)=> res.send('API Working'))
-app.post('/clerk',express.json(), clerkWebhooks)
+app.post('/clerk', clerkWebhooks)
 
 
 
