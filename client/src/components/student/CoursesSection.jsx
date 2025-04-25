@@ -18,7 +18,7 @@ const CoursesSection = () => {
       </div>
 
       <Link to={'/course-list'} onClick={()=> scrollTo(0,0)}
-      className='text-gray-500 border border-gray-500/30 px-10 py-3 rounded'>Show all Courses</Link>
+      className='text-gray-500 border border-gray-500/30 px-10 py-3 rounded bg-teal-700'>Show all Courses</Link>
     </div>
   )
 }
