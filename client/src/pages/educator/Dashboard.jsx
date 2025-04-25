@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { assets, dummyDashboardData } from '../../assets/assets'
+import { assets } from '../../assets/assets'
 import Loading from '../../components/student/Loading'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
