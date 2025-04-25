@@ -6,7 +6,6 @@ import { AppContext } from '../../context/AppContext'
 const CourseCard = ({course}) => {
 
   const { calculateRating,currency } = useContext(AppContext)
-  console.log(currency)
 
   return (
     <Link to={'/course/'+ course._id} onClick={()=>scrollTo(0,0)}
