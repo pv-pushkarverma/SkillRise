@@ -13,6 +13,7 @@ const AddCourse = () => {
   const quillRef = useRef(null)
   const editorRef = useRef(null)
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [ courseTitle, setCourseTitle ] =useState('')
   const [ coursePrice, setCoursePrice ] =useState(0)
   const [ discount, setDiscount ] =useState(0)
@@ -109,6 +110,13 @@ const AddCourse = () => {
       try {
         e.preventDefault()
 
+        if(isSubmitting){
+          toast.info('Course is getting uploaded')
+          return
+        }
+
+        setIsSubmitting(true)
+
         if(!image){
           toast.error('Thumbnail Not Selected')
         }
@@ -135,6 +143,7 @@ const AddCourse = () => {
           setDiscount(0)
           setImage(null)
           setChapters([])
+          setIsSubmitting(false)
           quillRef.current.root.innerHTML = ''
         } else {
           toast.error(data.message)
