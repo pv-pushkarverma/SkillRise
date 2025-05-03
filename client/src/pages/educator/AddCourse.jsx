@@ -80,6 +80,29 @@ const AddCourse = () => {
 
     const addLecture = () => {
 
+      if(!lectureDetails.lectureTitle){
+        toast.error('Please add Lecture Title')
+        return
+      }
+      
+      if(!lectureDetails.lectureDuration || isNaN(lectureDetails.lectureDuration)){
+        toast.error('Please add valid duration.')
+      }
+
+      function isValidURL(url) {
+        try {
+          new URL(url);
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      if (!isValidURL(lectureDetails.lectureUrl)) {
+        toast.error("Please enter a valid URL.");
+        return;
+      }
+
       setChapters(
         chapters.map((chapter) => {
           if(chapter.chapterId === currentChapterId){
@@ -110,15 +133,26 @@ const AddCourse = () => {
       try {
         e.preventDefault()
 
-        if(isSubmitting){
-          toast.info('Course is getting uploaded')
+        setIsSubmitting(true)
+        
+        if(quillRef.current.getText().trim() === ''){
+          toast.error('Course Description is empty')
+          return
+        }
+        
+        if(!image){
+          toast.error('Thumbnail Not Selected')
+          return
+        }
+        
+        if(chapters.length === 0){
+          toast.error('Chapter not Added')
           return
         }
 
-        setIsSubmitting(true)
-
-        if(!image){
-          toast.error('Thumbnail Not Selected')
+        if(isSubmitting){
+          toast.info('Course is getting uploaded')
+          return
         }
 
         const courseData = {
@@ -273,6 +307,7 @@ const AddCourse = () => {
                 <div className='mb-2'>
                   <p>Lecture URL</p>
                   <input 
+                    placeholder='https://www.skillrise.com'
                     type='text'
                     className='mt-1 block w-full border rounded py-1 px-2'
                     value={lectureDetails.lectureUrl}
