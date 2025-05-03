@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { assets } from '../../assets/assets'
 import { AppContext } from '../../context/AppContext'
 import { useParams } from 'react-router-dom'
-import YouTube from 'react-youtube'
+import ReactPlayer from 'react-player'
 import Footer from '../../components/student/Footer'
 import Rating from '../../components/student/Rating'
 import axios from 'axios'
@@ -160,7 +160,27 @@ const Player = () => {
         <div className='md:mt-10'>
           {playerData ? (
               <div>
-                <YouTube videoId={playerData.lectureUrl.split('/').pop()} iframeClassName='w-full aspect-video'/>
+                
+                <div className='w-full aspect-video'>
+                  <ReactPlayer
+                    url={
+                      playerData.lectureUrl.includes('youtu.be')
+                        ? `https://www.youtube.com/watch?v=${playerData.lectureUrl.split('/').pop().split('?')[0]}`
+                        : playerData.lectureUrl
+                    }
+                    controls
+                    playing
+                    width='100%'
+                    height='100%'
+                    config={{
+                      youtube: {
+                        modestbranding: 1, // hides the YouTube logo
+                        rel: 0, // prevents showing related videos after playback
+                      }
+                    }}
+                  />
+                </div>
+
                 <div className='flex justify-between items-center mt-1'>
                   <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
                   <button onClick={() => markLectureAsCompleted(playerData.lectureId)} className='text-teal-600'>{progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark as Complete'}</button>
