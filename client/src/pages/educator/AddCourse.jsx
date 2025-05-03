@@ -133,7 +133,10 @@ const AddCourse = () => {
       try {
         e.preventDefault()
 
-        setIsSubmitting(true)
+        if(isSubmitting){
+          toast.info('Course is getting uploaded')
+          return
+        }
         
         if(quillRef.current.getText().trim() === ''){
           toast.error('Course Description is empty')
@@ -150,10 +153,7 @@ const AddCourse = () => {
           return
         }
 
-        if(isSubmitting){
-          toast.info('Course is getting uploaded')
-          return
-        }
+        setIsSubmitting(true)
 
         const courseData = {
           courseTitle,
