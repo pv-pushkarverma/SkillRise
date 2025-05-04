@@ -78,7 +78,7 @@ const Player = () => {
 
   const handleRating = async ( rating ) => {
     try {
-      const token = getToken()
+      const token = await getToken()
       const { data } = await axios.post(backendUrl + '/api/user/add-rating', {courseId, rating}, {headers: {Authorization: `Bearer ${token}`}})
 
       if(data.success){

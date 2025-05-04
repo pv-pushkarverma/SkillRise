@@ -182,15 +182,14 @@ export const getUserCourseProgress = async (req, res) => {
 export const addUserRating = async (req, res) => {
     const userId = req.auth.userId
     const { courseId, rating } = req.body
-
-    if(!courseId || !userId || !rating || rating < 1 || rating > 5){
-        return res.json({
-            success: false,
-            message: 'Invalid Details'
-        })
-    }
-
+    
     try {
+        if(!courseId || !userId || !rating || rating < 1 || rating > 5){
+            return res.json({
+                success: false,
+                message: 'Invalid Details'
+            })
+        }
         const course = await Course.findById(courseId)
 
         if(!course){
