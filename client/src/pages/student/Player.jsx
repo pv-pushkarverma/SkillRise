@@ -104,98 +104,138 @@ const Player = () => {
   },[])
 
   return courseData ? (
-    <>
-      <div className='p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:px-36'>
+  <>
+    <div className='p-4 sm:p-6 flex flex-col md:grid md:grid-cols-[3fr,1fr] gap-10 md:px-10'>
 
-        {/* Left Column */}
-        <div className='text-gray-800'>
-          <h2 className='text-xl font-semibold'>Course Structure</h2>
+      {/* Player - Left on large screens */}
+      <div className='md:order-1'>
+        {playerData ? (
+          <div>
+            <div className='w-full aspect-video'>
+              <ReactPlayer
+                url={
+                  playerData.lectureUrl.includes('youtu.be')
+                    ? `https://www.youtube.com/watch?v=${playerData.lectureUrl.split('/').pop().split('?')[0]}`
+                    : playerData.lectureUrl
+                }
+                controls
+                playing
+                width='100%'
+                height='100%'
+                config={{
+                  youtube: {
+                    modestbranding: 1,
+                    rel: 0,
+                  }
+                }}
+              />
+            </div>
 
-          <div className='pt-5'>
-            {courseData && courseData.courseContent.map((chapter,index) => (
-              <div key={index} className='border border-gray-300 bg-white mb-2 rounded'>
-                <div className='flex items-center justify-between px-4 py-3 cursor-pointer select-none' onClick={()=>toggleSection(index)}>
-                  <div className='flex items-center gap-2'>
-                    <img className={`transform transition-transform ${openSections[index] ? 'rotate-180' : ''}`}
-                    src={assets.down_arrow_icon} alt='arrow icon' />
-                    <p className='font-medium md:text-base text-sm'>{chapter.chapterTitle}</p>
-                  </div>
-
-                  <p className='text-sm md:text-default'>{chapter.chapterContent.length} lectures - {calculateChapterTime(chapter)}</p>
-                </div>
-
-                <div className={`overflow-hidden transition-all duration-300 ${openSections[index] ? 'max-h-96' : 'max-h-0'}`}>
-                  <ul className='list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-300'>
-                    {chapter.chapterContent.map((lecture, i)=>(
-                      <li key={i} className='flex items-start gap-2 py-1'>
-                        <img src={progressData && progressData.lectureCompleted.includes(lecture.lectureId) ? assets.teal_tick_icon : assets.play_icon} alt='play-icon' className='w-4 h-4 mt-1'/>
-                        <div className='flex items-center justify-between w-full text-gray-800 text-xs md:text-default'>
-                          <p>{lecture.lectureTitle}</p>
-                          <div className='flex gap-2'>
-                            {lecture.lectureUrl && <p 
-                            onClick={()=> setPlayerData({
-                              ...lecture, chapter: index + 1,lecture: i + 1
-                            })}
-                            className='text-teal-500 cursor-pointer'>Watch</p>}
-                            <p>{humanizeDuration(lecture.lectureDuration * 60 * 1000, {units: ['h','m']})}</p>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-              </div>
-            ))}
+            <div className='flex justify-between items-center mt-1'>
+              <p className='text-lg font-semibold'>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
+              <button onClick={() => markLectureAsCompleted(playerData.lectureId)} className='text-teal-600'>
+                {progressData && progressData.lectureCompleted.includes(playerData.lectureId)
+                  ? 'Completed' : 'Mark as Complete'}
+              </button>
+            </div>
           </div>
-
-          <div className='flex items-center gap-2 py-3 mt-10'>
-            <h1 className='text-xl font-bold'>Rate this Course:</h1>
-            <Rating initialRating={initialRating} onRate={handleRating}/>
+        ) : (
+          <div className='w-full h-full flex flex-col items-center justify-center text-center bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-6 animate-fade-in'>
+            <img 
+              src={courseData.courseThumbnail} 
+              alt='Course Thumbnail' 
+              className='w-40 h-40 object-cover rounded-full shadow-md mb-4 ring-2 ring-teal-500/30'
+            />
+            <h2 className='text-xl md:text-2xl font-semibold text-gray-800'>
+              {courseData.courseTitle}
+            </h2>
+            <p className='text-sm md:text-base text-gray-600 mt-2 max-w-xs'>
+              Select a lecture from the Course Structure on the right to begin watching.
+            </p>
+            <div className='mt-4 animate-bounce text-teal-600 text-sm'>↓ Start with a lecture</div>
           </div>
-
-        </div>
-
-        {/* Right Column */}
-        <div className='md:mt-10'>
-          {playerData ? (
-              <div>
-                
-                <div className='w-full aspect-video'>
-                  <ReactPlayer
-                    url={
-                      playerData.lectureUrl.includes('youtu.be')
-                        ? `https://www.youtube.com/watch?v=${playerData.lectureUrl.split('/').pop().split('?')[0]}`
-                        : playerData.lectureUrl
-                    }
-                    controls
-                    playing
-                    width='100%'
-                    height='100%'
-                    config={{
-                      youtube: {
-                        modestbranding: 1, // hides the YouTube logo
-                        rel: 0, // prevents showing related videos after playback
-                      }
-                    }}
-                  />
-                </div>
-
-                <div className='flex justify-between items-center mt-1'>
-                  <p>{playerData.chapter}.{playerData.lecture} {playerData.lectureTitle}</p>
-                  <button onClick={() => markLectureAsCompleted(playerData.lectureId)} className='text-teal-600'>{progressData && progressData.lectureCompleted.includes(playerData.lectureId) ? 'Completed' : 'Mark as Complete'}</button>
-                </div>
-              </div>
-            )
-            : <img src={courseData ? courseData.courseThumbnail : 'a'} alt=''/>
-          }
-        </div>
-
+        )}
       </div>
 
-      <Footer/>
-    </>
-  )  : <Loading />
+      {/* Course Structure - Right on large screens */}
+      <div className='text-gray-800 md:order-2'>
+        <h2 className='text-xl font-semibold'>Course Structure</h2>
+
+        <div className='pt-5 space-y-4'>
+          {courseData.courseContent.map((chapter, index) => (
+            <div key={index} className='border border-gray-300 bg-white rounded-md shadow-sm overflow-hidden'>
+
+              {/* Chapter Header */}
+              <div
+                className='flex justify-between items-center px-4 py-3 cursor-pointer bg-gray-50 hover:bg-gray-100 transition'
+                onClick={() => toggleSection(index)}
+              >
+                <div className='flex items-center gap-2'>
+                  <img
+                    src={assets.down_arrow_icon}
+                    alt='arrow icon'
+                    className={`w-4 h-4 transform transition-transform duration-300 ${openSections[index] ? 'rotate-180' : ''}`}
+                  />
+                  <p className='font-medium text-sm md:text-base text-gray-800'>{chapter.chapterTitle}</p>
+                </div>
+                <p className='text-xs md:text-sm text-gray-600 whitespace-nowrap'>
+                  {chapter.chapterContent.length} {chapter.chapterContent.length === 1 ? 'lecture' : 'lectures'}
+                </p>
+              </div>
+
+
+              {/* Collapsible Lecture List */}
+              <div className={`transition-all duration-300 ${openSections[index] ? 'max-h-[500px]' : 'max-h-0'} overflow-hidden`}>
+                <ul className='divide-y divide-gray-200'>
+                  {chapter.chapterContent.map((lecture, i) => (
+                    <li key={i} className='px-5 py-3 flex flex-col md:flex-row md:items-center md:justify-between text-gray-700'>
+                      <div className='flex items-start gap-4 md:max-w-[70%]'>
+                        <img
+                          src={progressData && progressData.lectureCompleted.includes(lecture.lectureId)
+                            ? assets.teal_tick_icon : assets.play_icon}
+                          alt='icon'
+                          className='w-5 h-5 mt-1 mr-4'
+                        />
+                      </div>
+                      <div className='flex flex-col md:flex-row md:justify-between w-full text-gray-800 text-sm md:text-base'>
+                        <p
+                          onClick={() =>
+                            setPlayerData({
+                              ...lecture,
+                              chapter: index + 1,
+                              lecture: i + 1,
+                            })
+                          }
+                          className='cursor-pointer hover:text-teal-700 hover:underline font-medium transition-all duration-150'
+                          title='Click to play this lecture'
+                        >
+                          {lecture.lectureTitle}
+                        </p>
+                        <p className='text-gray-500 md:text-right mt-1 md:mt-0'>
+                          {humanizeDuration(lecture.lectureDuration * 60 * 1000, { units: ['h', 'm'] })}
+                        </p>
+                      </div>
+
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+
+
+
+        <div className='flex items-center gap-2 py-3 mt-10'>
+          <h1 className='text-xl font-bold'>Rate this Course:</h1>
+          <Rating initialRating={initialRating} onRate={handleRating} />
+        </div>
+      </div>
+    </div>
+
+    <Footer />
+  </>
+) : <Loading />
 }
 
 export default Player
