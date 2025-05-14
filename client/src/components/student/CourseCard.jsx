@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { assets } from '../../assets/assets'
 import { Link } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
 
 const CourseCard = ({course}) => {
 
-  const { calculateRating,currency } = useContext(AppContext)
+  const { calculateRating } = useContext(AppContext)
 
   return (
     <Link to={'/course/'+ course._id} onClick={()=>scrollTo(0,0)}

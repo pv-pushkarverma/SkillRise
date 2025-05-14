@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { assets } from '../../assets/assets'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
@@ -10,8 +10,6 @@ const Navbar = () => {
 
   const { openSignIn } = useClerk()
   const { user } = useUser()
-
-  const isCourseListPage = location.pathname.includes('/course-list')
 
   const { navigate, isEducator, backendUrl, setIsEducator, getToken } = useContext(AppContext)
 

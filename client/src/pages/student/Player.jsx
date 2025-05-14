@@ -1,5 +1,5 @@
 import humanizeDuration from 'humanize-duration'
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { assets } from '../../assets/assets'
 import { AppContext } from '../../context/AppContext'
 import { useParams } from 'react-router-dom'
@@ -12,7 +12,7 @@ import Loading from '../../components/student/Loading'
 
 const Player = () => {
 
-  const  { enrolledCourses, calculateChapterTime, backendUrl, getToken, userData, fetchUserEnrolledCourses } = useContext(AppContext)
+  const  { enrolledCourses, backendUrl, getToken, userData, fetchUserEnrolledCourses } = useContext(AppContext)
 
 
   const { courseId } = useParams()
@@ -107,7 +107,7 @@ const Player = () => {
   <>
     <div className='p-4 sm:p-6 flex flex-col md:grid md:grid-cols-[3fr,1fr] gap-10 md:px-10'>
 
-      {/* Player - Left on large screens */}
+      {/* Video Player */}
       <div className='md:order-1'>
         {playerData ? (
           <div>
@@ -152,12 +152,12 @@ const Player = () => {
             <p className='text-sm md:text-base text-gray-600 mt-2 max-w-xs'>
               Select a lecture from the Course Structure on the right to begin watching.
             </p>
-            <div className='mt-4 animate-bounce text-teal-600 text-sm'>↓ Start with a lecture</div>
+            <div className='mt-4 animate-bounce text-teal-600 text-sm'>Start with a lecture →</div>
           </div>
         )}
       </div>
 
-      {/* Course Structure - Right on large screens */}
+      {/* Course Structure */}
       <div className='text-gray-800 md:order-2'>
         <h2 className='text-xl font-semibold'>Course Structure</h2>
 

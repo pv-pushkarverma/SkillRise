@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { assets } from '../../assets/assets'
 import Loading from '../../components/student/Loading'
 import { AppContext } from '../../context/AppContext'
@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 const Dashboard = () => {
 
-  const { currency, backendUrl, isEducator, getToken } = useContext(AppContext)
+  const { backendUrl, isEducator, getToken } = useContext(AppContext)
 
   const [ dashboardData, setDashboardData ] = useState(null)
 
