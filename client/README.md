@@ -15,5 +15,6 @@
 - **Frontend:** [React]  
 - **Backend:** [Node.js/Express]  
 - **Database:** [MongoDB]  
+- **Media:** [Cloudinary]
 - **Authentication:** [JWT/Clerk]  
 - **Deployment:** [Vercel]  
