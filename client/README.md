@@ -8,7 +8,8 @@
 - Skill assessment modules  
 - Progress tracking dashboard  
 - Resource library for learning materials  
-- Responsive design for all devices  
+- Responsive design for all devices
+- AI Chatbot for personal assistance 
 
 ## Technologies Used
 
