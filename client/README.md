@@ -10,6 +10,7 @@
 - Resource library for learning materials  
 - Responsive design for all devices
 - AI Chatbot for personal assistance 
+- Students Progress Tracking
 
 ## Technologies Used
 
