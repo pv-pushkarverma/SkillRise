@@ -43,6 +43,7 @@ const Navbar = () => {
             <>
                 <button onClick={becomeEducator}>{isEducator ? 'Educator Dashboard' : 'Become Educator'}</button>
                 <Link to='/my-enrollments'>My Enrollments</Link>
+                <Link to='/ai-chat'>SkillRise AI</Link>
             </>
           }
         </div>
