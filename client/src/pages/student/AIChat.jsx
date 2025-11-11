@@ -20,7 +20,7 @@ const AIChat = () => {
   useEffect(() => {
     getToken().then( token => {
       return axios.post(
-        `${backendUrl}/api/user/previous-chats`,
+        `${backendUrl}/api/user/previous-chats`,{},
         {headers: {Authorization: `Bearer ${token}`}})
     })
     .then(response => setChatHistory(response.data.chats))
@@ -100,7 +100,6 @@ const AIChat = () => {
 
           {/* History */}
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            { console.log(chatHistory) }
             {chatHistory.map(chat => (
               <button className="w-full text-left p-3 rounded-lg hover:bg-gray-100">
                 <div className="text-sm font-medium truncate">{chat}</div>
