@@ -72,13 +72,30 @@ export const recentAIChats = async (req, res) => {
   try {
     const { userId } = req.auth;
 
-    const allSessionChats = await ChatSession.find({ userId })
+    const allSessionChats = await ChatSession.find({ userId }).select('sessionId messages')
     const chats = allSessionChats.map(session => {
-      return session.messages[1].content
+      return {
+        _id: session._id,
+        sessionId: session.sessionId,
+        messages: session.messages[1]?.content
+      }
     }).reverse()
 
     res.json({ chats })
   } catch (error) {
     res.json({ message: 'Error while fetching conversations'})
+  }
+}
+
+export const getChatSession = async (req, res) => {
+  try {
+    // const { userId } = req.auth;
+    const { sessionId } = req.params;
+
+    const Chats = await ChatSession.findOne({ sessionId });
+    return res.json({ Chats })
+
+  } catch (error) {
+    res.json({ message: 'Error while fetching conversation'})
   }
 }
