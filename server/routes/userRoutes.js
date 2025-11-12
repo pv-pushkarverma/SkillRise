@@ -1,6 +1,6 @@
 import express from 'express'
 import { addUserRating, getUserCourseProgress, getUserData, purchaseCourse, updateUserCourseProgress, userEnrolledCourses } from '../controllers/userController.js'
-import { aiChatbot, recentAIChats } from '../controllers/chatbotController.js'
+import { aiChatbot, getChatSession, recentAIChats } from '../controllers/chatbotController.js'
 
 const userRouter = express.Router()
 
@@ -14,5 +14,6 @@ userRouter.post('/add-rating', addUserRating)
 
 userRouter.post('/ai-chat', aiChatbot)
 userRouter.post('/previous-chats', recentAIChats)
+userRouter.post('/:sessionId', getChatSession)
 
 export default userRouter
