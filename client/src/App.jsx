@@ -17,6 +17,7 @@ import AddCourse from './pages/educator/AddCourse'
 import MyCourses from './pages/educator/MyCourses'
 import StudentsEnrolled from './pages/educator/StudentsEnrolled'
 import Navbar from './components/student/Navbar'
+import AIChat from './pages/student/AIChat';
 
 const App = () => {
 
@@ -33,6 +34,7 @@ const App = () => {
         <Route path='/my-enrollments' element={<MyEnrollments/>}/>
         <Route path='/player/:courseId' element={<Player/>}/>
         <Route path='/loading/:path' element={<Loading/>}/>
+        <Route path='ai-chat' element={<AIChat/>}/>
 
         <Route path='/educator' element={<Educator/>}>
           <Route path='/educator' element={<Dashboard/>}/>
