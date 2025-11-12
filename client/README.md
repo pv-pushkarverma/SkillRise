@@ -8,12 +8,15 @@
 - Skill assessment modules  
 - Progress tracking dashboard  
 - Resource library for learning materials  
-- Responsive design for all devices  
+- Responsive design for all devices
+- AI Chatbot for personal assistance 
+- Students Progress Tracking
 
 ## Technologies Used
 
 - **Frontend:** [React]  
 - **Backend:** [Node.js/Express]  
 - **Database:** [MongoDB]  
+- **Media:** [Cloudinary]
 - **Authentication:** [JWT/Clerk]  
 - **Deployment:** [Vercel]  
