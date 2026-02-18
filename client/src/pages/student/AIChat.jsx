@@ -2,16 +2,14 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import axios from 'axios'
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
-import ReactMarkdown from 'react-markdown';
+import MarkdownRenderer from '../../components/chatbot/MarkDownRenderer';
 
 const AIChat = () => {
 
   const { backendUrl, getToken } = useContext(AppContext)
   const [ sessionId, setSessionId ] = useState('')
 
-  const [messages, setMessages] = useState([
-    { id: 1, type: 'bot', content: "Hi! I'm your SkillRise AI Assistant. Ask me anything!" }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [ chatHistory, setChatHistory ] = useState([])
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
@@ -32,11 +30,23 @@ const AIChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const fetchConversation = async (sessionId) => {
+    try {
+    const token = await getToken()
+    const { data } = await axios.post(`${backendUrl}/api/user/${sessionId}`,
+      {},
+      {headers: {Authorization: `Bearer ${token}`}})
+      setMessages(data.messages)
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    setMessages([...messages, { id: Date.now(), type: 'user', content: input }]);
+    setMessages([...messages, { id: Date.now(), role: 'user', content: input }]);
     setInput('');
     setTyping(true);
 
@@ -54,14 +64,14 @@ const AIChat = () => {
     // Add AI response
     setMessages(prev => [...prev, { 
       id: Date.now(), 
-      type: 'bot', 
+      role: 'assistant', 
       content: data.response 
       }]);
     } catch (error) {
     console.error('Error:', error);
     setMessages(prev => [...prev, { 
       id: Date.now(), 
-      type: 'bot', 
+      role: 'assistant', 
       content: "Sorry, I'm having trouble connecting. Please try again." 
     }]);
     } finally {
@@ -74,37 +84,30 @@ const AIChat = () => {
       {/* Sidebar */}
       {sidebarOpen && (
         <div className="w-64 bg-gray-50 border-r flex flex-col">
-          {/* Header */}
-          <div className="p-3 border-b flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
-                <span className="text-white text-sm">✨</span>
-              </div>
-              <span className="font-semibold">SkillRise AI</span>
-            </div>
-            <button onClick={() => setSidebarOpen(false)} className="p-1 hover:bg-gray-200 rounded">
-              ✕
-            </button>
-          </div>
-
           {/* New Chat */}
-          <div className="p-3">
+          <div className="p-3 border-b flex items-center justify-between">
             <button className="w-full py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600"
               onClick={() => {
-                setMessages([{ id: 1, type: 'bot', content: "Hi! I'm your SkillRise AI Assistant. Ask me anything!" }])
+                setMessages([])
                 setInput('')
                 setTyping(false)
               }}>
               + New Chat
             </button>
-          </div>
 
+            <button onClick={() => setSidebarOpen(false)} className="ml-2 p-3 hover:bg-gray-200 rounded-full">
+              ✕
+            </button>
+        </div>
+          
           {/* History */}
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
             {chatHistory.map(chat => (
               <button className="w-full text-left p-3 rounded-lg hover:bg-gray-100">
-                <div className="text-sm font-medium truncate">{chat}</div>
-                {/* <div className="text-xs text-gray-500 mt-1">{chat.time}</div> */}
+                <div className="text-sm font-medium truncate hover:cursor-pointer" onClick={() => {
+                  fetchConversation(chat.sessionId)
+                }}>{chat.messages}</div>
+                <div className="text-xs text-gray-500 mt-1">{chat.updatedAt}</div>
               </button>
             ))}
           </div>
@@ -126,16 +129,16 @@ const AIChat = () => {
 
           <div className="max-w-3xl mx-auto space-y-4">
             {messages.map(msg => (
-              <div key={msg.id} className={`flex gap-3 ${msg.type === 'user' ? 'flex-row-reverse' : ''}`}>
+              <div key={msg._id} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                  msg.type === 'bot' ? 'bg-teal-500' : 'bg-gray-600'
+                  msg.role === 'assistant' ? 'bg-teal-500' : 'bg-gray-600'
                 }`}>
-                  <span className="text-white text-sm">{msg.type === 'bot' ? '🤖' : '👤'}</span>
+                  <span className="text-white text-sm">{msg.role === 'assistant' ? '🤖' : '👤'}</span>
                 </div>
-                <div className={`inline-block px-4 py-2 rounded-lg ${
-                  msg.type === 'bot' ? 'bg-gray-100' : 'bg-teal-500 text-white'
+                <div className={`inline-block px-4 py-2 rounded-lg prose prose-neutral max-w-none markdown-body ${
+                  msg.role === 'assistant' ? 'bg-gray-100' : 'bg-teal-500 text-white'
                 }`}>
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  <MarkdownRenderer>{msg.content}</MarkdownRenderer>
                 </div>
               </div>
             ))}

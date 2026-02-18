@@ -41,3 +41,89 @@
 .rich-text ul { margin-left: 30px; list-style-type: disc; }
 
 .rich-text li { margin-bottom: 8px; }
+
+/* ===== Markdown Body (Shared Styles) ===== */
+.markdown-body {
+  @apply prose prose-neutral max-w-none;
+}
+
+/* ===== Tables ===== */
+.markdown-body table {
+  @apply w-full border-collapse my-4;
+}
+
+.markdown-body th,
+.markdown-body td {
+  @apply border border-gray-300 dark:border-gray-600 px-3 py-2;
+}
+
+.markdown-body th {
+  @apply bg-gray-100 dark:bg-gray-700 font-semibold;
+}
+
+/* ===== Code Blocks ===== */
+.markdown-body pre {
+  @apply bg-gray-900 text-gray-200 p-4 rounded-xl overflow-x-auto;
+}
+
+.markdown-body code {
+  @apply bg-gray-800 text-gray-100 px-1 py-0.5 rounded;
+}
+
+/* Inline code inside paragraphs */
+.markdown-body p code {
+  @apply bg-gray-200 dark:bg-gray-800 text-red-600 dark:text-red-300;
+}
+
+/* ===== Headings ===== */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+  @apply font-bold text-gray-900 dark:text-gray-100;
+}
+
+/* ===== Images ===== */
+.markdown-body img {
+  @apply rounded-xl shadow w-full h-auto;
+}
+
+/* ===== Links ===== */
+.markdown-body a {
+  @apply text-blue-600 dark:text-blue-400 underline;
+}
+
+.markdown-body a:hover {
+  @apply text-blue-800 dark:text-blue-300;
+}
+
+/* ===== Lists ===== */
+.markdown-body ul,
+.markdown-body ol {
+  @apply my-3 pl-6;
+}
+
+/* ===== Blockquotes ===== */
+.markdown-body blockquote {
+  @apply border-l-4 border-gray-400 dark:border-gray-600 pl-4 italic;
+}
+
+/* ===== Mobile scrolling for wide content ===== */
+.markdown-body {
+  @apply overflow-x-auto;
+}
+
+.shiki-code pre {
+  @apply p-4 rounded-xl overflow-x-auto !bg-gray-900;
+}
+
+.shiki-code code {
+  @apply text-sm leading-6;
+}
+
+.markdown-body pre {
+  @apply my-4;
+}
+
+.group:hover button {
+  @apply opacity-100;
+}
