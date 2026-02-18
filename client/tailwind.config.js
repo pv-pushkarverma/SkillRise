@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+import typography from "@tailwindcss/typography";
+
 export default {
+  darkMode: "class",
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -24,8 +27,9 @@ export default {
       },
       boxShadow: {
         'custom-card' : '0px 4px 15px 2px rgba(0,0,0,0.1)'
-      }
+      },
+      
     },
   },
-  plugins: [],
+  plugins: [ typography ],
 }

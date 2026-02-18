@@ -8,7 +8,7 @@ export const generateAIResponse = async (messages) => {
     model: "openai/gpt-oss-120b",
     messages,
     temperature: 0.7,
-    max_tokens: 1000,
+    max_tokens: 5000,
     top_p: 1,
     stream: false,
   });

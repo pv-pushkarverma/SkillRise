@@ -8,6 +8,7 @@ import Footer from '../../components/student/Footer'
 import ReactPlayer from 'react-player'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import MarkdownRenderer from '../../components/chatbot/MarkDownRenderer'
 
 const CourseDetails = () => {
 
@@ -87,8 +88,9 @@ const CourseDetails = () => {
         {/* left col */}
         <div className='max-w-xl z-10 text-gray-500'>
           <h1 className='md:text-course-details-heading-large text-course-details-heading-small font-semibold text-gray-800'>{courseData.courseTitle}</h1>
-          <p className='pt-4 md:text-base text-sm rich-text'
-          dangerouslySetInnerHTML={{__html: courseData.courseDescription}}></p>
+          <div className='pt-4 md:text-base text-sm'>
+            <MarkdownRenderer>{ courseData.courseDescription }</MarkdownRenderer>
+          </div>
 
 
           {/* review and rating */}

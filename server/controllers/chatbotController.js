@@ -72,12 +72,13 @@ export const recentAIChats = async (req, res) => {
   try {
     const { userId } = req.auth;
 
-    const allSessionChats = await ChatSession.find({ userId }).select('sessionId messages')
+    const allSessionChats = await ChatSession.find({ userId }).select('sessionId messages updatedAt')
     const chats = allSessionChats.map(session => {
       return {
         _id: session._id,
         sessionId: session.sessionId,
-        messages: session.messages[1]?.content
+        messages: session.messages[1]?.content,
+        updatedAt: session.updatedAt.toDateString()
       }
     }).reverse()
 
@@ -89,11 +90,18 @@ export const recentAIChats = async (req, res) => {
 
 export const getChatSession = async (req, res) => {
   try {
-    // const { userId } = req.auth;
     const { sessionId } = req.params;
 
-    const Chats = await ChatSession.findOne({ sessionId });
-    return res.json({ Chats })
+    const fullChats = await ChatSession.aggregate([
+      { $match: { sessionId } },
+      { $project: {
+        _id: 1,
+        messages: { $slice: ["$messages", 1, { $size: "$messages" }] },
+      }}
+    ]);
+
+    const chats = Object.assign({}, ...fullChats)
+    return res.json(chats)
 
   } catch (error) {
     res.json({ message: 'Error while fetching conversation'})
