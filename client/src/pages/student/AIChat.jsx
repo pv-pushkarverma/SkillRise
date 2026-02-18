@@ -3,7 +3,6 @@ import axios from 'axios'
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'react-markdown'
 
 const AIChat = () => {
 
@@ -136,7 +135,7 @@ const AIChat = () => {
                 <div className={`inline-block px-4 py-2 rounded-lg ${
                   msg.type === 'bot' ? 'bg-gray-100' : 'bg-teal-500 text-white'
                 }`}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
               </div>
             ))}

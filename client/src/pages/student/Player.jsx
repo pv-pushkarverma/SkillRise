@@ -9,6 +9,7 @@ import Rating from '../../components/student/Rating'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
+import { updateActivity, updateWatchTime } from "../../services/progressApi";
 
 const Player = () => {
 
@@ -21,6 +22,7 @@ const Player = () => {
   const [ playerData, setPlayerData ] = useState(null)
   const [ progressData, setProgressData ] = useState(null)
   const [ initialRating, setInitialRating ] = useState(0)
+  const [watchTime, setWatchTime] = useState(0);
 
 
   const toggleSection = (index)=>{
@@ -237,5 +239,8 @@ const Player = () => {
   </>
 ) : <Loading />
 }
+
+// New Update
+
 
 export default Player

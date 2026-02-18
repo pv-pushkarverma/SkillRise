@@ -231,3 +231,92 @@ export const addUserRating = async (req, res) => {
         })
     }
 }
+
+// new update 1 
+export const updateActivity = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const user = await User.findById(userId);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const today = new Date().toDateString();
+    const lastActive = user.streak.lastActiveDate
+      ? new Date(user.streak.lastActiveDate).toDateString()
+      : null;
+
+    if (lastActive !== today) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      if (lastActive === yesterday.toDateString()) {
+        user.streak.currentStreak += 1;
+      } else {
+        user.streak.currentStreak = 1;
+      }
+
+      user.streak.lastActiveDate = new Date();
+
+      if (user.streak.currentStreak > user.streak.longestStreak) {
+        user.streak.longestStreak = user.streak.currentStreak;
+      }
+    }
+
+    if (!user.activityDates.some(d => new Date(d).toDateString() === today)) {
+      user.activityDates.push(new Date());
+    }
+
+    await user.save();
+    res.json({ success: true, streak: user.streak });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+// Update 2
+export const updateWatchTime = async (req, res) => {
+  try {
+    const { userId, videoId, watchTime, totalDuration } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const video = user.videos.find(v => v.videoId === videoId);
+
+    if (video) {
+      video.watchTime = Math.max(video.watchTime, watchTime);
+    } else {
+      user.videos.push({ videoId, watchTime, totalDuration });
+    }
+
+    await user.save();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Update 3
+export const getUserProgress = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const progressData = {};
+
+    user.videos.forEach(video => {
+      const day = new Date(video.updatedAt).toDateString();
+      progressData[day] = (progressData[day] || 0) + video.watchTime;
+    });
+
+    const formattedData = Object.keys(progressData).map(date => ({
+      date,
+      minutes: progressData[date]
+    }));
+
+    res.json(formattedData);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
