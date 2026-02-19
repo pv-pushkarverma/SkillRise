@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import uniqid from 'uniqid'
 import Quill from 'quill'
 import { assets } from '../../assets/assets'
 import { AppContext } from '../../context/AppContext'
@@ -29,13 +28,20 @@ const AddCourse = () => {
       isPreviewFree: false,
     })
 
+    const createId = () => {
+      if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        return crypto.randomUUID()
+      }
+      return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+    }
+
     const handleChapter = (action, chapterId) => {
       if(action === 'add'){
         const title = prompt('Enter Chapter Name : ')
 
         if(title){
           const newChapter = {
-            chapterId: uniqid(),
+            chapterId: createId(),
             chapterTitle: title,
             chapterContent: [],
             collapsed: false,
@@ -98,7 +104,7 @@ const AddCourse = () => {
         }
       }
 
-      if (!isValidURL(lectureDetails.lectureUrl)) {
+            if (!isValidURL(lectureDetails.lectureUrl)) {
         toast.error("Please enter a valid URL.");
         return;
       }
@@ -109,7 +115,7 @@ const AddCourse = () => {
             const newLecture = {
               ...lectureDetails,
               lectureOrder: chapter.chapterContent.length > 0 ? chapter.chapterContent.slice(-1)[0].lectureOrder + 1 : 1,
-              lectureId: uniqid()
+              lectureId: createId()
             }
 
             chapter.chapterContent.push(newLecture)

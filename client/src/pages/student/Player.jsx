@@ -30,10 +30,12 @@ const Player = () => {
   }
 
   const getCourseData = ()=> {
-    enrolledCourses.map((course)=>{
+    if (!Array.isArray(enrolledCourses) || !userData?._id) return
+
+    enrolledCourses.forEach((course)=>{
       if(course._id === courseId ){
         setCourseData(course)
-        course.courseRatings.map((item) => {
+        course.courseRatings.forEach((item) => {
           if(item.userId === userData._id){
             setInitialRating(item.rating)
           }
@@ -94,7 +96,7 @@ const Player = () => {
 
 
   useEffect(()=>{
-    if(enrolledCourses.length > 0){
+    if(Array.isArray(enrolledCourses) && enrolledCourses.length > 0){
       getCourseData()
     }
   },[enrolledCourses])
