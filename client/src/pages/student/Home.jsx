@@ -7,14 +7,53 @@ import Footer from '../../components/student/Footer'
 
 const Home = () => {
   return (
-    <div className='flex flex-col items-center space-y-7 text-center bg-gradient-to-b from-cyan-100/70'>
+    <main className='min-h-screen bg-white'>
       <Hero />
-      <Companies/>
-      <CoursesSection/>
-      <TestimonialsSection/>
-      <CallToAction/>
-      <Footer/>
-    </div>
+
+      <section className='px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-6xl mx-auto rounded-3xl border border-gray-200 bg-white shadow-sm px-6 md:px-10 py-10 -mt-6 relative z-10'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-6 text-left'>
+            <div>
+              <p className='text-sm text-gray-500'>For students</p>
+              <p className='mt-1 text-lg font-semibold text-gray-900'>Learn by doing</p>
+              <p className='mt-2 text-sm text-gray-600'>Structured lectures, progress tracking, and ratings you can trust.</p>
+            </div>
+            <div>
+              <p className='text-sm text-gray-500'>For creators</p>
+              <p className='mt-1 text-lg font-semibold text-gray-900'>Teach at scale</p>
+              <p className='mt-2 text-sm text-gray-600'>Become an educator and publish courses from your dashboard.</p>
+            </div>
+            <div>
+              <p className='text-sm text-gray-500'>For teams</p>
+              <p className='mt-1 text-lg font-semibold text-gray-900'>Upskill faster</p>
+              <p className='mt-2 text-sm text-gray-600'>Curated learning paths for practical, job‑ready skills.</p>
+            </div>
+          </div>
+          <div className='mt-8'>
+            <Companies compact />
+          </div>
+        </div>
+      </section>
+
+      <div className='px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-6xl mx-auto'>
+          <CoursesSection />
+        </div>
+      </div>
+
+      <div className='px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-6xl mx-auto'>
+          <TestimonialsSection />
+        </div>
+      </div>
+
+      <div className='px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-6xl mx-auto'>
+          <CallToAction />
+        </div>
+      </div>
+      <Footer />
+    </main>
   )
 }
 

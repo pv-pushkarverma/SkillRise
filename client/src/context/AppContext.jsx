@@ -29,7 +29,7 @@ export const AppContextProvider = (props)=>{
             const { data } = await axios.get(backendUrl + '/api/course/all')
 
             if(data.success){
-                setAllCourses(data.courses)
+                setAllCourses(Array.isArray(data.courses) ? data.courses : [])
             }else{
                 toast.error(data.message)
             }
@@ -111,7 +111,8 @@ export const AppContextProvider = (props)=>{
     
             if(data.success){
                 //reverse to get latest courses first
-                setEnrolledCourses(data.enrolledCourses.reverse())
+                const list = Array.isArray(data.enrolledCourses) ? data.enrolledCourses : []
+                setEnrolledCourses(list.reverse())
             } else {
                 toast.error(data.message)
             }

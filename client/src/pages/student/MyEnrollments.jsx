@@ -39,7 +39,7 @@ const MyEnrollments = () => {
   },[ userData ])
 
   useEffect(() => {
-    if(enrolledCourses.length > 0){
+    if(Array.isArray(enrolledCourses) && enrolledCourses.length > 0){
       getCourseProgress()
     }
   },[ enrolledCourses ])

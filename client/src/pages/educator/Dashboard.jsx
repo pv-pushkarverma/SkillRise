@@ -35,71 +35,76 @@ const Dashboard = () => {
 
 
   return dashboardData ? (
-    <div className='min-h-screen flex flex-col items-start justify-between gap-8 md:p-8 md:pb-0 p-4 pt-8 pb-0'>
+    <div className='min-h-screen flex flex-col gap-8 md:p-8 md:pb-6 p-4 pt-6'>
 
-      <div className='space-y-5'>
-        <div className='flex flex-wrap gap-5 items-center'>
+      <div className='space-y-6'>
+        <div className='flex flex-wrap gap-5 items-stretch'>
 
-          <div className='flex items-center gap-3 shadow-card border border-teal-500 p-4 w-56 rounded-md'>
+          <div className='flex items-center gap-3 bg-white border border-teal-100 rounded-2xl px-4 py-3 shadow-sm min-w-[220px]'>
             <img src={assets.patients_icon} alt='patients_icon'/>
             <div>
-              <p className='text-2xl font-medium text-gray-600'>
+              <p className='text-2xl font-semibold text-gray-900'>
                 {dashboardData.enrolledStudentsData.length}
               </p>
-              <p className='text-base text-gray-500'>Total Enrolments</p>
+              <p className='text-sm text-gray-500'>Total enrollments</p>
             </div>
           </div>
 
 
-          <div className='flex items-center gap-3 shadow-card border border-teal-500 p-4 w-56 rounded-md'>
+          <div className='flex items-center gap-3 bg-white border border-teal-100 rounded-2xl px-4 py-3 shadow-sm min-w-[220px]'>
             <img src={assets.appointments_icon} alt='appointments_icon'/>
             <div>
-              <p className='text-2xl font-medium text-gray-600'>
+              <p className='text-2xl font-semibold text-gray-900'>
                 {dashboardData.totalCourses}
               </p>
-              <p className='text-base text-gray-500'>Total Courses</p>
+              <p className='text-sm text-gray-500'>Published courses</p>
             </div>
           </div>
 
           
-          <div className='flex items-center gap-3 shadow-card border border-teal-500 p-4 w-56 rounded-md'>
+          <div className='flex items-center gap-3 bg-white border border-teal-100 rounded-2xl px-4 py-3 shadow-sm min-w-[220px]'>
             <img src={assets.earning_icon} alt='patients_icon'/>
             <div>
-              <p className='text-2xl font-medium text-gray-600'>₹
-                {dashboardData.totalEarnings}
+              <p className='text-2xl font-semibold text-gray-900'>₹
+                {dashboardData.totalEarnings.toLocaleString()}
               </p>
-              <p className='text-base text-gray-500'>Total Earnings</p>
+              <p className='text-sm text-gray-500'>Total earnings</p>
             </div>
           </div>
 
         </div>
 
         <div>
-          <h2 className='pb-4 text-lg font-medium'>Latest Enrolments</h2>
+          <div className='flex items-center justify-between pb-3'>
+            <h2 className='text-lg font-semibold text-gray-900'>Latest enrollments</h2>
+            <p className='text-xs text-gray-500'>
+              Showing {dashboardData.enrolledStudentsData.length} most recent
+            </p>
+          </div>
 
-          <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20'>
+          <div className='flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-2xl bg-white border border-gray-200 shadow-sm'>
 
             <table className='table-fixed md:table-auto w-full overflow-hidden'>
-              <thead className='text-gray-900 border-b border-gray-500/20 text-sm text-left'>
+              <thead className='text-gray-900 border-b border-gray-200 text-xs md:text-sm text-left bg-gray-50/60'>
                 <tr>
-                  <th className='px-4 py-3 font-semibold text-center hidden sm:table-cell'>#</th>
-                  <th className='px-4 py-3 font-semibold'>Student Name</th>
-                  <th className='px-4 py-3 font-semibold'>Course Title</th>
+                  <th className='px-4 py-3 font-semibold text-center hidden sm:table-cell w-10'>#</th>
+                  <th className='px-4 py-3 font-semibold'>Student</th>
+                  <th className='px-4 py-3 font-semibold'>Course</th>
                 </tr>
               </thead>
 
-              <tbody className='text-sm text-gray-500'>
+              <tbody className='text-xs md:text-sm text-gray-600'>
                 { dashboardData.enrolledStudentsData.map((item,index) => (
                   <tr key={index} className='border-b border-gray-500/20'>
                     
                     <td className='px-4 py-3 text-center hidden sm:table-cell'>{ index + 1}</td>
 
                     <td className='md:px-4 px-2 py-3 flex items-center space-x-3'>
-                      <img src={item.student.imageUrl} alt='Profile' className='w-9 h-9 rounded-full'/>
-                      <span className='truncate'>{item.student.name}</span>
+                      <img src={item.student.imageUrl} alt='Profile' className='w-8 h-8 rounded-full ring-1 ring-gray-200'/>
+                      <span className='truncate font-medium text-gray-900'>{item.student.name}</span>
                     </td>
 
-                    <td className='px-4 py-3 truncate'>{item.courseTitle}</td>
+                    <td className='px-4 py-3 truncate text-gray-700'>{item.courseTitle}</td>
                   </tr>
                 ))}
 

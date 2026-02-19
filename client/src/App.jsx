@@ -22,10 +22,11 @@ import AIChat from './pages/student/AIChat';
 const App = () => {
 
   const isEducatorRoute = useMatch('/educator/*')
+  const isAiChatRoute = useMatch('/ai-chat')
   return (
     <div className='text-default min-h-screen bg-white'>
       <ToastContainer />
-      {!isEducatorRoute && <Navbar/> }
+      {!isEducatorRoute && !isAiChatRoute && <Navbar/> }
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/course-list' element={<CoursesList/>}/>
@@ -34,7 +35,7 @@ const App = () => {
         <Route path='/my-enrollments' element={<MyEnrollments/>}/>
         <Route path='/player/:courseId' element={<Player/>}/>
         <Route path='/loading/:path' element={<Loading/>}/>
-        <Route path='ai-chat' element={<AIChat/>}/>
+        <Route path='/ai-chat' element={<AIChat/>}/>
 
         <Route path='/educator' element={<Educator/>}>
           <Route path='/educator' element={<Dashboard/>}/>

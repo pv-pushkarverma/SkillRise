@@ -107,3 +107,25 @@ export const getChatSession = async (req, res) => {
     res.json({ message: 'Error while fetching conversation'})
   }
 }
+
+export const deleteChatSession = async (req, res) => {
+  try {
+    const { sessionId } = req.params
+    const { userId } = req.auth
+
+    if (!sessionId) {
+      return res.status(400).json({ success: false, message: 'Missing sessionId' })
+    }
+
+    const deleted = await ChatSession.findOneAndDelete({ sessionId, userId })
+
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: 'Chat not found' })
+    }
+
+    return res.json({ success: true, message: 'Chat deleted successfully' })
+  } catch (error) {
+    console.error('Error deleting chat session:', error)
+    return res.status(500).json({ success: false, message: 'Error while deleting conversation' })
+  }
+}
