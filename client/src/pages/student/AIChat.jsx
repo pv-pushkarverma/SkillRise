@@ -162,7 +162,11 @@ const AIChat = () => {
                   {chat.messages}
                 </div>
                 <div className="text-[10px] md:text-xs text-gray-400 mt-0.5">
-                  {new Date(chat.updatedAt).toLocaleString()}
+                  { new Date(chat.updatedAt).toLocaleString("en-IN", { 
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric" })
+                  }
                 </div>
               </div>
               <button
