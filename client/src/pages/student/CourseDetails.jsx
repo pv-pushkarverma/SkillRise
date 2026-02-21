@@ -11,220 +11,291 @@ import { toast } from 'react-toastify'
 import MarkdownRenderer from '../../components/chatbot/MarkDownRenderer'
 
 const CourseDetails = () => {
-
   const { id } = useParams()
 
-  const [ courseData, setCourseData ] = useState(null)
-  const [ openSections, setOpenSections ] = useState({})
-  const [ isAlreadyEnrolled, setIsAlreadyEnrolled ] = useState(false)
-  const [ playerData, setPlayerData ] = useState(null)
+  const [courseData, setCourseData] = useState(null)
+  const [openSections, setOpenSections] = useState({})
+  const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
+  const [playerData, setPlayerData] = useState(null)
 
-  const { calculateRating, calculateChapterTime, calculateCourseDuration, calculateNoOfLectures, backendUrl, userData, getToken } = useContext(AppContext)
+  const {
+    calculateRating,
+    calculateChapterTime,
+    calculateCourseDuration,
+    calculateNoOfLectures,
+    backendUrl,
+    userData,
+    navigate,
+  } = useContext(AppContext)
 
-  const fetchCourseData = async()=>{
+  const fetchCourseData = async () => {
     try {
       const { data } = await axios.get(backendUrl + '/api/course/' + id)
-
-      if(data.success){
-        setCourseData(data.courseData)
-      } else {
-        toast.error(data.message)
-      }
-
+      if (data.success) setCourseData(data.courseData)
+      else toast.error(data.message)
     } catch (error) {
       toast.error(error.message)
     }
   }
 
-  const enrollCourse = async () => {
-    try {
-      if(!userData){
-        return toast.warn('Login to Enroll')
-      }
-      
-      if(isAlreadyEnrolled){
-        return toast.warn('Already Enrolled')
-      }
-
-      const token = await getToken()
-
-      const { data } =await axios.post(backendUrl + '/api/user/purchase', {courseId: courseData._id}, {headers: {Authorization: `Bearer ${token}`}})
-
-      if(data.success){
-        const { session_url } = data
-        window.location.replace(session_url)
-      } else {
-        toast.error(data.message)
-      }
-
-    } catch (error) {
-      toast.error(error.message)
-    }
+  const enrollCourse = () => {
+    if (!userData) return toast.warn('Login to Enroll')
+    if (isAlreadyEnrolled) return navigate('/player/' + courseData._id)
+    navigate('/checkout/' + courseData._id)
   }
 
-
-  useEffect(()=>{
+  useEffect(() => {
     fetchCourseData()
-  },[])
+  }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(()=>{
-    if( userData && courseData ){
+  useEffect(() => {
+    if (userData && courseData) {
       setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
     }
-  },[userData, courseData])
+  }, [userData, courseData])
 
-  const toggleSection = (index)=>{
-    setOpenSections((prev)=>(
-      {...prev,[index]:!prev[index]}
-    ))
+  const toggleSection = (index) => {
+    setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }))
   }
 
-  return courseData ? (
-    <>
-      <div className='flex md:flex-row flex-col-reverse gap-10 relative items-start justify-between md:px-36 px-8 md:pt-30 pt-20 text-left'>
+  if (!courseData) return <Loading />
 
-        <div className='absolute top-0 left-0 w-full h-section-height -z-1 bg-gradient-to-b from-cyan-100/70'></div>
+  const discountedPrice = (
+    courseData.coursePrice -
+    (courseData.discount * courseData.coursePrice) / 100
+  ).toFixed(2)
 
-        {/* left col */}
-        <div className='max-w-xl z-10 text-gray-500'>
-          <h1 className='md:text-course-details-heading-large text-course-details-heading-small font-semibold text-gray-800'>{courseData.courseTitle}</h1>
-          <div className='pt-4 md:text-base text-sm'>
-            <MarkdownRenderer>{ courseData.courseDescription }</MarkdownRenderer>
-          </div>
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero strip — description left, purchase card right */}
+      <div className="bg-gradient-to-b from-teal-50 to-gray-50 border-b border-gray-200">
+        <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
+          {/* Breadcrumb */}
+          <p className="text-sm text-gray-400 mb-6">
+            <span
+              onClick={() => navigate('/')}
+              className="text-teal-600 cursor-pointer hover:underline"
+            >
+              Home
+            </span>
+            <span className="mx-1.5">/</span>
+            <span
+              onClick={() => navigate('/course-list')}
+              className="text-teal-600 cursor-pointer hover:underline"
+            >
+              Explore
+            </span>
+            <span className="mx-1.5">/</span>
+            <span className="text-gray-700">{courseData.courseTitle}</span>
+          </p>
 
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+            {/* Left: title + description + meta */}
+            <div className="flex-1 min-w-0">
+              <h1 className="text-3xl font-bold text-gray-900">{courseData.courseTitle}</h1>
 
-          {/* review and rating */}
-          <div className='flex items-center space-x-2 pt-3 pb-1 text-sm'>
-            <p>{calculateRating(courseData)}</p>
-            <div className='flex'>
-              {[...Array(5)].map((_,i)=>(<img key={i} src={i < Math.floor(calculateRating(courseData)) ? assets.star : assets.star_blank} alt='' className='w-3.5 h-3.5'/>))}
+              <div className="mt-3 text-sm text-gray-600">
+                <MarkdownRenderer>{courseData.courseDescription}</MarkdownRenderer>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
+                <span className="font-semibold text-gray-900">{calculateRating(courseData)}</span>
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <img
+                      key={i}
+                      src={
+                        i < Math.floor(calculateRating(courseData))
+                          ? assets.star
+                          : assets.star_blank
+                      }
+                      alt=""
+                      className="w-3.5 h-3.5"
+                    />
+                  ))}
+                </div>
+                <span className="text-teal-600">
+                  ({courseData.courseRatings.length}{' '}
+                  {courseData.courseRatings.length === 1 ? 'rating' : 'ratings'})
+                </span>
+                <span className="text-gray-300">·</span>
+                <span className="text-gray-500">
+                  {courseData.enrolledStudents.length}{' '}
+                  {courseData.enrolledStudents.length === 1 ? 'student' : 'students'}
+                </span>
+              </div>
+
+              <p className="text-sm text-gray-600 mt-2">
+                By <span className="text-teal-600 font-medium">{courseData.educator.name}</span>
+              </p>
             </div>
-            <p className='text-teal-600'>({courseData.courseRatings.length} {courseData.courseRatings.length > 1 ? 'ratings ': 'rating' })</p>
 
-            <p>{courseData.enrolledStudents.length} {courseData.enrolledStudents.length >1 ? 'students' : 'student'}</p>
-          </div>
+            {/* Right: purchase card */}
+            <div className="lg:sticky lg:top-24 w-full lg:w-80 xl:w-96 shrink-0">
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                {playerData ? (
+                  <div className="w-full aspect-video">
+                    <ReactPlayer
+                      url={playerData.videoId}
+                      playing
+                      controls
+                      width="100%"
+                      height="100%"
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={courseData.courseThumbnail}
+                    alt=""
+                    className="w-full aspect-video object-cover"
+                  />
+                )}
 
-          <p className='text-sm'>Course by <span className='text-teal-600 underline'>{courseData.educator.name}</span></p>
+                <div className="p-5">
+                  {!isAlreadyEnrolled && (
+                    <>
+                      <div className="flex items-center gap-2 mb-3">
+                        <img
+                          className="w-3.5 opacity-70"
+                          src={assets.time_left_clock_icon}
+                          alt=""
+                        />
+                        <p className="text-sm text-red-500">
+                          <span className="font-medium">5 days</span> left at this price
+                        </p>
+                      </div>
+                      <div className="flex items-baseline gap-2.5 mb-4">
+                        <p className="text-3xl font-bold text-gray-900">₹{discountedPrice}</p>
+                        <p className="text-gray-400 line-through text-sm">
+                          ₹{courseData.coursePrice}
+                        </p>
+                        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-teal-50 text-teal-700 border border-teal-100">
+                          {courseData.discount}% off
+                        </span>
+                      </div>
+                    </>
+                  )}
 
-          <div className='pt-8 text-gray-800'>
-            <h2 className='text-xl font-semibold'>Course Structure</h2>
-
-            <div className='pt-5'>
-              {courseData.courseContent.map((chapter,index) => (
-                <div key={index} className='border border-gray-300 bg-white mb-2 rounded'>
-                  <div className='flex items-center justify-between px-4 py-3 cursor-pointer select-none' onClick={()=>toggleSection(index)}>
-                    <div className='flex items-center gap-2'>
-                      <img className={`transform transition-transform ${openSections[index] ? 'rotate-180' : ''}`}
-                      src={assets.down_arrow_icon} alt='arrow icon' />
-                      <p className='font-medium md:text-base text-sm'>{chapter.chapterTitle}</p>
+                  <div className="flex items-center gap-3 text-sm text-gray-500 mb-5">
+                    <div className="flex items-center gap-1.5">
+                      <img src={assets.star} alt="" className="w-3.5 h-3.5" />
+                      <span className="font-medium text-gray-700">
+                        {calculateRating(courseData)}
+                      </span>
                     </div>
-
-                    <p className='text-sm md:text-default'>{chapter.chapterContent.length} lectures - {calculateChapterTime(chapter)}</p>
+                    <div className="h-4 w-px bg-gray-200" />
+                    <div className="flex items-center gap-1.5">
+                      <img src={assets.time_clock_icon} alt="" className="w-3.5 h-3.5" />
+                      <span>{calculateCourseDuration(courseData)}</span>
+                    </div>
+                    <div className="h-4 w-px bg-gray-200" />
+                    <div className="flex items-center gap-1.5">
+                      <img src={assets.lesson_icon} alt="" className="w-3.5 h-3.5" />
+                      <span>{calculateNoOfLectures(courseData)} lessons</span>
+                    </div>
                   </div>
 
-                  <div className={`overflow-hidden transition-all duration-300 ${openSections[index] ? 'max-h-96' : 'max-h-0'}`}>
-                    <ul className='list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-300'>
-                      {chapter.chapterContent.map((lecture, i)=>(
-                        <li key={i} className='flex items-start gap-2 py-1'>
-                          <img src={assets.play_icon} alt='play-icon' className='w-4 h-4 mt-1'/>
-                          <div className='flex items-center justify-between w-full text-gray-800 text-xs md:text-default'>
-                            <p>{lecture.lectureTitle}</p>
-                            <div className='flex gap-2'>
-                              {lecture.isPreviewFree && <p 
-                              onClick={() => setPlayerData({
-                                videoId: `https://www.youtube.com/watch?v=${lecture.lectureUrl.split('/').pop().split('?')[0]}`
-                              })}                              
-                              className='text-teal-500 cursor-pointer'>Preview</p>}
-                              <p>{humanizeDuration(lecture.lectureDuration * 60 * 1000, {units: ['h','m']})}</p>
-                            </div>
-                          </div>
+                  <button
+                    onClick={enrollCourse}
+                    className="w-full py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-semibold transition text-sm"
+                  >
+                    {isAlreadyEnrolled ? 'Resume Learning' : 'Enrol Now'}
+                  </button>
+
+                  <div className="mt-5 pt-5 border-t border-gray-100">
+                    <p className="text-sm font-semibold text-gray-800 mb-3">What's included</p>
+                    <ul className="flex flex-col gap-2 text-sm text-gray-600">
+                      {[
+                        'Lifetime access with free updates',
+                        'Step-by-step, hands-on project guidance',
+                        'Downloadable resources and source code',
+                        'Quizzes to test your knowledge',
+                        'Certificate of completion',
+                      ].map((item) => (
+                        <li key={item} className="flex items-start gap-2">
+                          <span className="text-teal-500 font-bold mt-0.5">✓</span>
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
-
                 </div>
-              ))}
+              </div>
             </div>
-
-          </div>
-
-        </div>
-
-        {/* right col */}
-        <div className='max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]'>
-
-          {
-            playerData ? 
-            <div className="w-full aspect-video">
-              <ReactPlayer
-                url={playerData.videoId}
-                playing
-                controls
-                width="100%"
-                height="100%"
-              />
-            </div>
-            : <img src={courseData.courseThumbnail} alt='thumbnail'/>
-          }
-
-          
-          <div className='p-5'>
-
-              <div className='flex items-center gap-2'>
-                <img className='w-3.5' src={assets.time_left_clock_icon} alt='time left icon' />
-                <p className='text-red-500'><span className='font-medium'>5 days</span> left at this price</p>
-              </div>
-
-              <div className='flex gap-3 items-center pt-2'>
-                <p className='text-gray-800 md:text-4xl text-2xl font-semibold'>₹{(courseData.coursePrice - courseData.discount * courseData.coursePrice / 100).toFixed(2)}</p>
-                <p className='md:text-lg text-gray-500 line-through'>₹{courseData.coursePrice}</p>
-                <p className='md:text-lg text-gray-500'>{courseData.discount}% off</p>
-              </div>
-
-              <div className='flex items-center text-sm md:text-default gap-4 pt-2 md:pt-4 text-gray-500'>
-
-                <div className='flex items-center gap-1'>
-                  <img src={assets.star} alt='star icon'/>
-                  <p>{calculateRating(courseData)}</p>
-                </div>
-
-                <div className='h-4 w-px bg-gray-500/40'></div>
-
-                <div className='flex items-center gap-1'>
-                  <img src={assets.time_clock_icon} alt='clock icon'/>
-                  <p>{calculateCourseDuration(courseData)}</p>
-                </div>
-
-                <div className='h-4 w-px bg-gray-500/40'></div>
-
-                <div className='flex items-center gap-1'>
-                  <img src={assets.lesson_icon} alt='lesson icon'/>
-                  <p>{calculateNoOfLectures(courseData)} Lessons</p>
-                </div>
-              </div>
-
-              <button onClick={enrollCourse} className='md:mt-6 mt-4 w-full py-3 rounded bg-teal-600 text-white font-medium'>
-                {isAlreadyEnrolled ? 'Resume Learning' : 'Enrol Now'}</button>
-
-              <div className='pt-6'>
-                <p className='md:text-xl text-lg font-medium text-gray-800'>What's in the course?</p>
-                <ul className='ml-4 pt-2 text-sm md:text-default list-disc text-gray-500'>
-                  <li>Lifetime access with free updates.</li>
-                  <li>Step-by-step, hands-on project guidance.</li>
-                  <li>Downloadable resources and source code.</li>
-                  <li>Quizzes to test your knowledge.</li>
-                  <li>Certificate of completion.</li>
-                </ul>
-              </div>
-
           </div>
         </div>
-
       </div>
-      <Footer/>
-    </>
-  ) : <Loading />
+
+      {/* Course structure */}
+      <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Course Structure</h2>
+        <div className="flex flex-col gap-2 max-w-3xl">
+          {courseData.courseContent.map((chapter, index) => (
+            <div key={index} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div
+                className="flex items-center justify-between px-4 py-3.5 cursor-pointer select-none hover:bg-gray-50 transition"
+                onClick={() => toggleSection(index)}
+              >
+                <div className="flex items-center gap-2.5">
+                  <img
+                    className={`w-4 h-4 transform transition-transform ${openSections[index] ? 'rotate-180' : ''}`}
+                    src={assets.down_arrow_icon}
+                    alt=""
+                  />
+                  <p className="font-medium text-gray-800 text-sm">{chapter.chapterTitle}</p>
+                </div>
+                <p className="text-xs text-gray-400 shrink-0 ml-4">
+                  {chapter.chapterContent.length} lectures · {calculateChapterTime(chapter)}
+                </p>
+              </div>
+
+              <div
+                className={`overflow-hidden transition-all duration-300 ${openSections[index] ? 'max-h-96' : 'max-h-0'}`}
+              >
+                <div className="border-t border-gray-100 px-4 py-2 flex flex-col">
+                  {chapter.chapterContent.map((lecture, i) => (
+                    <div key={i} className="flex items-center justify-between py-2">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <img
+                          src={assets.play_icon}
+                          alt=""
+                          className="w-3.5 h-3.5 shrink-0 opacity-50"
+                        />
+                        <span className="text-sm text-gray-700 truncate">
+                          {lecture.lectureTitle}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0 ml-4">
+                        {lecture.isPreviewFree && (
+                          <button
+                            onClick={() =>
+                              setPlayerData({
+                                videoId: lecture.lectureUrl,
+                              })
+                            }
+                            className="text-xs text-teal-600 font-medium hover:text-teal-700 transition"
+                          >
+                            Preview
+                          </button>
+                        )}
+                        <span className="text-xs text-gray-400">
+                          {humanizeDuration(lecture.lectureDuration * 60 * 1000, {
+                            units: ['h', 'm'],
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  )
 }
 
 export default CourseDetails

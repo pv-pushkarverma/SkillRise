@@ -2,17 +2,27 @@ import { assets } from '../../assets/assets'
 
 const CallToAction = () => {
   return (
-    <div className='flex flex-col items-center gap-4 pt-10 pb-24 px-8 md:px-0'>
+    <section className="py-14">
+      <div className="bg-teal-50 border border-teal-100 rounded-2xl px-8 py-14 text-center">
+        <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
+          Learn anything, anytime, anywhere
+        </h2>
+        <p className="text-gray-500 mt-3 max-w-md mx-auto text-sm md:text-base">
+          Access course content on your schedule. Build real skills at your own pace, and track
+          every step of your progress.
+        </p>
 
-      <h1 className='text-xl md:text-4xl text-gray-800 font-semibold'>Learn Anything, Anytime, Anywhere</h1>
-      <p className='text-gray-500 sm:text-sm'>Access course content anytime, anywhere. Learn at your own schedule.</p>
-
-      <div className='flex items-center font-medium gap-6 mt-4'>
-        <button className='px-10 py-3 rounded-md text-white bg-teal-600'>Get Started</button>
-        <button className='flex items-center gap-2'>Learn More <img src={assets.arrow_icon} alt='arrow_icon'/> </button>
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <button className="px-6 py-2.5 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition">
+            Get started
+          </button>
+          <button className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 transition">
+            Learn more
+            <img src={assets.arrow_icon} alt="" className="w-4 h-4" />
+          </button>
+        </div>
       </div>
-
-    </div>
+    </section>
   )
 }
 

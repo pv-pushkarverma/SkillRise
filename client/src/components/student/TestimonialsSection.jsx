@@ -2,38 +2,55 @@ import { assets, dummyTestimonial } from '../../assets/assets'
 
 const TestimonialsSection = () => {
   return (
-    <div className='pb-14 px-8 md:px-0'>
-      <h2 className='text-3xl font-medium text-gray-800'>Testimonials</h2>
-      <p className='md:text-base text-gray-800 mt-3'>Hear from our learners as they share their journeys of transformation, success, and how our <br/> platform has made a difference in their lives.</p>
+    <section className="py-14">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <div>
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
+            What our learners say
+          </h2>
+          <p className="text-sm md:text-base text-gray-500 mt-2 max-w-2xl">
+            Real stories from students who levelled up their careers with SkillRise.
+          </p>
+        </div>
+      </div>
 
-      <div className='grid grid-cols-auto gap-8 mt-14'>
-        {dummyTestimonial.map((testimonial, index)=>(
-          <div key={index} className='text-sm text-left border border-gray-500/30 pb-6 rounded-lg bg-white shadow-[0px_4px_15px_0px] shadow-black/5 overflow-hidden '>
-
-            <div className='flex items-center gap-4 px-5 py-4 bg-gray-500/10'>
-              <img className='h-12 w-12 rounded-full' src={testimonial.image} alt={testimonial.name}/>
-              
-              <div>
-                <h1 className='text-lg font-medium text-gray-800'>{testimonial.name}</h1>
-                <p className='text-gray-800/80'>{testimonial.role}</p>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {dummyTestimonial.map((testimonial, index) => (
+          <div
+            key={index}
+            className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col gap-4 hover:shadow-md transition-shadow"
+          >
+            {/* Stars */}
+            <div className="flex gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <img
+                  key={i}
+                  className="h-4 w-4"
+                  src={i < Math.floor(testimonial.rating) ? assets.star : assets.star_blank}
+                  alt="star"
+                />
+              ))}
             </div>
 
-            <div className='p-5 pb-7'>
-                <div className='flex gap-0.5'>
-                  {[...Array(5)].map((__dirname,i)=>(
-                    <img className='h-5' key={i} src={i<Math.floor(testimonial.rating) ? assets.star : assets.star_blank} alt='star'/>
-                  ))}
-                </div>
-                <p className='text-gray-500 mt-5'>{testimonial.feedback}</p>
-              </div>
+            {/* Feedback */}
+            <p className="text-sm text-gray-600 flex-1 leading-relaxed">{testimonial.feedback}</p>
 
-                <a href='#' className='text-teal-500 underline px-5'>Read more</a>
+            {/* Author */}
+            <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+              <img
+                className="h-10 w-10 rounded-full object-cover shrink-0"
+                src={testimonial.image}
+                alt={testimonial.name}
+              />
+              <div>
+                <p className="text-sm font-medium text-gray-900">{testimonial.name}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{testimonial.role}</p>
+              </div>
+            </div>
           </div>
         ))}
       </div>
-
-    </div>
+    </section>
   )
 }
 
