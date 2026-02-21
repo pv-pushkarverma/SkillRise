@@ -1,49 +1,84 @@
-import { useEffect, useState } from "react";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import { createHighlighter } from "shiki";
-import { ClipboardCopy, Check } from "lucide-react";
+import { useEffect, useRef, useState } from 'react'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
+import { createHighlighter } from 'shiki'
+import { ClipboardCopy, Check } from 'lucide-react'
+
+function TableScrollWrapper({ children }) {
+  const scrollRef = useRef(null)
+  const [showFade, setShowFade] = useState(false)
+
+  const checkFade = () => {
+    const el = scrollRef.current
+    if (!el) return
+    const hasOverflow = el.scrollWidth > el.clientWidth
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 2
+    setShowFade(hasOverflow && !atEnd)
+  }
+
+  useEffect(() => {
+    checkFade()
+    window.addEventListener('resize', checkFade)
+    return () => window.removeEventListener('resize', checkFade)
+  }, [])
+
+  return (
+    <div className="relative my-4">
+      <div ref={scrollRef} className="table-scroll" onScroll={checkFade}>
+        <table className="min-w-full border-collapse">{children}</table>
+      </div>
+      {/* Right-side fade gradient — disappears once scrolled to end */}
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 w-12 rounded-r-sm transition-opacity duration-200"
+        style={{
+          background: 'linear-gradient(to left, #f9fafb, transparent)',
+          opacity: showFade ? 1 : 0,
+        }}
+      />
+    </div>
+  )
+}
 
 export default function MarkdownRenderer({ children }) {
-  const [highlighter, setHighlighter] = useState(null);
-  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [highlighter, setHighlighter] = useState(null)
+  const [copiedIndex, setCopiedIndex] = useState(null)
 
   // Load Shiki once on mount
   useEffect(() => {
     createHighlighter({
-        themes: ["dracula"],
-        langs: [
-          "javascript",
-          "typescript",
-          "jsx",
-          "tsx",
-          "json",
-          "html",
-          "css",
-          "bash",
-          "markdown",
-          "python",
-          "cpp",
-          "java",
-          "c",
-          "ruby",
-          "go",
-          "rust",
-          "php",
-          "sql",
-          "yaml"
-        ]
-        }).then((hl) => setHighlighter(hl));
-  }, []);
+      themes: ['dracula'],
+      langs: [
+        'javascript',
+        'typescript',
+        'jsx',
+        'tsx',
+        'json',
+        'html',
+        'css',
+        'bash',
+        'markdown',
+        'python',
+        'cpp',
+        'java',
+        'c',
+        'ruby',
+        'go',
+        'rust',
+        'php',
+        'sql',
+        'yaml',
+      ],
+    }).then((hl) => setHighlighter(hl))
+  }, [])
 
   const handleCopy = (text, index) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 1500);
-  };
+    navigator.clipboard.writeText(text)
+    setCopiedIndex(index)
+    setTimeout(() => setCopiedIndex(null), 1500)
+  }
 
-  let blockCounter = 0;
+  let blockCounter = 0
 
   return (
     <div className="markdown-body">
@@ -51,8 +86,11 @@ export default function MarkdownRenderer({ children }) {
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}
         components={{
+          table({ children }) {
+            return <TableScrollWrapper>{children}</TableScrollWrapper>
+          },
           code({ inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
+            const match = /language-(\w+)/.exec(className || '')
 
             // Inline code stays normal
             if (inline || !match) {
@@ -60,13 +98,13 @@ export default function MarkdownRenderer({ children }) {
                 <code className={className} {...props}>
                   {children}
                 </code>
-              );
+              )
             }
 
             // Prepare block code
-            const lang = match[1];
-            const codeText = String(children).replace(/\n$/, "");
-            const index = blockCounter++;
+            const lang = match[1]
+            const codeText = String(children).replace(/\n$/, '')
+            const index = blockCounter++
 
             // Fallback if Shiki hasn't loaded yet
             if (!highlighter) {
@@ -74,22 +112,22 @@ export default function MarkdownRenderer({ children }) {
                 <pre className="bg-gray-900 text-gray-100 p-4 rounded-xl">
                   <code>{codeText}</code>
                 </pre>
-              );
+              )
             }
 
             // Highlight using Shiki
-            const html = highlighter.codeToHtml(codeText, { lang, theme: "dracula" });
+            const html = highlighter.codeToHtml(codeText, { lang, theme: 'dracula' })
 
             return (
               <div className="relative group my-4">
                 {/* Copy Button */}
                 <button
                   onClick={() => handleCopy(codeText, index)}
-                  className="absolute top-2 right-2 
+                  className="absolute top-2 right-2
                              bg-gray-700/70 hover:bg-gray-600
                              text-white p-1.5 rounded-md
                              flex items-center justify-center
-                             transition opacity-0 
+                             transition opacity-0
                              group-hover:opacity-100"
                 >
                   {copiedIndex === index ? (
@@ -100,17 +138,14 @@ export default function MarkdownRenderer({ children }) {
                 </button>
 
                 {/* Shiki HTML */}
-                <div
-                  className="shiki-code rounded-xl"
-                  dangerouslySetInnerHTML={{ __html: html }}
-                />
+                <div className="shiki-code rounded-xl" dangerouslySetInnerHTML={{ __html: html }} />
               </div>
-            );
+            )
           },
         }}
       >
         {children}
       </Markdown>
     </div>
-  );
+  )
 }

@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "server": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "format": "prettier --write \"**/*.js\" --ignore-path .prettierignore",
+    "format:check": "prettier --check \"**/*.js\" --ignore-path .prettierignore"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
     "groq-sdk": "^0.34.0",
     "mongoose": "^8.13.2",
     "multer": "^1.4.5-lts.2",
@@ -24,5 +27,8 @@
     "stripe": "^18.0.0",
     "svix": "^1.42.0",
     "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1"
   }
 }

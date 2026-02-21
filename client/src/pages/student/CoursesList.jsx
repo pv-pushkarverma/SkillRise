@@ -6,65 +6,131 @@ import CourseCard from '../../components/student/CourseCard'
 import { assets } from '../../assets/assets'
 import Footer from '../../components/student/Footer'
 
-const CoursesList = () => {
+const SORT_OPTIONS = [
+  { value: 'default', label: 'Default' },
+  { value: 'popular', label: 'Most popular' },
+  { value: 'price-asc', label: 'Price: Low → High' },
+  { value: 'price-desc', label: 'Price: High → Low' },
+]
 
+const CoursesList = () => {
   const { navigate, allCourses } = useContext(AppContext)
   const { input } = useParams()
 
-  const [ filteredCourse, setFilteredCourse ] = useState([])
+  const [filteredCourse, setFilteredCourse] = useState([])
+  const [sortBy, setSortBy] = useState('default')
 
-  useEffect(()=>{
-    if(allCourses && allCourses.length>0){
-      const tempCourses = allCourses.slice()
+  useEffect(() => {
+    if (allCourses && allCourses.length > 0) {
+      let courses = allCourses.slice()
 
-      input ?
-      setFilteredCourse(
-        tempCourses.filter(
-          item => item.courseTitle.toLowerCase().includes(input.toLowerCase())
+      if (input) {
+        courses = courses.filter((c) => c.courseTitle.toLowerCase().includes(input.toLowerCase()))
+      }
+
+      if (sortBy === 'popular') {
+        courses = [...courses].sort(
+          (a, b) => (b.courseRatings?.length || 0) - (a.courseRatings?.length || 0)
         )
-      )
-      : setFilteredCourse(tempCourses)
+      } else if (sortBy === 'price-asc') {
+        courses = [...courses].sort(
+          (a, b) => (Number(a.coursePrice) || 0) - (Number(b.coursePrice) || 0)
+        )
+      } else if (sortBy === 'price-desc') {
+        courses = [...courses].sort(
+          (a, b) => (Number(b.coursePrice) || 0) - (Number(a.coursePrice) || 0)
+        )
+      }
+
+      setFilteredCourse(courses)
     }
-  },[allCourses, input])
+  }, [allCourses, input, sortBy])
 
   return (
-    <>
-      <div className='relative md:px-36 px-8 pt-20 text-left'>
-        <div className='flex md:flex-row flex-col gap-6 items-start justify-between w-full'>
-
-          <div>
-            <h1 className='text-3xl md:text-4xl font-semibold text-gray-900'>All courses</h1>
-            <p className='text-sm text-gray-500 mt-1'>
-              <span className='text-teal-600 cursor-pointer' onClick={()=> navigate('/')}>Home</span>
-              <span className='mx-1'>/</span>
-              <span>All courses</span>
-            </p>
-          </div>
-
-          <SearchBar data={input} />
+    <div className="min-h-screen bg-gray-50">
+      <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
+        {/* Header */}
+        <div className="mb-8">
+          <p className="text-sm text-gray-400 mb-3">
+            <span
+              className="text-teal-600 cursor-pointer hover:underline"
+              onClick={() => navigate('/')}
+            >
+              Home
+            </span>
+            <span className="mx-1.5">/</span>
+            <span className="text-gray-700">Explore</span>
+          </p>
+          <h1 className="text-3xl font-bold text-gray-900">Explore Courses</h1>
+          <p className="text-gray-500 mt-1">Discover the right course to level up your skills</p>
         </div>
 
-        {input && (
-          <div className='inline-flex items-center gap-3 px-4 py-2 mt-6 -mb-6 rounded-full border border-gray-200 bg-white text-gray-600 text-sm shadow-sm'>
-            <span className='font-medium text-gray-900'>Search:</span>
-            <p className='truncate max-w-[160px]'>{input}</p>
+        {/* Search bar + sort */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-5">
+          <div className="flex-1">
+            <SearchBar data={input} />
+          </div>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="h-11 px-4 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:border-teal-400 transition cursor-pointer shrink-0"
+          >
+            {SORT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Result count + active search pill */}
+        <div className="flex items-center gap-3 mb-6 flex-wrap">
+          <p className="text-sm text-gray-500">
+            <span className="font-semibold text-gray-800">{filteredCourse.length}</span>
+            &nbsp;{filteredCourse.length === 1 ? 'course' : 'courses'}
+            {input ? ` matching "${input}"` : ' available'}
+          </p>
+          {input && (
             <button
-              type='button'
-              className='ml-1 rounded-full p-1 hover:bg-gray-100'
-              onClick={()=> navigate('/course-list')}
+              type="button"
+              onClick={() => navigate('/course-list')}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-gray-200 bg-white text-xs text-gray-600 hover:bg-gray-50 transition"
             >
-              <img src={assets.cross_icon} alt='clear' className='w-3.5 h-3.5'/>
+              <img src={assets.cross_icon} alt="clear" className="w-2.5 h-2.5 opacity-60" />
+              Clear search
             </button>
+          )}
+        </div>
+
+        {/* Course grid or empty state */}
+        {filteredCourse.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center">
+            <div className="text-5xl mb-4">🔍</div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">No courses found</h3>
+            <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+              {input
+                ? `We couldn't find any courses matching "${input}". Try a different search term.`
+                : 'No courses are available right now. Check back soon.'}
+            </p>
+            {input && (
+              <button
+                onClick={() => navigate('/course-list')}
+                className="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition"
+              >
+                View all courses
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {filteredCourse.map((course, index) => (
+              <CourseCard key={index} course={course} />
+            ))}
           </div>
         )}
-
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-16 gap-4 px-2 md:p-0'>
-          {filteredCourse.map((course, index)=><CourseCard key={index} course={course}/>)}
-        </div>
       </div>
-
-      <Footer/>
-    </>
+      <Footer />
+    </div>
   )
 }
 

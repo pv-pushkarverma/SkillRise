@@ -1,17 +1,16 @@
-import { Groq } from "groq-sdk";
+import { Groq } from 'groq-sdk'
 
-const groq = new Groq({ apiKey: process.env.GROQ_CHATBOT_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_CHATBOT_API_KEY })
 
 export const generateAIResponse = async (messages) => {
-
   const completion = await groq.chat.completions.create({
-    model: "openai/gpt-oss-120b",
+    model: 'openai/gpt-oss-120b',
     messages,
     temperature: 0.7,
     max_tokens: 5000,
     top_p: 1,
     stream: false,
-  });
+  })
 
-  return completion.choices?.[0]?.message?.content?.trim() || "No response generated.";
-};
+  return completion.choices?.[0]?.message?.content?.trim() || 'No response generated.'
+}
