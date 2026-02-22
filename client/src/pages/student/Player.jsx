@@ -199,7 +199,9 @@ const Player = () => {
             My Courses
           </span>
           <span className="mx-1.5">/</span>
-          <span className="text-gray-700 dark:text-gray-300 line-clamp-1">{courseData.courseTitle}</span>
+          <span className="text-gray-700 dark:text-gray-300 line-clamp-1">
+            {courseData.courseTitle}
+          </span>
         </p>
 
         <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -242,7 +244,9 @@ const Player = () => {
 
             {/* Rating */}
             <div className="mt-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
-              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">Rate this course</p>
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">
+                Rate this course
+              </p>
               <Rating initialRating={initialRating} onRate={handleRating} />
             </div>
           </div>
@@ -269,12 +273,17 @@ const Player = () => {
             {/* Chapter list */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               <div className="px-4 py-3.5 border-b border-gray-100 dark:border-gray-700">
-                <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">Course Structure</p>
+                <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">
+                  Course Structure
+                </p>
               </div>
 
               <div className="overflow-y-auto max-h-[60vh]">
                 {courseData.courseContent.map((chapter, index) => (
-                  <div key={index} className="border-b border-gray-100 dark:border-gray-700 last:border-0">
+                  <div
+                    key={index}
+                    className="border-b border-gray-100 dark:border-gray-700 last:border-0"
+                  >
                     <div
                       className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition select-none"
                       onClick={() => toggleSection(index)}
@@ -306,7 +315,9 @@ const Player = () => {
                               key={i}
                               onClick={() => selectLecture(lecture, index, i)}
                               className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer transition ${
-                                isActive ? 'bg-teal-50 dark:bg-teal-900/20' : 'hover:bg-gray-100 dark:hover:bg-gray-600'
+                                isActive
+                                  ? 'bg-teal-50 dark:bg-teal-900/20'
+                                  : 'hover:bg-gray-100 dark:hover:bg-gray-600'
                               }`}
                             >
                               <img

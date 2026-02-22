@@ -37,11 +37,17 @@ const CoursePreview = ({
 
       <div className="p-4 space-y-3">
         <p className="text-sm font-bold text-gray-900 dark:text-gray-100 line-clamp-2 leading-snug min-h-[2.5rem]">
-          {courseTitle || <span className="text-gray-300 dark:text-gray-600 font-normal italic">Course title…</span>}
+          {courseTitle || (
+            <span className="text-gray-300 dark:text-gray-600 font-normal italic">
+              Course title…
+            </span>
+          )}
         </p>
 
         {descPreview && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">{descPreview}…</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+            {descPreview}…
+          </p>
         )}
 
         <div className="flex items-center gap-2 flex-wrap">
@@ -68,13 +74,21 @@ const CoursePreview = ({
 
         <div className="flex items-center gap-4 pt-2 border-t border-gray-100 dark:border-gray-700">
           <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500">
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
+            >
               <path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z" />
             </svg>
             {chapters.length} chapter{chapters.length !== 1 ? 's' : ''}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500">
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500"
+            >
               <path d="M8 5v14l11-7z" />
             </svg>
             {totalLectures} lecture{totalLectures !== 1 ? 's' : ''}

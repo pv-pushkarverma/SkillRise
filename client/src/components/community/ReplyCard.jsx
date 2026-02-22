@@ -24,12 +24,16 @@ const ReplyCard = ({ reply, isPostAuthor, currentUserId, onUpvote, onAccept, onA
         <div className="flex items-center gap-2.5 mb-4">
           <Avatar name={reply.authorName} imageUrl={reply.authorImage} />
           <div>
-            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{reply.authorName}</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+              {reply.authorName}
+            </p>
             <p className="text-xs text-gray-400 dark:text-gray-500">{timeAgo(reply.createdAt)}</p>
           </div>
         </div>
 
-        <p className="text-gray-700 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">{reply.content}</p>
+        <p className="text-gray-700 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">
+          {reply.content}
+        </p>
 
         <div className="flex items-center gap-3 mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
           <button

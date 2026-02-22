@@ -37,7 +37,9 @@ const LectureModal = ({ onClose, onAdd }) => {
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700">
           <div>
             <h3 className="text-base font-bold text-gray-900 dark:text-white">Add Lecture</h3>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Fill in the lecture details</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+              Fill in the lecture details
+            </p>
           </div>
           <button
             type="button"
@@ -285,7 +287,9 @@ const ChapterList = ({ chapters, setChapters }) => {
             {!chapter.collapsed && (
               <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {chapter.chapterContent.length === 0 && (
-                  <p className="px-4 py-3 text-xs text-gray-400 dark:text-gray-500 italic">No lectures yet</p>
+                  <p className="px-4 py-3 text-xs text-gray-400 dark:text-gray-500 italic">
+                    No lectures yet
+                  </p>
                 )}
 
                 {chapter.chapterContent.map((lecture, li) => (

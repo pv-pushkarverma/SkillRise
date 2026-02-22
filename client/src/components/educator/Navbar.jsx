@@ -11,7 +11,11 @@ const Navbar = () => {
     <header className="sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
       <div className="flex items-center justify-between px-4 md:px-8 lg:px-10 py-3">
         <Link to="/" className="flex items-center gap-3">
-          <img src={isDark ? assets.logo : assets.logo_light} alt="Logo" className="w-32 lg:w-40 cursor-pointer" />
+          <img
+            src={isDark ? assets.logo : assets.logo_light}
+            alt="Logo"
+            className="w-32 lg:w-40 cursor-pointer"
+          />
           <span className="hidden sm:inline text-xs font-medium tracking-wide px-2 py-1 rounded-full bg-teal-50 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 border border-teal-100 dark:border-teal-800">
             Educator dashboard
           </span>
@@ -20,7 +24,9 @@ const Navbar = () => {
         <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
           <p className="hidden sm:block">
             Hi,{' '}
-            <span className="font-semibold text-gray-900 dark:text-white">{user ? user.fullName : 'Creator'}</span>
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {user ? user.fullName : 'Creator'}
+            </span>
           </p>
           {user && <div className="h-6 w-px bg-gray-200 dark:bg-gray-700 hidden sm:block" />}
 
@@ -36,7 +42,11 @@ const Navbar = () => {
               </svg>
             ) : (
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clipRule="evenodd" />
+                <path
+                  fillRule="evenodd"
+                  d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"
+                  clipRule="evenodd"
+                />
               </svg>
             )}
           </button>

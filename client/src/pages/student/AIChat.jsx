@@ -232,7 +232,9 @@ const AIChat = () => {
               />
               <div className="relative w-72 bg-white dark:bg-gray-900 flex flex-col h-full shadow-xl">
                 <div className="flex items-center justify-between px-4 pt-4 pb-2">
-                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">Chat History</p>
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                    Chat History
+                  </p>
                   <button
                     onClick={() => setShowMobileHistory(false)}
                     className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition"
@@ -300,7 +302,9 @@ const AIChat = () => {
                   <div className="w-12 h-12 bg-teal-50 border border-teal-100 rounded-2xl flex items-center justify-center mb-3">
                     <SparkIcon className="w-6 h-6 text-teal-500" />
                   </div>
-                  <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-1">How can I help you?</h3>
+                  <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-1">
+                    How can I help you?
+                  </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     Ask about your courses, paste code snippets, or explore any topic.
                   </p>

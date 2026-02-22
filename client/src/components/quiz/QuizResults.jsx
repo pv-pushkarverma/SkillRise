@@ -66,7 +66,9 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {result.score} / {result.total} correct
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{quiz?.chapterTitle}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                {quiz?.chapterTitle}
+              </p>
             </div>
           </div>
 
@@ -95,13 +97,18 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
               </svg>
             </div>
             <div>
-              <p className="font-semibold text-gray-900 dark:text-white text-sm">Personalized Recommendations</p>
+              <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                Personalized Recommendations
+              </p>
               <p className="text-xs text-gray-400 dark:text-gray-500">Based on your performance</p>
             </div>
           </div>
           <ul className="space-y-2">
             {bullets.map((line, i) => (
-              <li key={i} className="flex gap-2.5 text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+              <li
+                key={i}
+                className="flex gap-2.5 text-sm text-gray-700 dark:text-gray-200 leading-relaxed"
+              >
                 <span className="text-teal-500 shrink-0 mt-0.5">•</span>
                 <span>{line.replace(/^[•\\-]\s*/, '')}</span>
               </li>
@@ -138,7 +145,8 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                       {q.options.map((opt, oi) => {
-                        let cls = 'text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-gray-100 dark:border-gray-600'
+                        let cls =
+                          'text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-gray-100 dark:border-gray-600'
                         if (oi === correct)
                           cls = 'text-teal-700 bg-teal-50 border-teal-200 font-semibold'
                         if (oi === chosen && !isRight)
@@ -152,7 +160,9 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
                       })}
                     </div>
                     {q.explanation && (
-                      <p className="text-xs text-gray-400 dark:text-gray-500 italic">{q.explanation}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 italic">
+                        {q.explanation}
+                      </p>
                     )}
                   </div>
                 )

@@ -10,7 +10,9 @@ const CoursesTab = ({
   <>
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
       <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">Enrolled</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
+          Enrolled
+        </p>
         <p className="text-3xl font-bold text-gray-900 dark:text-white">{enrolledCourses.length}</p>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">total courses</p>
       </div>
@@ -33,7 +35,9 @@ const CoursesTab = ({
     {enrolledCourses.length === 0 ? (
       <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-16 text-center">
         <div className="text-5xl mb-4">🎓</div>
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">No courses yet</h3>
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
+          No courses yet
+        </h3>
         <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-sm mx-auto">
           Enroll in a course to start tracking your progress here.
         </p>
@@ -88,7 +92,9 @@ const CoursesTab = ({
                 )}
 
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400 dark:text-gray-500">{calculateCourseDuration(course)}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
+                    {calculateCourseDuration(course)}
+                  </span>
                   <div className="flex items-center gap-2">
                     {isDone && (
                       <span className="text-xs px-2 py-0.5 bg-teal-50 text-teal-700 border border-teal-100 rounded-full font-medium">

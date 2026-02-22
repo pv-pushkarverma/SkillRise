@@ -349,7 +349,9 @@ const AddCourse = () => {
             <SectionCard>
               <div className="px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">Ready to publish?</p>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                    Ready to publish?
+                  </p>
                   <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                     {sectionsComplete} of 3 sections complete
                   </p>

@@ -128,7 +128,9 @@ const Quiz = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-100 dark:border-gray-700 border-t-teal-500" />
           <div>
             <p className="font-semibold text-gray-900 dark:text-white">Submitting your answers</p>
-            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Calculating score and generating feedback…</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+              Calculating score and generating feedback…
+            </p>
           </div>
         </div>
       </div>

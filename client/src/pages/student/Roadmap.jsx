@@ -78,7 +78,9 @@ const Roadmap = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4 dark:bg-gray-950">
         <div className="text-6xl">🗺️</div>
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Sign in to view your roadmap</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+          Sign in to view your roadmap
+        </h2>
         <p className="text-gray-500 dark:text-gray-400 max-w-sm">
           Get a personalized AI-powered learning path based on your enrolled courses and progress.
         </p>
@@ -163,9 +165,12 @@ const Roadmap = () => {
                     </h3>
                     <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-2 text-sm leading-relaxed">
                       The AI will analyze your{' '}
-                      <span className="font-semibold text-gray-700 dark:text-gray-200">{courseCount}</span> enrolled
-                      course{courseCount !== 1 ? 's' : ''} and build a complete, stage-by-stage path
-                      — showing what you've mastered, what you're building, and where to go next.
+                      <span className="font-semibold text-gray-700 dark:text-gray-200">
+                        {courseCount}
+                      </span>{' '}
+                      enrolled course{courseCount !== 1 ? 's' : ''} and build a complete,
+                      stage-by-stage path — showing what you've mastered, what you're building, and
+                      where to go next.
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-1.5 mb-6 mt-4">
@@ -201,7 +206,9 @@ const Roadmap = () => {
             {personalRoadmap && !personalLoading && (
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{personalRoadmap.title}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {personalRoadmap.title}
+                  </h2>
                 </div>
                 <RoadmapView
                   roadmap={personalRoadmap}
@@ -264,7 +271,9 @@ const Roadmap = () => {
             {customRoadmap && !customLoading && (
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{customRoadmap.title}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    {customRoadmap.title}
+                  </h2>
                 </div>
                 <RoadmapView
                   roadmap={customRoadmap}

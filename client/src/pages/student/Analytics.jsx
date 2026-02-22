@@ -119,7 +119,9 @@ const Analytics = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4 dark:bg-gray-950">
         <div className="text-6xl">📊</div>
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Sign in to view your dashboard</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+          Sign in to view your dashboard
+        </h2>
         <p className="text-gray-500 dark:text-gray-400 max-w-sm">
           Track time spent, monitor course progress, and see your learning stats.
         </p>

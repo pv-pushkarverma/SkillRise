@@ -112,7 +112,9 @@ const Dashboard = () => {
       <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
           <div>
-            <h2 className="text-base font-semibold text-gray-900 dark:text-white">Latest Enrollments</h2>
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+              Latest Enrollments
+            </h2>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
               {dashboardData.enrolledStudentsData.length} students total
             </p>
@@ -136,7 +138,10 @@ const Dashboard = () => {
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {dashboardData.enrolledStudentsData.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/40 transition-colors">
+                <tr
+                  key={index}
+                  className="hover:bg-gray-50/50 dark:hover:bg-gray-700/40 transition-colors"
+                >
                   <td className="px-6 py-3.5 text-sm text-gray-400 dark:text-gray-500 hidden sm:table-cell">
                     {index + 1}
                   </td>
@@ -147,7 +152,9 @@ const Dashboard = () => {
                         alt=""
                         className="w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-gray-800 border border-gray-100 dark:border-gray-600 shrink-0"
                       />
-                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.student.name}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {item.student.name}
+                      </span>
                     </div>
                   </td>
                   <td className="px-6 py-3.5 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
@@ -187,10 +194,14 @@ const Dashboard = () => {
                       <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                         {item.chapterTitle}
                       </p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{item.courseTitle}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">
+                        {item.courseTitle}
+                      </p>
                     </div>
                     <div className="shrink-0 text-right">
-                      <p className="text-sm font-bold text-gray-900 dark:text-white">{item.avgPct}%</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">
+                        {item.avgPct}%
+                      </p>
                       <p className="text-xs text-gray-400 dark:text-gray-500">
                         {item.attempts} attempt{item.attempts !== 1 ? 's' : ''}
                       </p>

@@ -92,14 +92,18 @@ const CourseDetails = () => {
           <div className="flex flex-col lg:flex-row gap-8 items-start">
             {/* Left: title + description + meta */}
             <div className="flex-1 min-w-0">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{courseData.courseTitle}</h1>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                {courseData.courseTitle}
+              </h1>
 
               <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
                 <MarkdownRenderer>{courseData.courseDescription}</MarkdownRenderer>
               </div>
 
               <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
-                <span className="font-semibold text-gray-900 dark:text-white">{calculateRating(courseData)}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {calculateRating(courseData)}
+                </span>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <img
@@ -165,7 +169,9 @@ const CourseDetails = () => {
                         </p>
                       </div>
                       <div className="flex items-baseline gap-2.5 mb-4">
-                        <p className="text-3xl font-bold text-gray-900 dark:text-white">₹{discountedPrice}</p>
+                        <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                          ₹{discountedPrice}
+                        </p>
                         <p className="text-gray-400 line-through text-sm">
                           ₹{courseData.coursePrice}
                         </p>
@@ -203,7 +209,9 @@ const CourseDetails = () => {
                   </button>
 
                   <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">What's included</p>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">
+                      What's included
+                    </p>
                     <ul className="flex flex-col gap-2 text-sm text-gray-600 dark:text-gray-300">
                       {[
                         'Lifetime access with free updates',
@@ -228,10 +236,15 @@ const CourseDetails = () => {
 
       {/* Course structure */}
       <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Course Structure</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Course Structure
+        </h2>
         <div className="flex flex-col gap-2 max-w-3xl">
           {courseData.courseContent.map((chapter, index) => (
-            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div
+              key={index}
+              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+            >
               <div
                 className="flex items-center justify-between px-4 py-3.5 cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                 onClick={() => toggleSection(index)}
@@ -242,7 +255,9 @@ const CourseDetails = () => {
                     src={assets.down_arrow_icon}
                     alt=""
                   />
-                  <p className="font-medium text-gray-800 dark:text-gray-100 text-sm">{chapter.chapterTitle}</p>
+                  <p className="font-medium text-gray-800 dark:text-gray-100 text-sm">
+                    {chapter.chapterTitle}
+                  </p>
                 </div>
                 <p className="text-xs text-gray-400 shrink-0 ml-4">
                   {chapter.chapterContent.length} lectures · {calculateChapterTime(chapter)}

@@ -78,7 +78,9 @@ const PaymentSuccess = () => {
           </svg>
         </div>
         <h1 className="text-xl font-bold text-gray-900 dark:text-white">Payment not completed</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Your payment was not processed. No charge was made.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Your payment was not processed. No charge was made.
+        </p>
         <Link
           to={`/course/${courseId}`}
           className="mt-2 bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-xl text-sm font-medium transition"
@@ -107,8 +109,12 @@ const PaymentSuccess = () => {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Payment successful!</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">You're now enrolled. Happy learning!</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+            Payment successful!
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+            You're now enrolled. Happy learning!
+          </p>
 
           {course && (
             <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl p-3 mb-6 text-left">
@@ -120,8 +126,12 @@ const PaymentSuccess = () => {
                 />
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{course.courseTitle}</p>
-                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">by {course.educator?.name}</p>
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">
+                  {course.courseTitle}
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                  by {course.educator?.name}
+                </p>
               </div>
               {discountedPrice && (
                 <p className="text-sm font-bold text-teal-700 shrink-0">₹{discountedPrice}</p>

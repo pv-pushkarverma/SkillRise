@@ -16,21 +16,27 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">For students</p>
-              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">Learn by doing</p>
+              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
+                Learn by doing
+              </p>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 Structured lectures, progress tracking, and ratings you can trust.
               </p>
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">For creators</p>
-              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">Teach at scale</p>
+              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
+                Teach at scale
+              </p>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 Become an educator and publish courses from your dashboard.
               </p>
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">For teams</p>
-              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">Upskill faster</p>
+              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
+                Upskill faster
+              </p>
               <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 Curated learning paths for practical, job‑ready skills.
               </p>

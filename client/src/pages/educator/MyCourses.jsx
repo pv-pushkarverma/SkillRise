@@ -60,14 +60,20 @@ const MyCourses = () => {
       {courses.length > 0 && (
         <div className="flex flex-wrap gap-3">
           <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-2.5 shadow-sm flex items-center gap-2">
-            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Total earnings</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+              Total earnings
+            </span>
             <span className="text-sm font-bold text-teal-700">
               ₹{totalEarnings.toLocaleString()}
             </span>
           </div>
           <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-2.5 shadow-sm flex items-center gap-2">
-            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Total students</span>
-            <span className="text-sm font-bold text-gray-800 dark:text-gray-100">{totalStudents}</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+              Total students
+            </span>
+            <span className="text-sm font-bold text-gray-800 dark:text-gray-100">
+              {totalStudents}
+            </span>
           </div>
         </div>
       )}
@@ -102,7 +108,10 @@ const MyCourses = () => {
                   course.coursePrice - (course.discount * course.coursePrice) / 100
                 )
                 return (
-                  <tr key={course._id} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/40 transition-colors">
+                  <tr
+                    key={course._id}
+                    className="hover:bg-gray-50/50 dark:hover:bg-gray-700/40 transition-colors"
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img

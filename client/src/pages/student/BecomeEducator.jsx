@@ -116,7 +116,9 @@ const BecomeEducator = () => {
             </svg>
           </div>
           <StatusBadge status="pending" />
-          <h2 className="mt-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Application Under Review</h2>
+          <h2 className="mt-4 text-xl font-semibold text-gray-800 dark:text-gray-100">
+            Application Under Review
+          </h2>
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Our team is reviewing your application. You will gain educator access once it is
             approved.
@@ -163,14 +165,18 @@ const BecomeEducator = () => {
             </svg>
           </div>
           <StatusBadge status="rejected" />
-          <h2 className="mt-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Application Not Approved</h2>
+          <h2 className="mt-4 text-xl font-semibold text-gray-800 dark:text-gray-100">
+            Application Not Approved
+          </h2>
           {applicationStatus.rejectionReason && (
             <p className="mt-3 text-sm text-gray-500 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
               <span className="font-medium text-red-600">Reason: </span>
               {applicationStatus.rejectionReason}
             </p>
           )}
-          <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">You may update your application and reapply.</p>
+          <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+            You may update your application and reapply.
+          </p>
           <button
             onClick={() => {
               setReapplying(true)
@@ -201,7 +207,9 @@ const BecomeEducator = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Apply to Become an Educator</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Apply to Become an Educator
+          </h1>
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Share your expertise with thousands of learners. Our team will review your application.
           </p>
@@ -266,7 +274,9 @@ const BecomeEducator = () => {
               })}
             </div>
             {form.expertise.length === 0 && (
-              <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">Select at least one area.</p>
+              <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">
+                Select at least one area.
+              </p>
             )}
           </div>
 

@@ -89,7 +89,10 @@ const StudentsEnrolled = () => {
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {filtered.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/40 transition-colors">
+                <tr
+                  key={index}
+                  className="hover:bg-gray-50/50 dark:hover:bg-gray-700/40 transition-colors"
+                >
                   <td className="px-6 py-3.5 text-sm text-gray-400 dark:text-gray-500 hidden sm:table-cell">
                     {index + 1}
                   </td>

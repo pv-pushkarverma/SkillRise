@@ -62,7 +62,9 @@ const ContinueLearning = () => {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Continue Learning</h2>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Pick up where you left off</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
+              Pick up where you left off
+            </p>
           </div>
           <button
             onClick={() => navigate('/analytics?tab=courses')}
@@ -112,7 +114,9 @@ const ContinueLearning = () => {
                         <span>
                           {completed} / {total} lectures
                         </span>
-                        <span className="font-semibold text-gray-700 dark:text-gray-200">{pct}%</span>
+                        <span className="font-semibold text-gray-700 dark:text-gray-200">
+                          {pct}%
+                        </span>
                       </div>
                       <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div

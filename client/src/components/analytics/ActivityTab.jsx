@@ -36,7 +36,9 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Total time
           </p>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatDuration(totalDuration)}</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">
+            {formatDuration(totalDuration)}
+          </p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">across all pages</p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
@@ -59,7 +61,9 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">Time by topic</h2>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">
+            Time by topic
+          </h2>
           {pageStats.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="text-4xl mb-3">📭</div>
@@ -99,11 +103,15 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
         </div>
 
         <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
-          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">Last 7 days</h2>
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">
+            Last 7 days
+          </h2>
           {dailyStats.every((d) => d.duration === 0) ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="text-4xl mb-3">📅</div>
-              <p className="text-gray-400 dark:text-gray-500 text-sm">No activity recorded this week.</p>
+              <p className="text-gray-400 dark:text-gray-500 text-sm">
+                No activity recorded this week.
+              </p>
             </div>
           ) : (
             <div className="flex items-end justify-between gap-1.5 h-48">
@@ -151,7 +159,9 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
       {courseBreakdown.length > 0 && (
         <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Course breakdown</h2>
+            <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+              Course breakdown
+            </h2>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
               Watch time per course · quiz time per chapter
             </p>

@@ -1,7 +1,9 @@
 const GroupRow = ({ g, selectedId, onSelect, onToggleMembership, isLoggedIn, onAuthRequired }) => (
   <div
     className={`flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-pointer transition group ${
-      selectedId === g._id ? 'bg-teal-50 text-teal-700' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
+      selectedId === g._id
+        ? 'bg-teal-50 text-teal-700'
+        : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
     }`}
     onClick={() => onSelect(selectedId === g._id ? null : g)}
   >
@@ -54,7 +56,9 @@ const GroupsPanel = ({
 
       <div
         className={`flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-pointer transition ${
-          !selectedGroup ? 'bg-teal-50 text-teal-700' : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
+          !selectedGroup
+            ? 'bg-teal-50 text-teal-700'
+            : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
         }`}
         onClick={() => onSelectGroup(null)}
       >

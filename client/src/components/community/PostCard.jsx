@@ -37,12 +37,17 @@ const PostCard = ({ post, onUpvote, isLoggedIn, onAuthRequired }) => {
         {post.title}
       </h3>
 
-      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-3">{post.content}</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-3">
+        {post.content}
+      </p>
 
       {post.tags?.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
           {post.tags.map((t) => (
-            <span key={t} className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md">
+            <span
+              key={t}
+              className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md"
+            >
               {t}
             </span>
           ))}

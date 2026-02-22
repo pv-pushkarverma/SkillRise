@@ -70,7 +70,9 @@ const QuizQuestion = ({
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 space-y-5">
-          <p className="text-base font-semibold text-gray-900 dark:text-white leading-relaxed">{q.question}</p>
+          <p className="text-base font-semibold text-gray-900 dark:text-white leading-relaxed">
+            {q.question}
+          </p>
 
           <div className="space-y-2.5">
             {q.options.map((opt, oi) => {
@@ -87,7 +89,9 @@ const QuizQuestion = ({
                 >
                   <span
                     className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 ${
-                      isSelected ? 'bg-teal-500 text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                      isSelected
+                        ? 'bg-teal-500 text-white'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                     }`}
                   >
                     {OPTION_LABELS[oi]}

@@ -12,7 +12,9 @@ const CoursesSection = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
           <div>
-            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">Featured courses</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
+              Featured courses
+            </h2>
             <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mt-2 max-w-2xl">
               Hand‑picked courses with strong ratings and structured content. Explore, enroll, and
               start learning today.

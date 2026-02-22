@@ -16,7 +16,14 @@ const ScoreRing = ({ pct, group }) => {
   return (
     <div className="relative w-28 h-28 mx-auto">
       <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-        <circle cx="50" cy="50" r={r} fill="none" stroke={isDark ? '#374151' : '#e5e7eb'} strokeWidth="10" />
+        <circle
+          cx="50"
+          cy="50"
+          r={r}
+          fill="none"
+          stroke={isDark ? '#374151' : '#e5e7eb'}
+          strokeWidth="10"
+        />
         <circle
           cx="50"
           cy="50"

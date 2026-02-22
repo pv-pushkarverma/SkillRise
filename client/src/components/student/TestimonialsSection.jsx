@@ -33,7 +33,9 @@ const TestimonialsSection = () => {
             </div>
 
             {/* Feedback */}
-            <p className="text-sm text-gray-600 dark:text-gray-300 flex-1 leading-relaxed">{testimonial.feedback}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300 flex-1 leading-relaxed">
+              {testimonial.feedback}
+            </p>
 
             {/* Author */}
             <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
@@ -43,8 +45,12 @@ const TestimonialsSection = () => {
                 alt={testimonial.name}
               />
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">{testimonial.name}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{testimonial.role}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  {testimonial.name}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  {testimonial.role}
+                </p>
               </div>
             </div>
           </div>

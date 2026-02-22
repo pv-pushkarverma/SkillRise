@@ -274,7 +274,9 @@ const Community = () => {
                     setTab(t.id)
                   }}
                   className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
-                    tab === t.id ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                    tab === t.id
+                      ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                   }`}
                 >
                   {t.label}
@@ -314,7 +316,9 @@ const Community = () => {
             ) : posts.length === 0 ? (
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-12 text-center">
                 <div className="text-5xl mb-3">💬</div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">No posts yet</h3>
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
+                  No posts yet
+                </h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">
                   {tab === 'myGroups'
                     ? 'Posts from groups you join will appear here.'

@@ -61,8 +61,14 @@ const Checkout = () => {
           >
             ← Back
           </button>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Complete your purchase</h1>
-          {courseTitle && <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">{courseTitle}</p>}
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            Complete your purchase
+          </h1>
+          {courseTitle && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">
+              {courseTitle}
+            </p>
+          )}
         </div>
 
         {/* Stripe Embedded Checkout */}

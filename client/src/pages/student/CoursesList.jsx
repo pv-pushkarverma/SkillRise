@@ -62,7 +62,9 @@ const CoursesList = () => {
             <span className="text-gray-700 dark:text-gray-300">Explore</span>
           </p>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Explore Courses</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Discover the right course to level up your skills</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
+            Discover the right course to level up your skills
+          </p>
         </div>
 
         {/* Search bar + sort */}
@@ -86,7 +88,9 @@ const CoursesList = () => {
         {/* Result count + active search pill */}
         <div className="flex items-center gap-3 mb-6 flex-wrap">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            <span className="font-semibold text-gray-800 dark:text-gray-100">{filteredCourse.length}</span>
+            <span className="font-semibold text-gray-800 dark:text-gray-100">
+              {filteredCourse.length}
+            </span>
             &nbsp;{filteredCourse.length === 1 ? 'course' : 'courses'}
             {input ? ` matching "${input}"` : ' available'}
           </p>
@@ -106,7 +110,9 @@ const CoursesList = () => {
         {filteredCourse.length === 0 ? (
           <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-16 text-center">
             <div className="text-5xl mb-4">🔍</div>
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">No courses found</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
+              No courses found
+            </h3>
             <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-sm mx-auto">
               {input
                 ? `We couldn't find any courses matching "${input}". Try a different search term.`

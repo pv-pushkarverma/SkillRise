@@ -256,8 +256,12 @@ const PostDetail = () => {
               <div className="flex items-center gap-2.5">
                 <Avatar name={post.authorName} imageUrl={post.authorImage} size="lg" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{post.authorName}</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">{timeAgo(post.createdAt)}</p>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                    {post.authorName}
+                  </p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                    {timeAgo(post.createdAt)}
+                  </p>
                 </div>
               </div>
 
@@ -311,7 +315,9 @@ const PostDetail = () => {
           {post.replies?.length === 0 ? (
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-10 text-center">
               <div className="text-3xl mb-2">💭</div>
-              <p className="text-gray-500 dark:text-gray-400 text-sm">No replies yet — be the first to answer!</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                No replies yet — be the first to answer!
+              </p>
             </div>
           ) : (
             <div className="flex flex-col gap-4">
@@ -360,7 +366,9 @@ const PostDetail = () => {
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
                   />
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-gray-400 dark:text-gray-500">{replyContent.length}/3000</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">
+                      {replyContent.length}/3000
+                    </span>
                     <button
                       type="submit"
                       disabled={submitting || !replyContent.trim()}
@@ -374,7 +382,9 @@ const PostDetail = () => {
             </form>
           ) : (
             <div className="flex items-center gap-3">
-              <p className="text-sm text-gray-500 dark:text-gray-400 flex-1">Join the discussion by signing in.</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 flex-1">
+                Join the discussion by signing in.
+              </p>
               <button
                 onClick={() => openSignIn()}
                 className="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition"
