@@ -183,7 +183,7 @@ const PostDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -191,9 +191,9 @@ const PostDetail = () => {
 
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-3 text-center px-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center gap-3 text-center px-4">
         <div className="text-5xl">💬</div>
-        <p className="text-gray-600">{error || 'Post not found'}</p>
+        <p className="text-gray-600 dark:text-gray-300">{error || 'Post not found'}</p>
         <Link to="/community" className="text-teal-600 hover:underline text-sm">
           ← Back to Community
         </Link>
@@ -205,21 +205,21 @@ const PostDetail = () => {
   const otherReplies = post.replies?.filter((r) => !r.isAcceptedAnswer) ?? []
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-6">
         <Link
           to="/community"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition mb-5"
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition mb-5"
         >
           <span>←</span>
           <span>Back to Community</span>
         </Link>
 
-        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-6">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden mb-6">
           <div className="p-6 sm:p-7">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               {post.group && (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-full">
                   <span>{post.group.icon}</span>
                   {post.group.name}
                 </span>
@@ -231,11 +231,11 @@ const PostDetail = () => {
               )}
             </div>
 
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 leading-snug mb-4">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white leading-snug mb-4">
               {post.title}
             </h1>
 
-            <p className="text-gray-700 leading-relaxed text-sm sm:text-base whitespace-pre-wrap mb-5">
+            <p className="text-gray-700 dark:text-gray-200 leading-relaxed text-sm sm:text-base whitespace-pre-wrap mb-5">
               {post.content}
             </p>
 
@@ -244,7 +244,7 @@ const PostDetail = () => {
                 {post.tags.map((t) => (
                   <span
                     key={t}
-                    className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md font-medium"
+                    className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md font-medium"
                   >
                     {t}
                   </span>
@@ -252,12 +252,12 @@ const PostDetail = () => {
               </div>
             )}
 
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-5 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-5 border-t border-gray-100 dark:border-gray-700">
               <div className="flex items-center gap-2.5">
                 <Avatar name={post.authorName} imageUrl={post.authorImage} size="lg" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">{post.authorName}</p>
-                  <p className="text-xs text-gray-400">{timeAgo(post.createdAt)}</p>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{post.authorName}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500">{timeAgo(post.createdAt)}</p>
                 </div>
               </div>
 
@@ -267,13 +267,13 @@ const PostDetail = () => {
                   className={`flex items-center gap-1.5 text-sm px-4 py-2 rounded-xl border transition ${
                     post.isUpvoted
                       ? 'border-teal-300 bg-teal-50 text-teal-700 font-semibold'
-                      : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                      : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
                   ↑ {post.upvoteCount} {post.upvoteCount === 1 ? 'upvote' : 'upvotes'}
                 </button>
 
-                <span className="text-sm text-gray-500 px-3 py-2 border border-gray-200 rounded-xl">
+                <span className="text-sm text-gray-500 dark:text-gray-400 px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-xl">
                   💬 {post.replyCount} {post.replyCount === 1 ? 'reply' : 'replies'}
                 </span>
 
@@ -284,7 +284,7 @@ const PostDetail = () => {
                       className={`text-sm px-3 py-2 rounded-xl border transition ${
                         post.isResolved
                           ? 'border-teal-200 bg-teal-50 text-teal-700'
-                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                          : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                       }`}
                     >
                       {post.isResolved ? '✓ Resolved' : 'Mark resolved'}
@@ -304,14 +304,14 @@ const PostDetail = () => {
         </div>
 
         <div className="mb-6">
-          <h2 className="text-base font-semibold text-gray-800 mb-4">
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">
             {post.replyCount} {post.replyCount === 1 ? 'Reply' : 'Replies'}
           </h2>
 
           {post.replies?.length === 0 ? (
-            <div className="bg-white border border-gray-200 rounded-2xl p-10 text-center">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-10 text-center">
               <div className="text-3xl mb-2">💭</div>
-              <p className="text-gray-500 text-sm">No replies yet — be the first to answer!</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">No replies yet — be the first to answer!</p>
             </div>
           ) : (
             <div className="flex flex-col gap-4">
@@ -341,8 +341,8 @@ const PostDetail = () => {
           )}
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6">
-          <h3 className="text-sm font-semibold text-gray-800 mb-3">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 sm:p-6">
+          <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">
             {user ? 'Your Reply' : 'Sign in to Reply'}
           </h3>
 
@@ -357,10 +357,10 @@ const PostDetail = () => {
                     placeholder="Share your answer or thoughts…"
                     rows={4}
                     maxLength={3000}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
                   />
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-gray-400">{replyContent.length}/3000</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">{replyContent.length}/3000</span>
                     <button
                       type="submit"
                       disabled={submitting || !replyContent.trim()}
@@ -374,7 +374,7 @@ const PostDetail = () => {
             </form>
           ) : (
             <div className="flex items-center gap-3">
-              <p className="text-sm text-gray-500 flex-1">Join the discussion by signing in.</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 flex-1">Join the discussion by signing in.</p>
               <button
                 onClick={() => openSignIn()}
                 className="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition"

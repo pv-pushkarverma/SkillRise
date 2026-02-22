@@ -51,22 +51,22 @@ const Checkout = () => {
   }, [courseId, backendUrl, getToken, navigate])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="max-w-2xl mx-auto px-4 py-10">
         {/* Header */}
         <div className="mb-6">
           <button
             onClick={() => navigate(-1)}
-            className="text-sm text-gray-500 hover:text-gray-800 flex items-center gap-1.5 mb-4 transition"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 flex items-center gap-1.5 mb-4 transition"
           >
             ← Back
           </button>
-          <h1 className="text-xl font-bold text-gray-900">Complete your purchase</h1>
-          {courseTitle && <p className="text-sm text-gray-500 mt-0.5 truncate">{courseTitle}</p>}
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Complete your purchase</h1>
+          {courseTitle && <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">{courseTitle}</p>}
         </div>
 
         {/* Stripe Embedded Checkout */}
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
             <EmbeddedCheckout />
           </EmbeddedCheckoutProvider>

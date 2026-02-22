@@ -9,10 +9,10 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
 
   if (quizHistory.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-16 text-center">
         <div className="text-5xl mb-4">🧠</div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">No quizzes taken yet</h3>
-        <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">No quizzes taken yet</h3>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-sm mx-auto">
           Complete all lectures in a chapter to unlock and take its quiz.
         </p>
         <button
@@ -28,38 +28,38 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Attempts
           </p>
-          <p className="text-3xl font-bold text-gray-900">{quizHistory.length}</p>
-          <p className="text-sm text-gray-500 mt-1">total quiz attempts</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">{quizHistory.length}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">total quiz attempts</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Avg Score
           </p>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {Math.round(quizHistory.reduce((s, r) => s + r.percentage, 0) / quizHistory.length)}%
           </p>
-          <p className="text-sm text-gray-500 mt-1">across all attempts</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">across all attempts</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Mastered
           </p>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {quizHistory.filter((r) => r.group === 'mastered').length}
           </p>
-          <p className="text-sm text-gray-500 mt-1">chapters mastered</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">chapters mastered</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100">
-          <p className="font-semibold text-gray-800 text-sm">All Attempts</p>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
+          <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">All Attempts</p>
         </div>
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-gray-100 dark:divide-gray-700">
           {quizHistory.map((r) => {
             const badgeColor =
               r.group === 'mastered'
@@ -77,14 +77,14 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
             return (
               <div
                 key={r._id}
-                className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition"
+                className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate">{r.chapterTitle}</p>
-                  <p className="text-xs text-gray-400 mt-0.5 truncate">{r.courseTitle}</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">{r.chapterTitle}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">{r.courseTitle}</p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-sm font-semibold text-gray-700 tabular-nums w-10 text-right">
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 tabular-nums w-10 text-right">
                     {r.percentage}%
                   </span>
                   <span
@@ -92,7 +92,7 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
                   >
                     {icon} {label}
                   </span>
-                  <span className="text-xs text-gray-400 hidden sm:block">
+                  <span className="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">
                     {new Date(r.createdAt).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',

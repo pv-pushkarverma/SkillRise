@@ -33,16 +33,16 @@ const LectureModal = ({ onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
-        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md">
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-100 dark:border-gray-700">
           <div>
-            <h3 className="text-base font-bold text-gray-900">Add Lecture</h3>
-            <p className="text-xs text-gray-400 mt-0.5">Fill in the lecture details</p>
+            <h3 className="text-base font-bold text-gray-900 dark:text-white">Add Lecture</h3>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Fill in the lecture details</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition p-1.5 rounded-xl hover:bg-gray-100"
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -80,7 +80,7 @@ const LectureModal = ({ onClose, onAdd }) => {
                   checked={details.isPreviewFree}
                   onChange={() => setDetails((p) => ({ ...p, isPreviewFree: !p.isPreviewFree }))}
                 />
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
                   {details.isPreviewFree ? 'Enabled' : 'Disabled'}
                 </span>
               </div>
@@ -95,7 +95,7 @@ const LectureModal = ({ onClose, onAdd }) => {
               placeholder="https://youtube.com/watch?v=..."
               className={inputCls}
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
               Supports YouTube, Vimeo, and direct video links
             </p>
           </Field>
@@ -105,7 +105,7 @@ const LectureModal = ({ onClose, onAdd }) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 text-sm font-medium text-gray-600 rounded-xl hover:bg-gray-50 transition"
+            className="flex-1 py-2.5 border border-gray-200 dark:border-gray-600 text-sm font-medium text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition"
           >
             Cancel
           </button>
@@ -212,13 +212,13 @@ const ChapterList = ({ chapters, setChapters }) => {
         {chapters.map((chapter, ci) => (
           <div
             key={chapter.chapterId}
-            className="border border-gray-200 rounded-xl overflow-hidden"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden"
           >
-            <div className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 border-b border-gray-200 group">
+            <div className="flex items-center gap-2.5 px-4 py-3 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700 group">
               <button
                 type="button"
                 onClick={() => toggleChapter(chapter.chapterId)}
-                className="text-gray-400 hover:text-gray-600 transition shrink-0"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition shrink-0"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -248,7 +248,7 @@ const ChapterList = ({ chapters, setChapters }) => {
                     }
                     if (e.key === 'Escape') setEditingChapterId(null)
                   }}
-                  className="flex-1 text-sm font-semibold text-gray-800 bg-white border border-teal-400 rounded-lg px-2.5 py-0.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                  className="flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700 border border-teal-400 rounded-lg px-2.5 py-0.5 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
                 />
               ) : (
                 <button
@@ -257,7 +257,7 @@ const ChapterList = ({ chapters, setChapters }) => {
                     setEditingChapterId(chapter.chapterId)
                     setEditingChapterTitle(chapter.chapterTitle)
                   }}
-                  className="flex-1 text-left text-sm font-semibold text-gray-800 truncate hover:text-teal-700 transition"
+                  className="flex-1 text-left text-sm font-semibold text-gray-800 dark:text-gray-100 truncate hover:text-teal-700 dark:hover:text-teal-400 transition"
                   title="Double-click to rename"
                 >
                   {chapter.chapterTitle}
@@ -265,7 +265,7 @@ const ChapterList = ({ chapters, setChapters }) => {
               )}
 
               <div className="flex items-center gap-2 shrink-0 ml-auto">
-                <span className="text-xs text-gray-400 hidden sm:block">
+                <span className="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">
                   {chapter.chapterContent.length} lecture
                   {chapter.chapterContent.length !== 1 ? 's' : ''}
                 </span>
@@ -283,15 +283,15 @@ const ChapterList = ({ chapters, setChapters }) => {
             </div>
 
             {!chapter.collapsed && (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {chapter.chapterContent.length === 0 && (
-                  <p className="px-4 py-3 text-xs text-gray-400 italic">No lectures yet</p>
+                  <p className="px-4 py-3 text-xs text-gray-400 dark:text-gray-500 italic">No lectures yet</p>
                 )}
 
                 {chapter.chapterContent.map((lecture, li) => (
                   <div
                     key={li}
-                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50/50 transition group/lec"
+                    className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition group/lec"
                   >
                     <div className="w-5 h-5 rounded-full bg-teal-50 border border-teal-100 flex items-center justify-center shrink-0">
                       <svg
@@ -302,10 +302,10 @@ const ChapterList = ({ chapters, setChapters }) => {
                         <path d="M8 5v14l11-7z" />
                       </svg>
                     </div>
-                    <span className="text-sm text-gray-700 flex-1 truncate">
+                    <span className="text-sm text-gray-700 dark:text-gray-200 flex-1 truncate">
                       {li + 1}. {lecture.lectureTitle}
                     </span>
-                    <span className="text-xs text-gray-400 shrink-0">
+                    <span className="text-xs text-gray-400 dark:text-gray-500 shrink-0">
                       {lecture.lectureDuration}m
                     </span>
                     {lecture.isPreviewFree && (
@@ -343,7 +343,7 @@ const ChapterList = ({ chapters, setChapters }) => {
         ))}
 
         {addingChapter ? (
-          <div className="flex items-center gap-2.5 px-4 py-3 border-2 border-teal-400 rounded-xl bg-teal-50/30">
+          <div className="flex items-center gap-2.5 px-4 py-3 border-2 border-teal-400 rounded-xl bg-teal-50/30 dark:bg-teal-900/10">
             <div className="w-6 h-6 rounded-full bg-teal-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
               {chapters.length + 1}
             </div>
@@ -363,7 +363,7 @@ const ChapterList = ({ chapters, setChapters }) => {
                 }
               }}
               placeholder="Chapter title…"
-              className="flex-1 text-sm font-semibold text-gray-800 bg-transparent focus:outline-none placeholder-gray-400"
+              className="flex-1 text-sm font-semibold text-gray-800 dark:text-gray-100 bg-transparent focus:outline-none placeholder-gray-400 dark:placeholder-gray-500"
             />
             <button
               type="button"
@@ -378,7 +378,7 @@ const ChapterList = ({ chapters, setChapters }) => {
                 setAddingChapter(false)
                 setNewChapterTitle('')
               }}
-              className="text-gray-400 hover:text-gray-600 p-1"
+              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                 <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -389,7 +389,7 @@ const ChapterList = ({ chapters, setChapters }) => {
           <button
             type="button"
             onClick={startAddingChapter}
-            className="w-full py-3.5 border-2 border-dashed border-gray-200 rounded-xl text-sm font-medium text-gray-400 hover:border-teal-400 hover:text-teal-600 hover:bg-teal-50/20 transition flex items-center justify-center gap-2"
+            className="w-full py-3.5 border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-xl text-sm font-medium text-gray-400 dark:text-gray-500 hover:border-teal-400 hover:text-teal-600 hover:bg-teal-50/20 dark:hover:bg-teal-900/10 transition flex items-center justify-center gap-2"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />

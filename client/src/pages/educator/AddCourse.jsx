@@ -119,11 +119,11 @@ const AddCourse = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 md:p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Create New Course</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create New Course</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Build and publish your course for students worldwide
           </p>
         </div>
@@ -139,7 +139,7 @@ const AddCourse = () => {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
                 s.done
                   ? 'bg-teal-50 border-teal-200 text-teal-700'
-                  : 'bg-white border-gray-200 text-gray-400'
+                  : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 text-gray-400 dark:text-gray-500'
               }`}
             >
               {s.done && (
@@ -154,7 +154,7 @@ const AddCourse = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div className="flex gap-6 items-start">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
           <div className="flex-1 min-w-0 space-y-5">
             <SectionCard>
               <SectionHeader
@@ -207,7 +207,7 @@ const AddCourse = () => {
                     className={`block border-2 border-dashed rounded-2xl cursor-pointer transition overflow-hidden ${
                       isDragOver
                         ? 'border-teal-400 bg-teal-50/60'
-                        : 'border-gray-200 hover:border-teal-300 hover:bg-gray-50/60'
+                        : 'border-gray-200 dark:border-gray-600 hover:border-teal-300 hover:bg-gray-50/60 dark:hover:bg-gray-800/60'
                     }`}
                   >
                     {image ? (
@@ -249,14 +249,14 @@ const AddCourse = () => {
                             />
                           </svg>
                         </div>
-                        <p className="text-sm font-semibold text-gray-700">
+                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                           Drop your thumbnail here
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                           or{' '}
                           <span className="text-teal-600 font-medium">click to browse files</span>
                         </p>
-                        <p className="text-xs text-gray-300 mt-3">
+                        <p className="text-xs text-gray-300 dark:text-gray-600 mt-3">
                           PNG, JPG, WEBP · Recommended 1280 × 720
                         </p>
                       </div>
@@ -271,10 +271,10 @@ const AddCourse = () => {
                   </label>
                 </Field>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field label="Course Price (₹)">
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 font-medium select-none">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 dark:text-gray-500 font-medium select-none">
                         ₹
                       </span>
                       <input
@@ -300,7 +300,7 @@ const AddCourse = () => {
                         onChange={(e) => setDiscount(e.target.value)}
                         className={`${inputCls} pr-8`}
                       />
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 font-medium select-none">
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-gray-400 dark:text-gray-500 font-medium select-none">
                         %
                       </span>
                     </div>
@@ -308,10 +308,10 @@ const AddCourse = () => {
                 </div>
 
                 {price > 0 && (
-                  <div className="flex flex-wrap items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
+                  <div className="flex flex-wrap items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-100 dark:border-gray-600">
                     {disc > 0 ? (
                       <>
-                        <span className="text-sm text-gray-400 line-through">
+                        <span className="text-sm text-gray-400 dark:text-gray-500 line-through">
                           ₹{price.toLocaleString()}
                         </span>
                         <span className="text-lg font-bold text-teal-700">
@@ -322,11 +322,11 @@ const AddCourse = () => {
                         </span>
                       </>
                     ) : (
-                      <span className="text-base font-bold text-gray-800">
+                      <span className="text-base font-bold text-gray-800 dark:text-gray-100">
                         ₹{price.toLocaleString()}
                       </span>
                     )}
-                    <span className="text-xs text-gray-400 ml-auto">
+                    <span className="text-xs text-gray-400 dark:text-gray-500 ml-auto">
                       Students will pay this amount
                     </span>
                   </div>
@@ -349,8 +349,8 @@ const AddCourse = () => {
             <SectionCard>
               <div className="px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">Ready to publish?</p>
-                  <p className="text-xs text-gray-400 mt-0.5">
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">Ready to publish?</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                     {sectionsComplete} of 3 sections complete
                   </p>
                 </div>

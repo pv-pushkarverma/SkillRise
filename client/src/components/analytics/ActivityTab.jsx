@@ -32,38 +32,38 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Total time
           </p>
-          <p className="text-3xl font-bold text-gray-900">{formatDuration(totalDuration)}</p>
-          <p className="text-sm text-gray-500 mt-1">across all pages</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">{formatDuration(totalDuration)}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">across all pages</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Active days
           </p>
-          <p className="text-3xl font-bold text-gray-900">{activeDays}</p>
-          <p className="text-sm text-gray-500 mt-1">of the last 7 days</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">{activeDays}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">of the last 7 days</p>
         </div>
         <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:col-span-2 lg:col-span-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Most time spent
           </p>
           <p className="text-3xl font-bold text-gray-900 truncate">{topPage}</p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {pageStats[0] ? formatDuration(pageStats[0].totalDuration) : '—'}
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-800 mb-5">Time by topic</h2>
+        <div className="lg:col-span-3 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">Time by topic</h2>
           {pageStats.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="text-4xl mb-3">📭</div>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-400 dark:text-gray-500 text-sm">
                 No data yet. Start browsing to see your stats.
               </p>
             </div>
@@ -74,21 +74,21 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
                 return (
                   <div key={page}>
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
+                      <span className="flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-200">
                         <span>{getIcon(page)}</span>
                         {page}
                       </span>
-                      <span className="text-sm text-gray-500 tabular-nums">
+                      <span className="text-sm text-gray-500 dark:text-gray-400 tabular-nums">
                         {formatDuration(dur)}
                       </span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full ${getColor(page)} transition-all duration-700`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                       {visits} {visits === 1 ? 'session' : 'sessions'}
                     </p>
                   </div>
@@ -98,12 +98,12 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
           )}
         </div>
 
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-800 mb-5">Last 7 days</h2>
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-5">Last 7 days</h2>
           {dailyStats.every((d) => d.duration === 0) ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="text-4xl mb-3">📅</div>
-              <p className="text-gray-400 text-sm">No activity recorded this week.</p>
+              <p className="text-gray-400 dark:text-gray-500 text-sm">No activity recorded this week.</p>
             </div>
           ) : (
             <div className="flex items-end justify-between gap-1.5 h-48">
@@ -116,7 +116,7 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
                 const label = new Date(date).toLocaleDateString('en-US', { weekday: 'short' })
                 return (
                   <div key={date} className="flex flex-col items-center gap-1.5 flex-1">
-                    <span className="text-xs text-gray-500 tabular-nums">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums">
                       {duration > 0 ? formatDuration(duration) : ''}
                     </span>
                     <div
@@ -130,7 +130,7 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
                       />
                     </div>
                     <span
-                      className={`text-xs font-medium ${isToday ? 'text-teal-600' : 'text-gray-400'}`}
+                      className={`text-xs font-medium ${isToday ? 'text-teal-600' : 'text-gray-400 dark:text-gray-500'}`}
                     >
                       {label}
                     </span>
@@ -139,9 +139,9 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
               })}
             </div>
           )}
-          <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between text-sm text-gray-500">
+          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
             <span>This week</span>
-            <span className="font-medium text-gray-700">
+            <span className="font-medium text-gray-700 dark:text-gray-200">
               {formatDuration(dailyStats.reduce((s, d) => s + d.duration, 0))}
             </span>
           </div>
@@ -149,14 +149,14 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
       </div>
 
       {courseBreakdown.length > 0 && (
-        <div className="mt-6 bg-white rounded-2xl border border-gray-200 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="text-base font-semibold text-gray-800">Course breakdown</h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+        <div className="mt-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">Course breakdown</h2>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
               Watch time per course · quiz time per chapter
             </p>
           </div>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {courseBreakdown.map(
               ({
                 courseId,
@@ -180,10 +180,10 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
                       />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-800 group-hover:text-teal-700 transition truncate">
+                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 group-hover:text-teal-700 transition truncate">
                         {courseTitle}
                       </p>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-400 mt-0.5">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                         {learningDuration > 0 && (
                           <span>
                             ▶ {formatDuration(learningDuration)} watched · {learningSessions}{' '}
@@ -198,27 +198,27 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
                   </div>
 
                   {chapters.length > 0 && (
-                    <div className="ml-1 pl-4 border-l-2 border-gray-100 flex flex-col gap-3">
+                    <div className="ml-1 pl-4 border-l-2 border-gray-100 dark:border-gray-700 flex flex-col gap-3">
                       {chapters.map(({ chapterId, chapterTitle, quizDuration, quizSessions }) => {
                         const maxChapterDur = chapters[0].quizDuration || 1
                         const pct = Math.max(4, (quizDuration / maxChapterDur) * 100)
                         return (
                           <div key={chapterId}>
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-xs text-gray-600 truncate pr-3">
+                              <span className="text-xs text-gray-600 dark:text-gray-300 truncate pr-3">
                                 {chapterTitle}
                               </span>
-                              <span className="text-xs font-medium text-gray-500 tabular-nums shrink-0">
+                              <span className="text-xs font-medium text-gray-500 dark:text-gray-400 tabular-nums shrink-0">
                                 {formatDuration(quizDuration)}
                               </span>
                             </div>
-                            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-indigo-400 rounded-full transition-all duration-700"
                                 style={{ width: `${pct}%` }}
                               />
                             </div>
-                            <p className="text-xs text-gray-400 mt-0.5">
+                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
                               Quiz · {quizSessions} {quizSessions === 1 ? 'attempt' : 'attempts'}
                             </p>
                           </div>

@@ -94,16 +94,16 @@ const Quiz = () => {
 
   if (phase === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-5 px-4">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-10 flex flex-col items-center gap-4 max-w-sm w-full text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center gap-5 px-4">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-10 flex flex-col items-center gap-4 max-w-sm w-full text-center">
           <div className="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center">
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7 text-teal-600">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
             </svg>
           </div>
           <div>
-            <p className="font-semibold text-gray-900">Generating your quiz</p>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="font-semibold text-gray-900 dark:text-white">Generating your quiz</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
               AI is creating questions based on this chapter…
             </p>
           </div>
@@ -123,12 +123,12 @@ const Quiz = () => {
 
   if (phase === 'submitting') {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-5 px-4">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-10 flex flex-col items-center gap-4 max-w-sm w-full text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-100 border-t-teal-500" />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center gap-5 px-4">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-10 flex flex-col items-center gap-4 max-w-sm w-full text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-100 dark:border-gray-700 border-t-teal-500" />
           <div>
-            <p className="font-semibold text-gray-900">Submitting your answers</p>
-            <p className="text-sm text-gray-400 mt-1">Calculating score and generating feedback…</p>
+            <p className="font-semibold text-gray-900 dark:text-white">Submitting your answers</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Calculating score and generating feedback…</p>
           </div>
         </div>
       </div>

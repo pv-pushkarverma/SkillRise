@@ -11,13 +11,13 @@ const GROUP_COLORS = {
 }
 
 const StatCard = ({ icon, label, value, iconBg, iconColor }) => (
-  <div className="flex items-center gap-4 bg-white border border-gray-100 rounded-2xl px-5 py-5 shadow-sm flex-1 min-w-[190px]">
+  <div className="flex items-center gap-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-5 py-5 shadow-sm flex-1 min-w-[190px]">
     <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
       <span className={iconColor}>{icon}</span>
     </div>
     <div>
-      <p className="text-2xl font-bold text-gray-900 leading-tight">{value}</p>
-      <p className="text-xs text-gray-500 mt-0.5 font-medium">{label}</p>
+      <p className="text-2xl font-bold text-gray-900 dark:text-white leading-tight">{value}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-medium">{label}</p>
     </div>
   </div>
 )
@@ -62,11 +62,11 @@ const Dashboard = () => {
   if (!dashboardData) return <Loading />
 
   return (
-    <div className="min-h-screen p-6 md:p-8 space-y-8 bg-gray-50">
+    <div className="min-h-screen p-6 md:p-8 space-y-8 bg-gray-50 dark:bg-gray-950">
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           Overview of your courses, students, and earnings
         </p>
       </div>
@@ -109,11 +109,11 @@ const Dashboard = () => {
       </div>
 
       {/* Latest enrollments */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
           <div>
-            <h2 className="text-base font-semibold text-gray-900">Latest Enrollments</h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white">Latest Enrollments</h2>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
               {dashboardData.enrolledStudentsData.length} students total
             </p>
           </div>
@@ -122,22 +122,22 @@ const Dashboard = () => {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50/70 border-b border-gray-100">
-                <th className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide hidden sm:table-cell w-12">
+              <tr className="bg-gray-50/70 dark:bg-gray-700/40 border-b border-gray-100 dark:border-gray-700">
+                <th className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide hidden sm:table-cell w-12">
                   #
                 </th>
-                <th className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
+                <th className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
                   Student
                 </th>
-                <th className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
+                <th className="px-6 py-3 text-left text-[11px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
                   Course
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {dashboardData.enrolledStudentsData.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="px-6 py-3.5 text-sm text-gray-400 hidden sm:table-cell">
+                <tr key={index} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/40 transition-colors">
+                  <td className="px-6 py-3.5 text-sm text-gray-400 dark:text-gray-500 hidden sm:table-cell">
                     {index + 1}
                   </td>
                   <td className="px-6 py-3.5">
@@ -145,12 +145,12 @@ const Dashboard = () => {
                       <img
                         src={item.student.imageUrl}
                         alt=""
-                        className="w-8 h-8 rounded-full object-cover ring-2 ring-white border border-gray-100 shrink-0"
+                        className="w-8 h-8 rounded-full object-cover ring-2 ring-white dark:ring-gray-800 border border-gray-100 dark:border-gray-600 shrink-0"
                       />
-                      <span className="text-sm font-medium text-gray-900">{item.student.name}</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{item.student.name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-gray-500 max-w-xs truncate">
+                  <td className="px-6 py-3.5 text-sm text-gray-500 dark:text-gray-400 max-w-xs truncate">
                     {item.courseTitle}
                   </td>
                 </tr>
@@ -160,7 +160,7 @@ const Dashboard = () => {
 
           {dashboardData.enrolledStudentsData.length === 0 && (
             <div className="py-14 text-center">
-              <p className="text-gray-400 text-sm">No enrollments yet</p>
+              <p className="text-gray-400 dark:text-gray-500 text-sm">No enrollments yet</p>
             </div>
           )}
         </div>
@@ -168,15 +168,15 @@ const Dashboard = () => {
 
       {/* Quiz Insights */}
       {quizInsights.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900">Quiz Insights</h2>
-            <p className="text-xs text-gray-400 mt-0.5">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white">Quiz Insights</h2>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
               Student performance across chapter quizzes
             </p>
           </div>
 
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700">
             {quizInsights.map((item, i) => {
               const total = item.needs_review + item.on_track + item.mastered
               return (
@@ -184,14 +184,14 @@ const Dashboard = () => {
                   {/* Chapter + course */}
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 truncate">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                         {item.chapterTitle}
                       </p>
-                      <p className="text-xs text-gray-400 truncate">{item.courseTitle}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{item.courseTitle}</p>
                     </div>
                     <div className="shrink-0 text-right">
-                      <p className="text-sm font-bold text-gray-900">{item.avgPct}%</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">{item.avgPct}%</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
                         {item.attempts} attempt{item.attempts !== 1 ? 's' : ''}
                       </p>
                     </div>

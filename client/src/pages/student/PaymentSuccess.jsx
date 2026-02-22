@@ -57,7 +57,7 @@ const PaymentSuccess = () => {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin" />
       </div>
     )
@@ -65,7 +65,7 @@ const PaymentSuccess = () => {
 
   if (status === 'failed') {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 gap-4 text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center px-4 gap-4 text-center">
         <div className="w-16 h-16 bg-red-50 border-2 border-red-100 rounded-full flex items-center justify-center">
           <svg
             viewBox="0 0 24 24"
@@ -77,8 +77,8 @@ const PaymentSuccess = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </div>
-        <h1 className="text-xl font-bold text-gray-900">Payment not completed</h1>
-        <p className="text-sm text-gray-500">Your payment was not processed. No charge was made.</p>
+        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Payment not completed</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Your payment was not processed. No charge was made.</p>
         <Link
           to={`/course/${courseId}`}
           className="mt-2 bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-xl text-sm font-medium transition"
@@ -90,8 +90,8 @@ const PaymentSuccess = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
         <div className="h-1.5 w-full bg-gradient-to-r from-teal-400 to-emerald-400" />
 
         <div className="p-8 text-center">
@@ -107,11 +107,11 @@ const PaymentSuccess = () => {
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Payment successful!</h1>
-          <p className="text-sm text-gray-500 mb-6">You're now enrolled. Happy learning!</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Payment successful!</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">You're now enrolled. Happy learning!</p>
 
           {course && (
-            <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-xl p-3 mb-6 text-left">
+            <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl p-3 mb-6 text-left">
               {course.courseThumbnail && (
                 <img
                   src={course.courseThumbnail}
@@ -120,8 +120,8 @@ const PaymentSuccess = () => {
                 />
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-800 truncate">{course.courseTitle}</p>
-                <p className="text-xs text-gray-400 mt-0.5">by {course.educator?.name}</p>
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate">{course.courseTitle}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">by {course.educator?.name}</p>
               </div>
               {discountedPrice && (
                 <p className="text-sm font-bold text-teal-700 shrink-0">₹{discountedPrice}</p>
@@ -136,16 +136,16 @@ const PaymentSuccess = () => {
             Start Learning →
           </Link>
 
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-400 dark:text-gray-500">
             Redirecting automatically in{' '}
-            <span className="font-semibold text-gray-600">{countdown}s</span>
+            <span className="font-semibold text-gray-600 dark:text-gray-300">{countdown}s</span>
           </p>
         </div>
       </div>
 
       <Link
         to="/my-enrollments"
-        className="mt-6 text-sm text-gray-400 hover:text-gray-600 transition"
+        className="mt-6 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition"
       >
         View all my courses
       </Link>

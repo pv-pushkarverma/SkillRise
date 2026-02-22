@@ -98,8 +98,8 @@ const BecomeEducator = () => {
   // Show pending state
   if (applicationStatus?.status === 'pending' && !reapplying) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-lg w-full bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
+        <div className="max-w-lg w-full bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-50 flex items-center justify-center">
             <svg
               className="w-8 h-8 text-amber-500"
@@ -116,24 +116,24 @@ const BecomeEducator = () => {
             </svg>
           </div>
           <StatusBadge status="pending" />
-          <h2 className="mt-4 text-xl font-semibold text-gray-800">Application Under Review</h2>
-          <p className="mt-2 text-sm text-gray-500">
+          <h2 className="mt-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Application Under Review</h2>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Our team is reviewing your application. You will gain educator access once it is
             approved.
           </p>
-          <div className="mt-6 text-left bg-gray-50 rounded-xl p-4 space-y-2 text-sm text-gray-600 border border-gray-100">
+          <div className="mt-6 text-left bg-gray-50 dark:bg-gray-700 rounded-xl p-4 space-y-2 text-sm text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-600">
             <div>
-              <span className="font-medium text-gray-700">Title: </span>
+              <span className="font-medium text-gray-700 dark:text-gray-200">Title: </span>
               {applicationStatus.professionalTitle}
             </div>
             <div>
-              <span className="font-medium text-gray-700">Expertise: </span>
+              <span className="font-medium text-gray-700 dark:text-gray-200">Expertise: </span>
               {applicationStatus.expertise.join(', ')}
             </div>
           </div>
           <button
             onClick={() => navigate('/')}
-            className="mt-6 w-full py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition text-sm"
+            className="mt-6 w-full py-2.5 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-sm"
           >
             Back to home
           </button>
@@ -145,8 +145,8 @@ const BecomeEducator = () => {
   // Show rejected state
   if (applicationStatus?.status === 'rejected' && !reapplying) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-lg w-full bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center px-4">
+        <div className="max-w-lg w-full bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-50 flex items-center justify-center">
             <svg
               className="w-8 h-8 text-red-400"
@@ -163,14 +163,14 @@ const BecomeEducator = () => {
             </svg>
           </div>
           <StatusBadge status="rejected" />
-          <h2 className="mt-4 text-xl font-semibold text-gray-800">Application Not Approved</h2>
+          <h2 className="mt-4 text-xl font-semibold text-gray-800 dark:text-gray-100">Application Not Approved</h2>
           {applicationStatus.rejectionReason && (
             <p className="mt-3 text-sm text-gray-500 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
               <span className="font-medium text-red-600">Reason: </span>
               {applicationStatus.rejectionReason}
             </p>
           )}
-          <p className="mt-3 text-sm text-gray-500">You may update your application and reapply.</p>
+          <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">You may update your application and reapply.</p>
           <button
             onClick={() => {
               setReapplying(true)
@@ -187,7 +187,7 @@ const BecomeEducator = () => {
           </button>
           <button
             onClick={() => navigate('/')}
-            className="mt-3 w-full py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition text-sm"
+            className="mt-3 w-full py-2.5 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-sm"
           >
             Back to home
           </button>
@@ -198,22 +198,22 @@ const BecomeEducator = () => {
 
   // Application form (new or reapplying)
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Apply to Become an Educator</h1>
-          <p className="mt-2 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Apply to Become an Educator</h1>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Share your expertise with thousands of learners. Our team will review your application.
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 space-y-6"
+          className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-8 space-y-6"
         >
           {/* Professional Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
               Professional Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -222,13 +222,13 @@ const BecomeEducator = () => {
               value={form.professionalTitle}
               onChange={(e) => setForm((p) => ({ ...p, professionalTitle: e.target.value }))}
               required
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+              className="w-full border border-gray-200 dark:border-gray-600 rounded-lg px-4 py-2.5 text-sm text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
             />
           </div>
 
           {/* Bio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
               Bio / About You <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -237,13 +237,13 @@ const BecomeEducator = () => {
               value={form.bio}
               onChange={(e) => setForm((p) => ({ ...p, bio: e.target.value }))}
               required
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition resize-none"
+              className="w-full border border-gray-200 dark:border-gray-600 rounded-lg px-4 py-2.5 text-sm text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition resize-none"
             />
           </div>
 
           {/* Expertise */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
               Areas of Expertise <span className="text-red-500">*</span>
             </label>
             <div className="flex flex-wrap gap-2">
@@ -257,7 +257,7 @@ const BecomeEducator = () => {
                     className={`px-3 py-1.5 rounded-full text-xs font-medium border transition ${
                       selected
                         ? 'bg-teal-600 border-teal-600 text-white'
-                        : 'bg-white border-gray-200 text-gray-600 hover:border-teal-400 hover:text-teal-600'
+                        : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-teal-400 hover:text-teal-600'
                     }`}
                   >
                     {option}
@@ -266,13 +266,13 @@ const BecomeEducator = () => {
               })}
             </div>
             {form.expertise.length === 0 && (
-              <p className="mt-1.5 text-xs text-gray-400">Select at least one area.</p>
+              <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">Select at least one area.</p>
             )}
           </div>
 
           {/* LinkedIn */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">
               LinkedIn / Portfolio URL <span className="text-gray-400 font-normal">(optional)</span>
             </label>
             <input
@@ -280,7 +280,7 @@ const BecomeEducator = () => {
               placeholder="https://linkedin.com/in/yourprofile"
               value={form.linkedinUrl}
               onChange={(e) => setForm((p) => ({ ...p, linkedinUrl: e.target.value }))}
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+              className="w-full border border-gray-200 dark:border-gray-600 rounded-lg px-4 py-2.5 text-sm text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
             />
           </div>
 
@@ -300,14 +300,14 @@ const BecomeEducator = () => {
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="flex-1 py-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm transition"
+              className="flex-1 py-2.5 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm transition"
             >
               Cancel
             </button>
           </div>
         </form>
 
-        <p className="mt-4 text-center text-xs text-gray-400">
+        <p className="mt-4 text-center text-xs text-gray-400 dark:text-gray-500">
           Applications are reviewed by our team. You will gain educator access once approved.
         </p>
       </div>

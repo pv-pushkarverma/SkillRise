@@ -76,10 +76,10 @@ const Roadmap = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4 dark:bg-gray-950">
         <div className="text-6xl">🗺️</div>
-        <h2 className="text-2xl font-semibold text-gray-800">Sign in to view your roadmap</h2>
-        <p className="text-gray-500 max-w-sm">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Sign in to view your roadmap</h2>
+        <p className="text-gray-500 dark:text-gray-400 max-w-sm">
           Get a personalized AI-powered learning path based on your enrolled courses and progress.
         </p>
         <button
@@ -95,23 +95,23 @@ const Roadmap = () => {
   const courseCount = enrolledCourses?.length ?? 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-8">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Learning Roadmap</h1>
-              <p className="text-gray-500 mt-1 max-w-lg">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Learning Roadmap</h1>
+              <p className="text-gray-500 dark:text-gray-400 mt-1 max-w-lg">
                 AI-powered paths tailored to your goals and current progress.
               </p>
             </div>
-            <div className="hidden sm:flex items-center gap-1.5 text-xs text-gray-500 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 shrink-0">
+            <div className="hidden sm:flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 shrink-0">
               <span>✨</span>
               <span>Powered by AI</span>
             </div>
           </div>
 
-          <div className="flex gap-1 mt-6 bg-gray-100 p-1 rounded-xl w-fit">
+          <div className="flex gap-1 mt-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl w-fit">
             {[
               { id: 'personal', label: '🎓  My Learning Path' },
               { id: 'custom', label: '✦  Custom Roadmap' },
@@ -121,8 +121,8 @@ const Roadmap = () => {
                 onClick={() => setTab(t.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   tab === t.id
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                    : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 {t.label}
@@ -138,12 +138,12 @@ const Roadmap = () => {
             {!personalRoadmap &&
               !personalLoading &&
               (courseCount === 0 ? (
-                <div className="bg-white border border-gray-200 rounded-2xl p-10 text-center">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-10 text-center">
                   <div className="text-5xl mb-3">📚</div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
                     No courses enrolled yet
                   </h3>
-                  <p className="text-gray-500 text-sm mb-5">
+                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">
                     Enroll in at least one course so the AI can build your personalized roadmap.
                   </p>
                   <Link
@@ -154,16 +154,16 @@ const Roadmap = () => {
                   </Link>
                 </div>
               ) : (
-                <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
                   <div className="h-1.5 w-full bg-gradient-to-r from-teal-400 via-blue-400 to-violet-500" />
                   <div className="p-10 text-center">
                     <div className="text-5xl mb-4">🗺️</div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
                       Generate Your Learning Roadmap
                     </h3>
-                    <p className="text-gray-500 max-w-md mx-auto mb-2 text-sm leading-relaxed">
+                    <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-2 text-sm leading-relaxed">
                       The AI will analyze your{' '}
-                      <span className="font-semibold text-gray-700">{courseCount}</span> enrolled
+                      <span className="font-semibold text-gray-700 dark:text-gray-200">{courseCount}</span> enrolled
                       course{courseCount !== 1 ? 's' : ''} and build a complete, stage-by-stage path
                       — showing what you've mastered, what you're building, and where to go next.
                     </p>
@@ -178,7 +178,7 @@ const Roadmap = () => {
                         </span>
                       ))}
                       {courseCount > 5 && (
-                        <span className="text-xs bg-gray-100 text-gray-500 px-2.5 py-1 rounded-full">
+                        <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2.5 py-1 rounded-full">
                           +{courseCount - 5} more
                         </span>
                       )}
@@ -201,7 +201,7 @@ const Roadmap = () => {
             {personalRoadmap && !personalLoading && (
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">{personalRoadmap.title}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{personalRoadmap.title}</h2>
                 </div>
                 <RoadmapView
                   roadmap={personalRoadmap}
@@ -215,13 +215,13 @@ const Roadmap = () => {
 
         {tab === 'custom' && (
           <div>
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-6">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden mb-6">
               <div className="h-1.5 w-full bg-gradient-to-r from-violet-400 via-pink-400 to-amber-400" />
               <div className="p-6">
-                <h3 className="text-base font-semibold text-gray-800 mb-1">
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1">
                   Generate a roadmap for any topic
                 </h3>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                   Enter any skill, technology, or career path — the AI will build a structured,
                   stage-by-stage plan.
                 </p>
@@ -231,7 +231,7 @@ const Roadmap = () => {
                     onChange={(e) => setCustomTopic(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && !customLoading && generateCustom()}
                     placeholder="e.g. Machine Learning, System Design, iOS Development…"
-                    className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                    className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
                   />
                   <button
                     onClick={generateCustom}
@@ -243,12 +243,12 @@ const Roadmap = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mt-3 items-center">
-                  <span className="text-xs text-gray-400">Try:</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">Try:</span>
                   {EXAMPLE_TOPICS.map((t) => (
                     <button
                       key={t}
                       onClick={() => setCustomTopic(t)}
-                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-full transition"
+                      className="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 px-3 py-1.5 rounded-full transition"
                     >
                       {t}
                     </button>
@@ -264,7 +264,7 @@ const Roadmap = () => {
             {customRoadmap && !customLoading && (
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-gray-900">{customRoadmap.title}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{customRoadmap.title}</h2>
                 </div>
                 <RoadmapView
                   roadmap={customRoadmap}
