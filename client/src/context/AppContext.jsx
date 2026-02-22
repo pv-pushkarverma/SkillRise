@@ -112,7 +112,8 @@ export const AppContextProvider = (props) => {
       if (data.success) {
         setApplicationStatus(data.application)
       }
-    } catch (error) {
+    // eslint-disable-next-line no-unused-vars
+    } catch ( e ) {
       // non-critical, silently ignore
     }
   }
