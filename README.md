@@ -21,7 +21,7 @@
 - **Course Catalog** — Browse, search, and filter courses by category
 - **Stripe Payments** — Secure checkout with Stripe embedded payment UI
 - **Video Player** — Chapter-based course player with progress tracking
-- **AI Chat** — Groq-powered assistant for learning support (rate-limited)
+- **AI Chat** — Groq-powered assistant for learning support
 - **AI Roadmap** — Personalized learning roadmap generated from your profile
 - **Quizzes** — Auto-generated chapter quizzes with explanations
 - **Analytics** — Time tracking and learning progress dashboard
