@@ -61,8 +61,8 @@ const ContinueLearning = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Continue Learning</h2>
-            <p className="text-gray-500 text-sm mt-0.5">Pick up where you left off</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Continue Learning</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Pick up where you left off</p>
           </div>
           <button
             onClick={() => navigate('/analytics?tab=courses')}
@@ -91,7 +91,7 @@ const ContinueLearning = () => {
             return (
               <div
                 key={course._id}
-                className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+                className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
               >
                 <img
                   src={course.courseThumbnail}
@@ -100,21 +100,21 @@ const ContinueLearning = () => {
                   onClick={() => navigate('/player/' + course._id)}
                 />
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-sm font-medium text-gray-800 line-clamp-2 mb-3 flex-1">
+                  <h3 className="text-sm font-medium text-gray-800 dark:text-gray-100 line-clamp-2 mb-3 flex-1">
                     {course.courseTitle}
                   </h3>
 
                   {loading || !prog ? (
-                    <div className="h-1.5 bg-gray-100 rounded-full mb-4 animate-pulse" />
+                    <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full mb-4 animate-pulse" />
                   ) : (
                     <div className="mb-4">
-                      <div className="flex justify-between text-xs text-gray-500 mb-1.5">
+                      <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                         <span>
                           {completed} / {total} lectures
                         </span>
-                        <span className="font-semibold text-gray-700">{pct}%</span>
+                        <span className="font-semibold text-gray-700 dark:text-gray-200">{pct}%</span>
                       </div>
-                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-700 ${isDone ? 'bg-teal-500' : 'bg-teal-400'}`}
                           style={{ width: `${pct}%` }}

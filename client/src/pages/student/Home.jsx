@@ -8,30 +8,30 @@ import ContinueLearning from '../../components/student/ContinueLearning'
 
 const Home = () => {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-gray-950">
       <Hero />
 
       <section className="px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto rounded-3xl border border-gray-200 bg-white shadow-sm px-6 md:px-10 py-10 -mt-6 relative z-10">
+        <div className="max-w-6xl mx-auto rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm px-6 md:px-10 py-10 -mt-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div>
-              <p className="text-sm text-gray-500">For students</p>
-              <p className="mt-1 text-lg font-semibold text-gray-900">Learn by doing</p>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="text-sm text-gray-500 dark:text-gray-400">For students</p>
+              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">Learn by doing</p>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 Structured lectures, progress tracking, and ratings you can trust.
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">For creators</p>
-              <p className="mt-1 text-lg font-semibold text-gray-900">Teach at scale</p>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="text-sm text-gray-500 dark:text-gray-400">For creators</p>
+              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">Teach at scale</p>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 Become an educator and publish courses from your dashboard.
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">For teams</p>
-              <p className="mt-1 text-lg font-semibold text-gray-900">Upskill faster</p>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="text-sm text-gray-500 dark:text-gray-400">For teams</p>
+              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">Upskill faster</p>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 Curated learning paths for practical, job‑ready skills.
               </p>
             </div>

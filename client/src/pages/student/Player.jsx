@@ -181,7 +181,7 @@ const Player = () => {
   const progressPct = totalLectures > 0 ? Math.round((completedCount / totalLectures) * 100) : 0
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-8">
         {/* Breadcrumb */}
         <p className="text-sm text-gray-400 mb-6">
@@ -199,7 +199,7 @@ const Player = () => {
             My Courses
           </span>
           <span className="mx-1.5">/</span>
-          <span className="text-gray-700 line-clamp-1">{courseData.courseTitle}</span>
+          <span className="text-gray-700 dark:text-gray-300 line-clamp-1">{courseData.courseTitle}</span>
         </p>
 
         <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -216,12 +216,12 @@ const Player = () => {
 
             {/* Lecture info + mark complete */}
             {playerData && (
-              <div className="mt-4 bg-white rounded-2xl border border-gray-200 p-4 flex items-start justify-between gap-4">
+              <div className="mt-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-xs text-gray-400 mb-0.5">
                     Chapter {playerData.chapter} · Lecture {playerData.lecture}
                   </p>
-                  <p className="text-base font-semibold text-gray-900 truncate">
+                  <p className="text-base font-semibold text-gray-900 dark:text-white truncate">
                     {playerData.lectureTitle}
                   </p>
                 </div>
@@ -241,8 +241,8 @@ const Player = () => {
             )}
 
             {/* Rating */}
-            <div className="mt-4 bg-white rounded-2xl border border-gray-200 p-5">
-              <p className="text-sm font-semibold text-gray-800 mb-3">Rate this course</p>
+            <div className="mt-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">Rate this course</p>
               <Rating initialRating={initialRating} onRate={handleRating} />
             </div>
           </div>
@@ -250,12 +250,12 @@ const Player = () => {
           {/* Right: sticky sidebar */}
           <div className="lg:sticky lg:top-24 w-full lg:w-72 xl:w-80 shrink-0">
             {/* Progress */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-4 mb-3">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 mb-3">
               <div className="flex items-center justify-between text-sm mb-2">
-                <span className="font-medium text-gray-700">Your progress</span>
+                <span className="font-medium text-gray-700 dark:text-gray-200">Your progress</span>
                 <span className="font-semibold text-teal-600">{progressPct}%</span>
               </div>
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-teal-500 rounded-full transition-all duration-700"
                   style={{ width: `${progressPct}%` }}
@@ -267,16 +267,16 @@ const Player = () => {
             </div>
 
             {/* Chapter list */}
-            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-              <div className="px-4 py-3.5 border-b border-gray-100">
-                <p className="font-semibold text-gray-800 text-sm">Course Structure</p>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div className="px-4 py-3.5 border-b border-gray-100 dark:border-gray-700">
+                <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">Course Structure</p>
               </div>
 
               <div className="overflow-y-auto max-h-[60vh]">
                 {courseData.courseContent.map((chapter, index) => (
-                  <div key={index} className="border-b border-gray-100 last:border-0">
+                  <div key={index} className="border-b border-gray-100 dark:border-gray-700 last:border-0">
                     <div
-                      className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 transition select-none"
+                      className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition select-none"
                       onClick={() => toggleSection(index)}
                     >
                       <div className="flex items-center gap-2 min-w-0">
@@ -285,7 +285,7 @@ const Player = () => {
                           alt=""
                           className={`w-3.5 h-3.5 shrink-0 transform transition-transform ${openSections[index] ? 'rotate-180' : ''}`}
                         />
-                        <p className="text-sm font-medium text-gray-800 truncate">
+                        <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">
                           {chapter.chapterTitle}
                         </p>
                       </div>
@@ -295,7 +295,7 @@ const Player = () => {
                     </div>
 
                     {openSections[index] && (
-                      <div className="bg-gray-50 border-t border-gray-100">
+                      <div className="bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700">
                         {chapter.chapterContent.map((lecture, i) => {
                           const isCompleted = progressData?.lectureCompleted?.includes(
                             lecture.lectureId
@@ -306,7 +306,7 @@ const Player = () => {
                               key={i}
                               onClick={() => selectLecture(lecture, index, i)}
                               className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer transition ${
-                                isActive ? 'bg-teal-50' : 'hover:bg-gray-100'
+                                isActive ? 'bg-teal-50 dark:bg-teal-900/20' : 'hover:bg-gray-100 dark:hover:bg-gray-600'
                               }`}
                             >
                               <img
@@ -316,7 +316,7 @@ const Player = () => {
                               />
                               <div className="flex-1 min-w-0">
                                 <p
-                                  className={`text-xs truncate ${isActive ? 'text-teal-700 font-semibold' : 'text-gray-700'}`}
+                                  className={`text-xs truncate ${isActive ? 'text-teal-700 font-semibold' : 'text-gray-700 dark:text-gray-200'}`}
                                 >
                                   {lecture.lectureTitle}
                                 </p>
@@ -335,7 +335,7 @@ const Player = () => {
                           chapter.chapterContent.every((lec) =>
                             progressData?.lectureCompleted?.includes(lec.lectureId)
                           ) && (
-                            <div className="px-4 py-3 border-t border-gray-200 bg-white">
+                            <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
                               <button
                                 onClick={() => navigate(`/quiz/${courseId}/${chapter.chapterId}`)}
                                 className="w-full flex items-center justify-center gap-2 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition"

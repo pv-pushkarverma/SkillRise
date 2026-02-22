@@ -19,20 +19,20 @@ const CourseCard = ({ course }) => {
     <Link
       to={'/course/' + course._id}
       onClick={() => scrollTo(0, 0)}
-      className="group border border-gray-200 overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition will-change-transform"
+      className="group border border-gray-200 dark:border-gray-700 overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition will-change-transform"
     >
       <div className="relative">
         <img className="w-full aspect-[16/9] object-cover" src={course.courseThumbnail} alt="" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition" />
       </div>
       <div className="p-4 text-left">
-        <h3 className="text-[15px] leading-5 font-semibold text-gray-900 line-clamp-2">
+        <h3 className="text-[15px] leading-5 font-semibold text-gray-900 dark:text-white line-clamp-2">
           {course.courseTitle}
         </h3>
-        <p className="text-sm text-gray-500 mt-1">{educatorName}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{educatorName}</p>
 
         <div className="flex items-center space-x-2 mt-3">
-          <p className="text-sm font-medium text-gray-900">{calculateRating(course)}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{calculateRating(course)}</p>
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <img
@@ -43,11 +43,11 @@ const CourseCard = ({ course }) => {
               />
             ))}
           </div>
-          <p className="text-sm text-gray-500">({course.courseRatings.length})</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">({course.courseRatings.length})</p>
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          <p className="text-base font-semibold text-gray-900">
+          <p className="text-base font-semibold text-gray-900 dark:text-white">
             ₹ {Number.isFinite(price) ? price.toFixed(2) : '0.00'}
           </p>
           <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-100">

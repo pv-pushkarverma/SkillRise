@@ -29,7 +29,7 @@ const TrashIcon = () => (
 
 const HistoryList = ({ chatHistory, sessionId, onNewChat, onSelectChat, onDeleteChat }) => (
   <>
-    <div className="p-4 border-b border-gray-100">
+    <div className="p-4 border-b border-gray-100 dark:border-gray-700">
       <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">
         Chat History
       </p>
@@ -50,8 +50,8 @@ const HistoryList = ({ chatHistory, sessionId, onNewChat, onSelectChat, onDelete
             onClick={() => onSelectChat(chat.sessionId)}
             className={`group flex items-center justify-between gap-2 px-3 py-2 rounded-lg cursor-pointer transition ${
               sessionId === chat.sessionId
-                ? 'bg-teal-50 text-teal-800 border border-teal-100'
-                : 'hover:bg-gray-50 text-gray-700'
+                ? 'bg-teal-50 text-teal-800 border border-teal-100 dark:bg-teal-900/20 dark:text-teal-300 dark:border-teal-800'
+                : 'hover:bg-gray-50 text-gray-700 dark:text-gray-300 dark:hover:bg-gray-700'
             }`}
           >
             <div className="flex-1 min-w-0">
@@ -200,20 +200,20 @@ const AIChat = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
         {/* Page header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">SkillRise AI</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">SkillRise AI</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             Ask about your courses, concepts, or paste code for help.
           </p>
         </div>
 
         {/* Chat card */}
-        <div className="flex bg-white rounded-2xl border border-gray-200 overflow-hidden h-[calc(100vh-240px)] min-h-[500px]">
+        <div className="flex bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden h-[calc(100vh-240px)] min-h-[500px]">
           {/* History sidebar — desktop only */}
-          <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-gray-200">
+          <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-gray-200 dark:border-gray-700">
             <HistoryList
               chatHistory={chatHistory}
               sessionId={sessionId}
@@ -230,12 +230,12 @@ const AIChat = () => {
                 className="absolute inset-0 bg-black/40"
                 onClick={() => setShowMobileHistory(false)}
               />
-              <div className="relative w-72 bg-white flex flex-col h-full shadow-xl">
+              <div className="relative w-72 bg-white dark:bg-gray-900 flex flex-col h-full shadow-xl">
                 <div className="flex items-center justify-between px-4 pt-4 pb-2">
-                  <p className="text-sm font-semibold text-gray-700">Chat History</p>
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">Chat History</p>
                   <button
                     onClick={() => setShowMobileHistory(false)}
-                    className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition"
+                    className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition"
                     aria-label="Close history"
                   >
                     <svg
@@ -251,7 +251,7 @@ const AIChat = () => {
                     </svg>
                   </button>
                 </div>
-                <div className="flex flex-col flex-1 overflow-hidden border-t border-gray-100">
+                <div className="flex flex-col flex-1 overflow-hidden border-t border-gray-100 dark:border-gray-700">
                   <HistoryList
                     chatHistory={chatHistory}
                     sessionId={sessionId}
@@ -267,10 +267,10 @@ const AIChat = () => {
           {/* Main chat area */}
           <div className="flex-1 flex flex-col min-w-0">
             {/* Mobile toolbar */}
-            <div className="md:hidden px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+            <div className="md:hidden px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
               <button
                 onClick={() => setShowMobileHistory(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition font-medium"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition font-medium"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -300,8 +300,8 @@ const AIChat = () => {
                   <div className="w-12 h-12 bg-teal-50 border border-teal-100 rounded-2xl flex items-center justify-center mb-3">
                     <SparkIcon className="w-6 h-6 text-teal-500" />
                   </div>
-                  <h3 className="font-medium text-gray-700 mb-1">How can I help you?</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="font-medium text-gray-700 dark:text-gray-200 mb-1">How can I help you?</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     Ask about your courses, paste code snippets, or explore any topic.
                   </p>
                 </div>
@@ -335,7 +335,7 @@ const AIChat = () => {
 
                       {/* Bubble */}
                       {msg.role === 'assistant' ? (
-                        <div className="flex-1 px-4 py-3 rounded-2xl bg-gray-50 border border-gray-200 markdown-body">
+                        <div className="flex-1 px-4 py-3 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 markdown-body">
                           <MarkdownRenderer>{msg.content}</MarkdownRenderer>
                         </div>
                       ) : (
@@ -351,7 +351,7 @@ const AIChat = () => {
                       <div className="w-8 h-8 shrink-0 rounded-full bg-teal-500 flex items-center justify-center">
                         <SparkIcon className="w-4 h-4 text-white" />
                       </div>
-                      <div className="bg-gray-50 border border-gray-200 px-4 py-3 rounded-2xl">
+                      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-3 rounded-2xl">
                         <div className="flex gap-1.5 items-center">
                           <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" />
                           <div
@@ -373,7 +373,7 @@ const AIChat = () => {
             </div>
 
             {/* Input */}
-            <div className="px-4 sm:px-6 py-4 border-t border-gray-200">
+            <div className="px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-gray-700">
               <form onSubmit={sendMessage} className="flex gap-2 items-end">
                 <textarea
                   ref={textareaRef}
@@ -382,7 +382,7 @@ const AIChat = () => {
                   onKeyDown={handleKeyDown}
                   placeholder="Ask a question or paste some code..."
                   rows={1}
-                  className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-gray-50 text-sm resize-none overflow-hidden"
+                  className="flex-1 px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400 text-sm resize-none overflow-hidden"
                 />
                 <button
                   type="submit"

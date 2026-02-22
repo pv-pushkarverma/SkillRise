@@ -47,7 +47,7 @@ const CoursesList = () => {
   }, [allCourses, input, sortBy])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
         {/* Header */}
         <div className="mb-8">
@@ -59,10 +59,10 @@ const CoursesList = () => {
               Home
             </span>
             <span className="mx-1.5">/</span>
-            <span className="text-gray-700">Explore</span>
+            <span className="text-gray-700 dark:text-gray-300">Explore</span>
           </p>
-          <h1 className="text-3xl font-bold text-gray-900">Explore Courses</h1>
-          <p className="text-gray-500 mt-1">Discover the right course to level up your skills</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Explore Courses</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">Discover the right course to level up your skills</p>
         </div>
 
         {/* Search bar + sort */}
@@ -73,7 +73,7 @@ const CoursesList = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="h-11 px-4 border border-gray-200 rounded-xl text-sm text-gray-700 bg-white focus:outline-none focus:border-teal-400 transition cursor-pointer shrink-0"
+            className="h-11 px-4 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:border-teal-400 transition cursor-pointer shrink-0"
           >
             {SORT_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>
@@ -85,8 +85,8 @@ const CoursesList = () => {
 
         {/* Result count + active search pill */}
         <div className="flex items-center gap-3 mb-6 flex-wrap">
-          <p className="text-sm text-gray-500">
-            <span className="font-semibold text-gray-800">{filteredCourse.length}</span>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="font-semibold text-gray-800 dark:text-gray-100">{filteredCourse.length}</span>
             &nbsp;{filteredCourse.length === 1 ? 'course' : 'courses'}
             {input ? ` matching "${input}"` : ' available'}
           </p>
@@ -94,7 +94,7 @@ const CoursesList = () => {
             <button
               type="button"
               onClick={() => navigate('/course-list')}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-gray-200 bg-white text-xs text-gray-600 hover:bg-gray-50 transition"
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
             >
               <img src={assets.cross_icon} alt="clear" className="w-2.5 h-2.5 opacity-60" />
               Clear search
@@ -104,10 +104,10 @@ const CoursesList = () => {
 
         {/* Course grid or empty state */}
         {filteredCourse.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-16 text-center">
             <div className="text-5xl mb-4">🔍</div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">No courses found</h3>
-            <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">No courses found</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-sm mx-auto">
               {input
                 ? `We couldn't find any courses matching "${input}". Try a different search term.`
                 : 'No courses are available right now. Check back soon.'}

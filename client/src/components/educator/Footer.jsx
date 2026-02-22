@@ -2,13 +2,13 @@ import { assets } from '../../assets/assets'
 
 const Footer = () => {
   return (
-    <footer className="flex md:flex-row flex-col-reverse items-center justify-between text-left w-full px-6 md:px-10 border-t border-gray-200 bg-white py-3">
+    <footer className="flex md:flex-row flex-col-reverse items-center justify-between text-left w-full px-6 md:px-10 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 py-3">
       <div className="flex items-center gap-4">
         <img className="hidden md:block w-28" src={assets.logo_light} alt="Logo" />
 
-        <div className="hidden md:block h-7 w-px bg-gray-200"></div>
+        <div className="hidden md:block h-7 w-px bg-gray-200 dark:bg-gray-700"></div>
 
-        <p className="py-1 text-center text-xs md:text-sm text-gray-500">
+        <p className="py-1 text-center text-xs md:text-sm text-gray-500 dark:text-gray-400">
           © 2026 SkillRise. All rights reserved.
         </p>
       </div>

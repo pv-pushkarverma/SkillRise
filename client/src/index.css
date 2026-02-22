@@ -23,6 +23,10 @@
   color: #7a7b7d;
 }
 
+.dark .rich-text {
+  color: #9ca3af;
+}
+
 .rich-text p {
   margin-bottom: 16px;
 }
@@ -34,11 +38,19 @@
   margin: 32px 0;
 }
 
+.dark .rich-text h1 {
+  color: #f3f4f6;
+}
+
 .rich-text h2 {
   font-size: 22px;
   font-weight: 700;
   color: #252525;
   margin: 24px 0;
+}
+
+.dark .rich-text h2 {
+  color: #f3f4f6;
 }
 
 .rich-text h3 {
@@ -48,11 +60,19 @@
   margin: 20px 0;
 }
 
+.dark .rich-text h3 {
+  color: #e5e7eb;
+}
+
 .rich-text h4 {
   font-size: 16px;
   font-weight: 500;
   color: #444444;
   margin: 16px 0;
+}
+
+.dark .rich-text h4 {
+  color: #d1d5db;
 }
 
 .rich-text h5 {
@@ -62,11 +82,19 @@
   margin: 12px 0;
 }
 
+.dark .rich-text h5 {
+  color: #d1d5db;
+}
+
 .rich-text h6 {
   font-size: 12px;
   font-weight: 400;
   color: #666666;
   margin: 8px 0;
+}
+
+.dark .rich-text h6 {
+  color: #9ca3af;
 }
 
 .rich-text strong {
@@ -110,6 +138,10 @@
 .table-scroll::-webkit-scrollbar-track {
   background: #f1f5f9;
   border-radius: 4px;
+}
+
+.dark .table-scroll::-webkit-scrollbar-track {
+  background: #1e293b;
 }
 
 .table-scroll::-webkit-scrollbar-thumb {
@@ -179,6 +211,10 @@
 /* ===== Mobile scrolling for wide content ===== */
 .markdown-body {
   @apply overflow-x-auto;
+}
+
+.dark .markdown-body {
+  color: #d1d5db;
 }
 
 .shiki-code pre {
