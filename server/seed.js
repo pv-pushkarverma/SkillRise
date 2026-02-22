@@ -417,7 +417,13 @@ const seed = async () => {
       userId: 'user_seed_student1',
       courseId: courseUX._id.toString(),
       completed: true,
-      lectureCompleted: ['lec_empathize', 'lec_ideate', 'lec_figma_basics', 'lec_components', 'lec_prototype'],
+      lectureCompleted: [
+        'lec_empathize',
+        'lec_ideate',
+        'lec_figma_basics',
+        'lec_components',
+        'lec_prototype',
+      ],
     },
     {
       userId: 'user_seed_student2',
@@ -546,8 +552,7 @@ const seed = async () => {
           question: 'What is the first stage of the Design Thinking process?',
           options: ['Define', 'Ideate', 'Empathize', 'Prototype'],
           correctIndex: 2,
-          explanation:
-            'Empathize is the first stage — understanding users and their needs.',
+          explanation: 'Empathize is the first stage — understanding users and their needs.',
         },
         {
           question: 'A usability test primarily helps you:',
@@ -651,7 +656,12 @@ const seed = async () => {
       content:
         "Started with zero coding knowledge. Completed the UI/UX course and I'm halfway through Data Science. Here's what worked: consistency over intensity — 1 hour every day beats 7 hours on weekends. Also, community posts helped me stay accountable!",
       tags: ['motivation', 'roadmap', 'progress'],
-      upvotes: ['user_seed_student1', 'user_seed_student2', 'user_seed_educator1', 'user_seed_educator2'],
+      upvotes: [
+        'user_seed_student1',
+        'user_seed_student2',
+        'user_seed_educator1',
+        'user_seed_educator2',
+      ],
       replyCount: 1,
       isResolved: false,
     },
