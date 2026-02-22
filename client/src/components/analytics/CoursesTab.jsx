@@ -9,32 +9,36 @@ const CoursesTab = ({
 }) => (
   <>
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-      <div className="bg-white rounded-2xl border border-gray-200 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Enrolled</p>
-        <p className="text-3xl font-bold text-gray-900">{enrolledCourses.length}</p>
-        <p className="text-sm text-gray-500 mt-1">total courses</p>
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
+          Enrolled
+        </p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white">{enrolledCourses.length}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">total courses</p>
       </div>
-      <div className="bg-white rounded-2xl border border-gray-200 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
           In Progress
         </p>
-        <p className="text-3xl font-bold text-gray-900">{inProgressCount}</p>
-        <p className="text-sm text-gray-500 mt-1">active courses</p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white">{inProgressCount}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">active courses</p>
       </div>
-      <div className="bg-white rounded-2xl border border-gray-200 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
           Completed
         </p>
-        <p className="text-3xl font-bold text-gray-900">{completedCount}</p>
-        <p className="text-sm text-gray-500 mt-1">finished courses</p>
+        <p className="text-3xl font-bold text-gray-900 dark:text-white">{completedCount}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">finished courses</p>
       </div>
     </div>
 
     {enrolledCourses.length === 0 ? (
-      <div className="bg-white rounded-2xl border border-gray-200 p-16 text-center">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-16 text-center">
         <div className="text-5xl mb-4">🎓</div>
-        <h3 className="text-lg font-semibold text-gray-800 mb-2">No courses yet</h3>
-        <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
+          No courses yet
+        </h3>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-sm mx-auto">
           Enroll in a course to start tracking your progress here.
         </p>
         <button
@@ -56,7 +60,7 @@ const CoursesTab = ({
           return (
             <div
               key={course._id}
-              className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+              className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
             >
               <img
                 src={course.courseThumbnail}
@@ -64,21 +68,21 @@ const CoursesTab = ({
                 className="w-full aspect-video object-cover"
               />
               <div className="p-4 flex flex-col flex-1">
-                <h3 className="text-sm font-medium text-gray-800 line-clamp-2 mb-3 flex-1">
+                <h3 className="text-sm font-medium text-gray-800 dark:text-gray-100 line-clamp-2 mb-3 flex-1">
                   {course.courseTitle}
                 </h3>
 
                 {coursesLoading || !prog ? (
-                  <div className="h-1.5 bg-gray-100 rounded-full mb-4 animate-pulse" />
+                  <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full mb-4 animate-pulse" />
                 ) : (
                   <div className="mb-4">
-                    <div className="flex justify-between text-xs text-gray-500 mb-1.5">
+                    <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                       <span>
                         {completed} / {total} lectures
                       </span>
-                      <span className="font-semibold text-gray-700">{pct}%</span>
+                      <span className="font-semibold text-gray-700 dark:text-gray-200">{pct}%</span>
                     </div>
-                    <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-700 ${isDone ? 'bg-teal-500' : 'bg-teal-400'}`}
                         style={{ width: `${pct}%` }}
@@ -88,7 +92,9 @@ const CoursesTab = ({
                 )}
 
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-400">{calculateCourseDuration(course)}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
+                    {calculateCourseDuration(course)}
+                  </span>
                   <div className="flex items-center gap-2">
                     {isDone && (
                       <span className="text-xs px-2 py-0.5 bg-teal-50 text-teal-700 border border-teal-100 rounded-full font-medium">

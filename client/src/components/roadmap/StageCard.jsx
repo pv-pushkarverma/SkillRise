@@ -44,20 +44,24 @@ const Chip = ({ label, className }) => (
 )
 
 const SectionLabel = ({ children }) => (
-  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">{children}</p>
+  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">
+    {children}
+  </p>
 )
 
 const ReadinessBar = ({ value }) => {
   const color = value >= 70 ? 'bg-teal-500' : value >= 50 ? 'bg-blue-500' : 'bg-amber-500'
   return (
     <div className="flex items-center gap-2 mt-1">
-      <div className="h-1.5 flex-1 bg-gray-200 rounded-full overflow-hidden">
+      <div className="h-1.5 flex-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-700 ${color}`}
           style={{ width: `${value}%` }}
         />
       </div>
-      <span className="text-xs font-semibold text-gray-500 tabular-nums w-8">{value}%</span>
+      <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 tabular-nums w-8">
+        {value}%
+      </span>
     </div>
   )
 }
@@ -73,17 +77,21 @@ const StageCard = ({ stage, isLast }) => {
         >
           {stage.icon || cfg.symbol}
         </div>
-        {!isLast && <div className="w-px flex-1 mt-1 bg-gradient-to-b from-gray-300 to-gray-100" />}
+        {!isLast && (
+          <div className="w-px flex-1 mt-1 bg-gradient-to-b from-gray-300 to-gray-100 dark:from-gray-600 dark:to-gray-800" />
+        )}
       </div>
 
       <div
-        className={`flex-1 mb-10 bg-white rounded-2xl border border-gray-200 border-l-4 ${cfg.border} shadow-sm overflow-hidden`}
+        className={`flex-1 mb-10 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 border-l-4 ${cfg.border} shadow-sm overflow-hidden`}
       >
-        <div className="flex items-start justify-between gap-3 px-5 py-4 border-b border-gray-100">
+        <div className="flex items-start justify-between gap-3 px-5 py-4 border-b border-gray-100 dark:border-gray-700">
           <div>
-            <h3 className="text-base font-semibold text-gray-900">{stage.label}</h3>
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">{stage.label}</h3>
             {stage.description && (
-              <p className="text-sm text-gray-500 mt-0.5 leading-relaxed">{stage.description}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed">
+                {stage.description}
+              </p>
             )}
           </div>
           <span
@@ -110,7 +118,10 @@ const StageCard = ({ stage, isLast }) => {
               <SectionLabel>Highlights</SectionLabel>
               <ul className="flex flex-col gap-1.5">
                 {stage.highlights.map((h) => (
-                  <li key={h} className="flex items-start gap-2 text-sm text-gray-700">
+                  <li
+                    key={h}
+                    className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
+                  >
                     <span className="text-teal-500 font-bold shrink-0 mt-0.5">✓</span>
                     {h}
                   </li>
@@ -124,12 +135,16 @@ const StageCard = ({ stage, isLast }) => {
               <SectionLabel>Enrolled Courses</SectionLabel>
               <div className="flex flex-col gap-3">
                 {stage.courses.map((c) => (
-                  <div key={c.title} className="bg-gray-50 rounded-xl px-3 py-3">
+                  <div key={c.title} className="bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-3">
                     <div className="flex justify-between text-sm mb-1.5">
-                      <span className="font-medium text-gray-800">{c.title}</span>
-                      <span className="text-gray-500 tabular-nums">{c.completion}%</span>
+                      <span className="font-medium text-gray-800 dark:text-gray-100">
+                        {c.title}
+                      </span>
+                      <span className="text-gray-500 dark:text-gray-400 tabular-nums">
+                        {c.completion}%
+                      </span>
                     </div>
-                    <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full ${cfg.bar}`}
                         style={{ width: `${c.completion}%` }}
@@ -148,14 +163,20 @@ const StageCard = ({ stage, isLast }) => {
                 {stage.recommendations.map((r) => (
                   <div
                     key={r.title}
-                    className="flex items-start gap-3 bg-gray-50 rounded-xl px-3 py-2.5"
+                    className="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-2.5"
                   >
                     <span
                       className={`shrink-0 w-2 h-2 rounded-full mt-1.5 ${r.priority === 'high' ? 'bg-red-400' : 'bg-amber-400'}`}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-800">{r.title}</p>
-                      {r.reason && <p className="text-xs text-gray-500 mt-0.5">{r.reason}</p>}
+                      <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
+                        {r.title}
+                      </p>
+                      {r.reason && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                          {r.reason}
+                        </p>
+                      )}
                     </div>
                     <span
                       className={`shrink-0 text-xs font-semibold capitalize ${r.priority === 'high' ? 'text-red-500' : 'text-amber-600'}`}
@@ -175,9 +196,11 @@ const StageCard = ({ stage, isLast }) => {
                 {stage.paths.map((p) => (
                   <div
                     key={p.title}
-                    className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3"
+                    className="bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3"
                   >
-                    <p className="text-sm font-semibold text-gray-800 mb-1">{p.title}</p>
+                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">
+                      {p.title}
+                    </p>
                     {typeof p.readiness === 'number' && p.readiness > 0 && (
                       <ReadinessBar value={p.readiness} />
                     )}
@@ -186,7 +209,7 @@ const StageCard = ({ stage, isLast }) => {
                         {p.gap.map((g) => (
                           <span
                             key={g}
-                            className="text-xs bg-white border border-gray-200 text-gray-500 rounded-md px-2 py-0.5"
+                            className="text-xs bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-500 text-gray-500 dark:text-gray-300 rounded-md px-2 py-0.5"
                           >
                             {g}
                           </span>
@@ -202,9 +225,11 @@ const StageCard = ({ stage, isLast }) => {
           {stage.timeEstimate && (
             <div className="flex items-center gap-2">
               <span className="text-gray-400">⏱</span>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 dark:text-gray-300">
                 Estimated time:{' '}
-                <span className="font-semibold text-gray-800">{stage.timeEstimate}</span>
+                <span className="font-semibold text-gray-800 dark:text-gray-100">
+                  {stage.timeEstimate}
+                </span>
               </span>
             </div>
           )}
@@ -214,7 +239,10 @@ const StageCard = ({ stage, isLast }) => {
               <SectionLabel>Project Ideas</SectionLabel>
               <ul className="flex flex-col gap-1.5">
                 {stage.projects.map((p) => (
-                  <li key={p} className="flex items-start gap-2 text-sm text-gray-700">
+                  <li
+                    key={p}
+                    className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
+                  >
                     <span className="text-violet-400 font-bold shrink-0 mt-0.5">◈</span>
                     {p}
                   </li>
@@ -228,7 +256,11 @@ const StageCard = ({ stage, isLast }) => {
               <SectionLabel>Learning Resources</SectionLabel>
               <div className="flex flex-wrap gap-1.5">
                 {stage.resources.map((r) => (
-                  <Chip key={r} label={r} className="bg-gray-100 text-gray-700" />
+                  <Chip
+                    key={r}
+                    label={r}
+                    className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                  />
                 ))}
               </div>
             </div>

@@ -41,11 +41,11 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
     .filter((l) => l.length > 0)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
         <button
           onClick={() => navigate(`/player/${courseId}`)}
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition"
+          className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 transition"
         >
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
@@ -63,20 +63,22 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
                 <span>{meta.icon}</span>
                 {meta.label}
               </span>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
                 {result.score} / {result.total} correct
               </p>
-              <p className="text-sm text-gray-500 mt-0.5">{quiz?.chapterTitle}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                {quiz?.chapterTitle}
+              </p>
             </div>
           </div>
 
-          <div className="px-6 py-4 border-t border-gray-100">
-            <div className="flex justify-between text-xs text-gray-400 mb-1.5 font-medium">
+          <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-700">
+            <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mb-1.5 font-medium">
               <span>Needs Review (0–40%)</span>
               <span>On Track (41–75%)</span>
               <span>Mastered (76–100%)</span>
             </div>
-            <div className="relative h-3 bg-gray-100 rounded-full overflow-hidden">
+            <div className="relative h-3 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
               <div className="absolute top-0 left-[40%] h-full w-px bg-white/60" />
               <div className="absolute top-0 left-[75%] h-full w-px bg-white/60" />
               <div
@@ -87,7 +89,7 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-3">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 space-y-3">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-indigo-600">
@@ -95,13 +97,18 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
               </svg>
             </div>
             <div>
-              <p className="font-semibold text-gray-900 text-sm">Personalized Recommendations</p>
-              <p className="text-xs text-gray-400">Based on your performance</p>
+              <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                Personalized Recommendations
+              </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">Based on your performance</p>
             </div>
           </div>
           <ul className="space-y-2">
             {bullets.map((line, i) => (
-              <li key={i} className="flex gap-2.5 text-sm text-gray-700 leading-relaxed">
+              <li
+                key={i}
+                className="flex gap-2.5 text-sm text-gray-700 dark:text-gray-200 leading-relaxed"
+              >
                 <span className="text-teal-500 shrink-0 mt-0.5">•</span>
                 <span>{line.replace(/^[•\\-]\s*/, '')}</span>
               </li>
@@ -109,36 +116,37 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
           </ul>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
           <button
-            className="w-full px-6 py-4 flex items-center justify-between text-sm font-semibold text-gray-800 hover:bg-gray-50 transition"
+            className="w-full px-6 py-4 flex items-center justify-between text-sm font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
             onClick={() => setShowExplain((s) => !s)}
           >
             <span>Review Answers</span>
             <svg
               viewBox="0 0 24 24"
               fill="currentColor"
-              className={`w-4 h-4 text-gray-400 transition-transform ${showExplain ? 'rotate-180' : ''}`}
+              className={`w-4 h-4 text-gray-400 dark:text-gray-500 transition-transform ${showExplain ? 'rotate-180' : ''}`}
             >
               <path d="M7 10l5 5 5-5z" />
             </svg>
           </button>
 
           {showExplain && (
-            <div className="border-t border-gray-100 divide-y divide-gray-100">
+            <div className="border-t border-gray-100 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700">
               {quiz.questions.map((q, i) => {
                 const chosen = answers[i]
                 const correct = q.correctIndex
                 const isRight = chosen === correct
                 return (
                   <div key={i} className="px-6 py-4 space-y-2">
-                    <p className="text-sm font-medium text-gray-900">
-                      <span className="text-gray-400 mr-1.5">{i + 1}.</span>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      <span className="text-gray-400 dark:text-gray-500 mr-1.5">{i + 1}.</span>
                       {q.question}
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                       {q.options.map((opt, oi) => {
-                        let cls = 'text-gray-500 bg-gray-50 border-gray-100'
+                        let cls =
+                          'text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-gray-100 dark:border-gray-600'
                         if (oi === correct)
                           cls = 'text-teal-700 bg-teal-50 border-teal-200 font-semibold'
                         if (oi === chosen && !isRight)
@@ -152,7 +160,9 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
                       })}
                     </div>
                     {q.explanation && (
-                      <p className="text-xs text-gray-400 italic">{q.explanation}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 italic">
+                        {q.explanation}
+                      </p>
                     )}
                   </div>
                 )
@@ -164,7 +174,7 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
         <div className="flex gap-3">
           <button
             onClick={onRetake}
-            className="flex-1 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition"
+            className="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-600 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
           >
             Retake Quiz
           </button>

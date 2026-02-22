@@ -117,10 +117,12 @@ const Analytics = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4 dark:bg-gray-950">
         <div className="text-6xl">📊</div>
-        <h2 className="text-2xl font-semibold text-gray-800">Sign in to view your dashboard</h2>
-        <p className="text-gray-500 max-w-sm">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+          Sign in to view your dashboard
+        </h2>
+        <p className="text-gray-500 dark:text-gray-400 max-w-sm">
           Track time spent, monitor course progress, and see your learning stats.
         </p>
         <button
@@ -141,22 +143,22 @@ const Analytics = () => {
   ).length
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My Dashboard</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             Track your learning progress and time spent on SkillRise
           </p>
         </div>
 
-        <div className="flex gap-1 p-1 bg-gray-100 rounded-xl mb-8 w-fit">
+        <div className="flex gap-1 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl mb-8 w-fit">
           <button
             onClick={() => setActiveTab('activity')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
               activeTab === 'activity'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             Activity
@@ -165,8 +167,8 @@ const Analytics = () => {
             onClick={() => setActiveTab('courses')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition ${
               activeTab === 'courses'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             My Courses
@@ -180,8 +182,8 @@ const Analytics = () => {
             onClick={() => setActiveTab('quizzes')}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition ${
               activeTab === 'quizzes'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             Quizzes

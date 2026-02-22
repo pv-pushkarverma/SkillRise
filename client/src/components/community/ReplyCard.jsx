@@ -12,7 +12,7 @@ const ReplyCard = ({ reply, isPostAuthor, currentUserId, onUpvote, onAccept, onA
 
   return (
     <div
-      className={`bg-white rounded-2xl border ${reply.isAcceptedAnswer ? 'border-teal-300 shadow-teal-50 shadow-md' : 'border-gray-200'} overflow-hidden`}
+      className={`bg-white dark:bg-gray-800 rounded-2xl border ${reply.isAcceptedAnswer ? 'border-teal-300 shadow-teal-50 shadow-md' : 'border-gray-200 dark:border-gray-700'} overflow-hidden`}
     >
       {reply.isAcceptedAnswer && (
         <div className="bg-teal-500 text-white text-xs font-semibold px-4 py-1.5 flex items-center gap-1.5">
@@ -24,20 +24,24 @@ const ReplyCard = ({ reply, isPostAuthor, currentUserId, onUpvote, onAccept, onA
         <div className="flex items-center gap-2.5 mb-4">
           <Avatar name={reply.authorName} imageUrl={reply.authorImage} />
           <div>
-            <p className="text-sm font-semibold text-gray-800">{reply.authorName}</p>
-            <p className="text-xs text-gray-400">{timeAgo(reply.createdAt)}</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">
+              {reply.authorName}
+            </p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">{timeAgo(reply.createdAt)}</p>
           </div>
         </div>
 
-        <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{reply.content}</p>
+        <p className="text-gray-700 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">
+          {reply.content}
+        </p>
 
-        <div className="flex items-center gap-3 mt-4 pt-3 border-t border-gray-100">
+        <div className="flex items-center gap-3 mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
           <button
             onClick={handleUpvote}
             className={`flex items-center gap-1.5 text-sm transition px-3 py-1.5 rounded-lg border ${
               reply.isUpvoted
                 ? 'border-teal-200 bg-teal-50 text-teal-600 font-semibold'
-                : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+                : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             <span>↑</span>
@@ -50,7 +54,7 @@ const ReplyCard = ({ reply, isPostAuthor, currentUserId, onUpvote, onAccept, onA
               className={`flex items-center gap-1.5 text-sm transition px-3 py-1.5 rounded-lg border ${
                 reply.isAcceptedAnswer
                   ? 'border-teal-300 bg-teal-50 text-teal-700 font-medium'
-                  : 'border-gray-200 text-gray-500 hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50'
+                  : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-teal-300 hover:text-teal-600 hover:bg-teal-50'
               }`}
             >
               <span>✓</span>

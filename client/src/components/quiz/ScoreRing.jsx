@@ -1,4 +1,7 @@
+import { useTheme } from '../../context/ThemeContext'
+
 const ScoreRing = ({ pct, group }) => {
+  const { isDark } = useTheme()
   const r = 40
   const circ = 2 * Math.PI * r
   const offset = circ - (pct / 100) * circ
@@ -13,7 +16,14 @@ const ScoreRing = ({ pct, group }) => {
   return (
     <div className="relative w-28 h-28 mx-auto">
       <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-        <circle cx="50" cy="50" r={r} fill="none" stroke="#e5e7eb" strokeWidth="10" />
+        <circle
+          cx="50"
+          cy="50"
+          r={r}
+          fill="none"
+          stroke={isDark ? '#374151' : '#e5e7eb'}
+          strokeWidth="10"
+        />
         <circle
           cx="50"
           cy="50"

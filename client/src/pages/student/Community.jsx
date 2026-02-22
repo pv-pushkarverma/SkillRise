@@ -190,13 +190,13 @@ const Community = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-5">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Community</h1>
-              <p className="text-gray-500 text-sm mt-0.5">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Community</h1>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
                 Ask questions, share knowledge, connect with fellow learners
               </p>
             </div>
@@ -215,7 +215,7 @@ const Community = () => {
       <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-6">
         <div className="flex gap-6">
           <aside className="hidden lg:block w-64 shrink-0">
-            <div className="bg-white border border-gray-200 rounded-2xl p-3 sticky top-20">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-3 sticky top-20">
               {groupsLoading ? (
                 <div className="flex justify-center py-8">
                   <div className="w-5 h-5 border-2 border-teal-500 border-t-transparent rounded-full animate-spin" />
@@ -230,10 +230,10 @@ const Community = () => {
             <div className="lg:hidden flex items-center gap-2 mb-4">
               <button
                 onClick={() => setShowGroupDrawer(true)}
-                className="flex items-center gap-1.5 text-sm border border-gray-200 bg-white px-3 py-2 rounded-xl hover:bg-gray-50 transition"
+                className="flex items-center gap-1.5 text-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition"
               >
                 <span>📂</span>
-                <span className="text-gray-700 font-medium">Groups</span>
+                <span className="text-gray-700 dark:text-gray-200 font-medium">Groups</span>
               </button>
               {selectedGroup && (
                 <div className="flex items-center gap-1.5 bg-teal-50 border border-teal-100 text-teal-700 text-sm px-3 py-1.5 rounded-xl">
@@ -258,7 +258,7 @@ const Community = () => {
               />
             )}
 
-            <div className="flex gap-1 bg-white border border-gray-200 p-1 rounded-xl mb-5 w-fit">
+            <div className="flex gap-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-1 rounded-xl mb-5 w-fit">
               {[
                 { id: 'all', label: 'All Posts' },
                 { id: 'myGroups', label: 'My Groups', authRequired: true },
@@ -274,7 +274,9 @@ const Community = () => {
                     setTab(t.id)
                   }}
                   className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
-                    tab === t.id ? 'bg-gray-100 text-gray-900' : 'text-gray-500 hover:text-gray-700'
+                    tab === t.id
+                      ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                   }`}
                 >
                   {t.label}
@@ -284,8 +286,8 @@ const Community = () => {
 
             {selectedGroup && (
               <div className="hidden lg:flex items-center gap-2 mb-4">
-                <span className="text-sm text-gray-500">Showing posts in</span>
-                <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-800">
+                <span className="text-sm text-gray-500 dark:text-gray-400">Showing posts in</span>
+                <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-800 dark:text-gray-100">
                   {selectedGroup.icon} {selectedGroup.name}
                 </span>
                 <button
@@ -302,20 +304,22 @@ const Community = () => {
                 {[...Array(4)].map((_, i) => (
                   <div
                     key={i}
-                    className="bg-white border border-gray-200 rounded-2xl p-5 animate-pulse"
+                    className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 animate-pulse"
                   >
-                    <div className="h-3 bg-gray-200 rounded w-1/4 mb-3" />
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                    <div className="h-3 bg-gray-200 rounded w-full mb-1" />
-                    <div className="h-3 bg-gray-200 rounded w-2/3" />
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-3" />
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-1" />
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3" />
                   </div>
                 ))}
               </div>
             ) : posts.length === 0 ? (
-              <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center">
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-12 text-center">
                 <div className="text-5xl mb-3">💬</div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-1">No posts yet</h3>
-                <p className="text-gray-500 text-sm mb-5">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
+                  No posts yet
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-5">
                   {tab === 'myGroups'
                     ? 'Posts from groups you join will appear here.'
                     : 'Be the first to start a discussion!'}
@@ -345,7 +349,7 @@ const Community = () => {
                   <button
                     onClick={() => fetchPosts(false)}
                     disabled={loadingMore}
-                    className="text-sm text-gray-500 hover:text-gray-700 py-3 border border-gray-200 bg-white rounded-2xl transition hover:bg-gray-50 disabled:opacity-40"
+                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-2xl transition hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-40"
                   >
                     {loadingMore ? 'Loading…' : 'Load more posts'}
                   </button>
@@ -360,11 +364,11 @@ const Community = () => {
         <div className="fixed inset-0 z-50 lg:hidden" onClick={() => setShowGroupDrawer(false)}>
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
           <div
-            className="absolute left-0 top-0 bottom-0 w-72 bg-white overflow-y-auto p-4 shadow-xl"
+            className="absolute left-0 top-0 bottom-0 w-72 bg-white dark:bg-gray-800 overflow-y-auto p-4 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-semibold text-gray-800">Groups</h2>
+              <h2 className="font-semibold text-gray-800 dark:text-gray-100">Groups</h2>
               <button
                 onClick={() => setShowGroupDrawer(false)}
                 className="text-gray-400 hover:text-gray-600 text-xl"
