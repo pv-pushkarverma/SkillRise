@@ -1,0 +1,16 @@
+services:
+  server:
+    image: pushkarverma/skillrise-server:latest
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./server/.env
+    restart: unless-stopped
+
+  client:
+    image: pushkarverma/skillrise-client:latest
+    ports:
+      - '80:80'
+    depends_on:
+      - server
+    restart: unless-stopped
