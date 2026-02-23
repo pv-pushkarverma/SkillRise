@@ -7,6 +7,8 @@
     "server": "nodemon server.js",
     "start": "node server.js",
     "seed": "node seed.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.js\" --ignore-path .prettierignore",
     "format:check": "prettier --check \"**/*.js\" --ignore-path .prettierignore"
   },
@@ -30,6 +32,10 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.3.0",
     "nodemon": "^3.1.9",
     "prettier": "^3.8.1"
   }

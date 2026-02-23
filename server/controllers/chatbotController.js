@@ -183,7 +183,7 @@ export const recentAIChats = async (req, res) => {
       .reverse()
 
     res.json({ chats })
-  } catch (error) {
+  } catch {
     return res.status(500).json({ success: false, message: 'Error while fetching conversations' })
   }
 }
@@ -208,7 +208,7 @@ export const getChatSession = async (req, res) => {
     }
 
     return res.json(fullChats[0])
-  } catch (error) {
+  } catch {
     return res.status(500).json({ success: false, message: 'Error while fetching conversation' })
   }
 }

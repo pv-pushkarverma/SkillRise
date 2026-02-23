@@ -1,4 +1,4 @@
-name: CI pipeline to Lint, Format & Build Client and Format Server
+name: CI pipeline to Lint, Format & Build Client and Lint & Format Server
 
 on:
     pull_request:
@@ -39,7 +39,7 @@ jobs:
                   VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
 
     server:
-        name: Format Check Server
+        name: Lint & Format Check Server
         runs-on: ubuntu-latest
         defaults:
             run:
@@ -55,6 +55,9 @@ jobs:
 
             - name: Install Dependencies
               run: npm ci
+
+            - name: Run ESLint
+              run: npm run lint
 
             - name: Check Prettier Formatting
               run: npm run format:check

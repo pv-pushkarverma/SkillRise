@@ -19,7 +19,9 @@ const parseJSON = (raw) => {
     try {
       const r = fn()
       if (r) return r
-    } catch {}
+    } catch {
+      // strategy threw — try next
+    }
   }
   return null
 }
