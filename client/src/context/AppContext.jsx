@@ -16,10 +16,14 @@ export const AppContextProvider = (props) => {
   const { user } = useUser()
 
   const [allCourses, setAllCourses] = useState([])
-  const [isEducator, setIsEducator] = useState(false)
   const [enrolledCourses, setEnrolledCourses] = useState([])
   const [userData, setUserData] = useState(null)
   const [applicationStatus, setApplicationStatus] = useState(null)
+
+  // Derived from Clerk's publicMetadata — single source of truth, no stale state
+  const userRole = user?.publicMetadata?.role
+  const isEducator = userRole === 'educator'
+  const isAdmin = userRole === 'admin'
 
   //Fetch Course Data
   const fetchAllCourses = async () => {
@@ -38,10 +42,6 @@ export const AppContextProvider = (props) => {
 
   //Fetch User Data
   const fetchUserData = async () => {
-    if (user?.publicMetadata?.role === 'educator') {
-      setIsEducator(true)
-    }
-
     try {
       const token = await getToken()
 
@@ -156,7 +156,7 @@ export const AppContextProvider = (props) => {
     navigate,
     calculateRating,
     isEducator,
-    setIsEducator,
+    isAdmin,
     calculateChapterTime,
     calculateCourseDuration,
     calculateNoOfLectures,

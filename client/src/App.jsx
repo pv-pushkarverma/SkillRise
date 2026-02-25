@@ -20,6 +20,9 @@ import Dashboard from './pages/educator/Dashboard'
 import AddCourse from './pages/educator/AddCourse'
 import MyCourses from './pages/educator/MyCourses'
 import StudentsEnrolled from './pages/educator/StudentsEnrolled'
+import Admin from './pages/admin/Admin'
+import AdminDashboard from './pages/admin/AdminDashboard'
+import EducatorApplications from './pages/admin/EducatorApplications'
 import Navbar from './components/student/Navbar'
 import AIChat from './pages/student/AIChat'
 import Quiz from './pages/student/Quiz'
@@ -33,10 +36,11 @@ const App = () => {
   useTimeTracker()
 
   const isEducatorRoute = useMatch('/educator/*')
+  const isAdminRoute = useMatch('/admin/*')
   return (
     <div className="text-default min-h-screen bg-white dark:bg-gray-950 dark:text-gray-100 transition-colors duration-200">
       <ToastContainer />
-      {!isEducatorRoute && <Navbar />}
+      {!isEducatorRoute && !isAdminRoute && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/course-list" element={<CoursesList />} />
@@ -60,6 +64,11 @@ const App = () => {
           <Route path="add-course" element={<AddCourse />} />
           <Route path="my-courses" element={<MyCourses />} />
           <Route path="students-enrolled" element={<StudentsEnrolled />} />
+        </Route>
+
+        <Route path="/admin" element={<Admin />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="educator-applications" element={<EducatorApplications />} />
         </Route>
       </Routes>
     </div>
