@@ -4,8 +4,8 @@
 
 **A full-stack e-learning platform with AI-powered features, built for students and educators.**
 
-[![CI](https://github.com/pv-pushkarverma/skillrise/actions/workflows/ci.yml/badge.svg)](https://github.com/pv-pushkarverma/skillrise/actions/workflows/ci.yml)
-[![Deploy](https://github.com/pv-pushkarverma/skillrise/actions/workflows/deploy.yml/badge.svg)](https://github.com/pv-pushkarverma/skillrise/actions/workflows/deploy.yml)
+[![CI](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/build.yml/badge.svg)](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/build.yml)
+[![Deploy](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/deploy.yml/badge.svg)](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/deploy.yml)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb)
@@ -205,7 +205,7 @@ docker compose down
 
 ### On Pull Request → `main` or `dev`
 
-Both jobs run in parallel via [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
+Both jobs run in parallel via [`.github/workflows/build.yml`](.github/workflows/build.yml):
 
 | Job | Steps |
 |---|---|
