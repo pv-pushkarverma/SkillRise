@@ -4,15 +4,19 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
 
-const STATUS_OPTIONS = ['all', 'completed', 'pending', 'failed']
+const STATUS_OPTIONS = ['all', 'completed', 'created', 'pending', 'failed', 'refunded']
 
 const STATUS_STYLES = {
   completed:
     'bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-900/20 dark:text-teal-400 dark:border-teal-800',
+  created:
+    'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800',
   pending:
     'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800',
   failed:
     'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
+  refunded:
+    'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-800',
 }
 
 const AdminPurchases = () => {

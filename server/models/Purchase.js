@@ -12,7 +12,25 @@ const purchaseSchema = new mongoose.Schema(
 
     amount: { type: Number, required: true },
 
-    status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
+    currency: { type: String, default: 'INR' },
+
+    paymentProvider: {
+      type: String,
+      enum: ['stripe', 'razorpay'],
+      required: true,
+    },
+
+    providerOrderId: { type: String },
+
+    providerPaymentId: { type: String },
+
+    failureReason: { type: String },
+
+    status: {
+      type: String,
+      enum: ['created', 'pending', 'completed', 'failed', 'refunded'],
+      default: 'created',
+    },
   },
   { timestamps: true }
 )

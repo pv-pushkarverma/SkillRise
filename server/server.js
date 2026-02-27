@@ -3,7 +3,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import 'dotenv/config'
 import connectDB from './configs/mongodb.js'
-import { clerkWebhooks, stripeWebhooks } from './controllers/webhooks.js'
+import { clerkWebhooks, stripeWebhooks, razorpayWebhooks } from './controllers/webhooks.js'
 import educatorRouter from './routes/educatorRoutes.js'
 import adminRouter from './routes/adminRoutes.js'
 import { clerkMiddleware } from '@clerk/express'
@@ -12,7 +12,7 @@ import courseRouter from './routes/courseRoute.js'
 import userRouter from './routes/userRoutes.js'
 import communityRouter from './routes/communityRoutes.js'
 import quizRouter from './routes/quizRoutes.js'
-import { rateLimit } from 'express-rate-limit'
+import { rateLimit, ipKeyGenerator } from 'express-rate-limit'
 
 const app = express()
 
@@ -26,6 +26,7 @@ app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }))
 app.use(clerkMiddleware())
 
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks)
+app.post('/razorpay', express.raw({ type: 'application/json' }), razorpayWebhooks)
 
 //stripe needs raw body so move this after stripe
 app.use(express.json())
@@ -34,7 +35,7 @@ app.use(express.json())
 const aiChatLimiter = rateLimit({
   windowMs: 10 * 60 * 1000,
   limit: 30,
-  keyGenerator: (req) => req.auth?.userId || req.ip,
+  keyGenerator: (req) => req.auth?.userId || ipKeyGenerator(req),
   message: {
     success: false,
     message: 'Too many requests. Please wait a moment before sending another message.',

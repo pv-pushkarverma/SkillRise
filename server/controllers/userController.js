@@ -1,10 +1,10 @@
-import Stripe from 'stripe'
 import Course from '../models/Course.js'
 import Purchase from '../models/Purchase.js'
 import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
-
-const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
+import { createOrder as paymentCreateOrder } from '../services/payments/payment.service.js'
+import { verifyPayment as razorpayVerify } from '../services/payments/razorpay.service.js'
+import { completePurchase } from '../services/order.service.js'
 
 //Get User Data
 export const getUserData = async (req, res) => {
@@ -53,65 +53,42 @@ export const userEnrolledCourses = async (req, res) => {
 export const purchaseCourse = async (req, res) => {
   try {
     const { origin } = req.headers
-
     const userId = req.auth.userId
-    const userData = await User.findById(userId)
+    const { courseId, provider = process.env.DEFAULT_PAYMENT_PROVIDER || 'stripe' } = req.body
 
-    const { courseId } = req.body
-    const courseData = await Course.findById(courseId)
+    const [userData, courseData] = await Promise.all([
+      User.findById(userId),
+      Course.findById(courseId),
+    ])
 
     if (!userData || !courseData) {
-      return res.json({
-        success: false,
-        message: 'Data Not Found',
-      })
+      return res.json({ success: false, message: 'Data Not Found' })
     }
 
-    const purchaseData = {
+    const amount = parseFloat(
+      (courseData.coursePrice - (courseData.discount * courseData.coursePrice) / 100).toFixed(2)
+    )
+
+    const newPurchase = await Purchase.create({
       courseId: courseData._id,
       userId,
-      amount: (
-        courseData.coursePrice -
-        (courseData.discount * courseData.coursePrice) / 100
-      ).toFixed(2),
-    }
-
-    const newPurchase = await Purchase.create(purchaseData)
-
-    const currency = process.env.CURRENCY.toLowerCase()
-
-    const lineItems = [
-      {
-        price_data: {
-          currency,
-          product_data: {
-            name: courseData.courseTitle,
-          },
-          unit_amount: Math.floor(newPurchase.amount) * 100,
-        },
-        quantity: 1,
-      },
-    ]
-
-    const session = await stripeInstance.checkout.sessions.create({
-      ui_mode: 'embedded',
-      return_url: `${origin}/payment/success/${courseData._id}?session_id={CHECKOUT_SESSION_ID}`,
-      line_items: lineItems,
-      mode: 'payment',
-      metadata: {
-        purchaseId: newPurchase._id.toString(),
-      },
+      amount,
+      currency: process.env.CURRENCY || 'INR',
+      paymentProvider: provider,
+      status: 'created',
     })
 
-    res.json({
-      success: true,
-      clientSecret: session.client_secret,
+    const providerResult = await paymentCreateOrder(provider, {
+      purchaseId: newPurchase._id,
+      courseId: courseData._id,
+      amount,
+      courseTitle: courseData.courseTitle,
+      origin,
     })
+
+    res.json({ success: true, purchaseId: newPurchase._id.toString(), ...providerResult })
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    })
+    res.json({ success: false, message: error.message })
   }
 }
 
@@ -223,9 +200,33 @@ export const addUserRating = async (req, res) => {
   }
 }
 
-// Check Stripe session status (used by PaymentSuccess page)
+// Verify Razorpay payment signature and complete the purchase (enrollment)
+// Acts as primary completion path for local dev; webhook is fallback in production
+export const verifyRazorpayPayment = async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, purchaseId } = req.body
+
+    const isValid = razorpayVerify({
+      orderId: razorpay_order_id,
+      paymentId: razorpay_payment_id,
+      signature: razorpay_signature,
+    })
+
+    if (!isValid) {
+      return res.json({ success: false, message: 'Invalid payment signature' })
+    }
+
+    await completePurchase(purchaseId, razorpay_payment_id)
+    res.json({ success: true })
+  } catch (error) {
+    res.json({ success: false, message: error.message })
+  }
+}
+
+// Check Stripe session status (used by PaymentSuccess page for Stripe flows)
 export const getSessionStatus = async (req, res) => {
   try {
+    const { stripeInstance } = await import('../services/payments/stripe.service.js')
     const session = await stripeInstance.checkout.sessions.retrieve(req.query.session_id)
     res.json({ success: true, status: session.status })
   } catch (error) {

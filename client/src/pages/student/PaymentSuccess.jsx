@@ -11,16 +11,19 @@ const PaymentSuccess = () => {
   const { backendUrl } = useContext(AppContext)
 
   const [course, setCourse] = useState(null)
-  const [status, setStatus] = useState('loading') // 'loading' | 'complete' | 'failed'
+  // Derive initial status from URL so Razorpay never shows a spinner
+  const [status, setStatus] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    const provider = params.get('provider')
+    const sessionId = params.get('session_id')
+    return provider === 'razorpay' || (!sessionId && !provider) ? 'complete' : 'loading'
+  })
   const [countdown, setCountdown] = useState(REDIRECT_AFTER)
 
-  // Verify session with Stripe
+  // Only needed for Stripe — verify session status server-side
   useEffect(() => {
     const sessionId = searchParams.get('session_id')
-    if (!sessionId) {
-      setStatus('complete')
-      return
-    } // no session_id = direct nav, just show success
+    if (!sessionId) return
 
     axios
       .get(`${backendUrl}/api/user/session-status?session_id=${sessionId}`)
@@ -113,7 +116,7 @@ const PaymentSuccess = () => {
             Payment successful!
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-            You're now enrolled. Happy learning!
+            You&apos;re now enrolled. Happy learning!
           </p>
 
           {course && (

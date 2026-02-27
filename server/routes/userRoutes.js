@@ -7,6 +7,7 @@ import {
   purchaseCourse,
   updateUserCourseProgress,
   userEnrolledCourses,
+  verifyRazorpayPayment,
 } from '../controllers/userController.js'
 import {
   aiChatbot,
@@ -32,6 +33,7 @@ userRouter.post('/generate-personal-roadmap', generatePersonalRoadmap)
 userRouter.post('/generate-custom-roadmap', generateCustomRoadmap)
 
 userRouter.get('/session-status', getSessionStatus)
+userRouter.post('/verify-razorpay', verifyRazorpayPayment)
 
 userRouter.post('/ai-chat', aiChatbot)
 userRouter.post('/previous-chats', recentAIChats)
