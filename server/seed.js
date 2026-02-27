@@ -67,7 +67,7 @@ const courseData = [
     coursePrice: 3999,
     isPublished: true,
     discount: 30,
-    educator: 'user_seed_educator1',
+    educatorId: 'user_seed_educator1',
     courseContent: [
       {
         chapterId: 'ch_react_basics',
@@ -169,7 +169,7 @@ const courseData = [
     coursePrice: 4499,
     isPublished: true,
     discount: 20,
-    educator: 'user_seed_educator1',
+    educatorId: 'user_seed_educator1',
     courseContent: [
       {
         chapterId: 'ch_python_basics',
@@ -240,7 +240,7 @@ const courseData = [
     coursePrice: 2999,
     isPublished: true,
     discount: 15,
-    educator: 'user_seed_educator2',
+    educatorId: 'user_seed_educator2',
     courseContent: [
       {
         chapterId: 'ch_design_thinking',
@@ -356,7 +356,7 @@ const seed = async () => {
   console.log('🧹 Clearing existing seed data...')
   await Promise.all([
     User.deleteMany({ _id: { $regex: /^user_seed_/ } }),
-    Course.deleteMany({ educator: { $in: ['user_seed_educator1', 'user_seed_educator2'] } }),
+    Course.deleteMany({ educatorId: { $in: ['user_seed_educator1', 'user_seed_educator2'] } }),
     Purchase.deleteMany({ userId: { $regex: /^user_seed_/ } }),
     CourseProgress.deleteMany({ userId: { $regex: /^user_seed_/ } }),
     CommunityPost.deleteMany({ authorId: { $regex: /^user_seed_/ } }),

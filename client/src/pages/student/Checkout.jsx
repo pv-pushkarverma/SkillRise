@@ -23,8 +23,8 @@ const Checkout = () => {
   useEffect(() => {
     axios
       .get(`${backendUrl}/api/course/${courseId}`)
-      .then((r) => {
-        if (r.data.success) setCourseTitle(r.data.courseData.courseTitle)
+      .then((res) => {
+        if (res.data.success) setCourseTitle(res.data.courseData.courseTitle)
       })
       .catch(() => {})
   }, [courseId, backendUrl])

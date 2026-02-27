@@ -45,14 +45,14 @@ const Navbar = () => {
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-300">
           {primaryLinks
-            .filter((l) => !l.requiresAuth || user)
-            .map((l) => (
+            .filter((link) => !link.requiresAuth || user)
+            .map((link) => (
               <Link
-                key={l.to}
-                to={l.to}
+                key={link.to}
+                to={link.to}
                 className="hover:text-gray-900 dark:hover:text-white transition"
               >
-                {l.label}
+                {link.label}
               </Link>
             ))}
         </nav>
@@ -150,15 +150,15 @@ const Navbar = () => {
           <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
             <div className="p-3 flex flex-col gap-1 text-sm font-medium text-gray-700 dark:text-gray-200">
               {primaryLinks
-                .filter((l) => !l.requiresAuth || user)
-                .map((l) => (
+                .filter((link) => !link.requiresAuth || user)
+                .map((link) => (
                   <Link
-                    key={l.to}
-                    to={l.to}
+                    key={link.to}
+                    to={link.to}
                     onClick={() => setMobileOpen(false)}
                     className="px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                   >
-                    {l.label}
+                    {link.label}
                   </Link>
                 ))}
               {user && (

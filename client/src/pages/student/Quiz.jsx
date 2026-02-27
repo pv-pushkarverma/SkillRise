@@ -155,7 +155,6 @@ const Quiz = () => {
       quiz={quiz}
       current={current}
       answers={answers}
-      courseId={courseId}
       onSelect={selectOption}
       onNext={goNext}
       onPrev={goPrev}

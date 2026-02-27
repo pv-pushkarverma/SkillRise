@@ -5,7 +5,7 @@ export const getAllCourse = async (req, res) => {
   try {
     const courses = await Course.find({ isPublished: true })
       .select(['-courseContent', '-enrolledStudents'])
-      .populate({ path: 'educator' })
+      .populate({ path: 'educatorId' })
 
     res.json({
       success: true,
@@ -20,11 +20,13 @@ export const getAllCourse = async (req, res) => {
 }
 
 //Get Course by Id
-export const getCourseId = async (req, res) => {
+export const getCourseById = async (req, res) => {
   const { id } = req.params
 
   try {
-    const courseData = await Course.findById(id).populate({ path: 'educator' })
+    const courseData = await Course.findById(id).populate({ path: 'educatorId' })
+
+    if (!courseData) return res.json({ success: false, message: 'Course not found' })
 
     courseData.courseContent.forEach((chapter) => {
       chapter.chapterContent.forEach((lecture) => {

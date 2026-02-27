@@ -15,5 +15,8 @@ const quizResultSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+quizResultSchema.index({ userId: 1, courseId: 1 })
+quizResultSchema.index({ courseId: 1 })
+
 const QuizResult = mongoose.model('QuizResult', quizResultSchema)
 export default QuizResult

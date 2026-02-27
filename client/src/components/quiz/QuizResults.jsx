@@ -37,8 +37,8 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
 
   const bullets = result.recommendations
     .split('\n')
-    .map((l) => l.trim())
-    .filter((l) => l.length > 0)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -110,7 +110,7 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
                 className="flex gap-2.5 text-sm text-gray-700 dark:text-gray-200 leading-relaxed"
               >
                 <span className="text-teal-500 shrink-0 mt-0.5">•</span>
-                <span>{line.replace(/^[•\\-]\s*/, '')}</span>
+                <span>{line.replace(/^[•\-]\s*/, '')}</span>
               </li>
             ))}
           </ul>

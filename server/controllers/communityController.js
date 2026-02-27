@@ -80,12 +80,12 @@ const seedDefaultGroups = async () => {
 }
 
 //   Helper: enrich post objects (strip upvotes array, add counts)
-const enrichPost = (p, userId) => ({
-  ...p,
-  group: p.groupId ?? p.group ?? null,
+const enrichPost = (post, userId) => ({
+  ...post,
+  group: post.groupId ?? post.group ?? null,
   groupId: undefined,
-  upvoteCount: Array.isArray(p.upvotes) ? p.upvotes.length : 0,
-  isUpvoted: userId ? Array.isArray(p.upvotes) && p.upvotes.includes(userId) : false,
+  upvoteCount: Array.isArray(post.upvotes) ? post.upvotes.length : 0,
+  isUpvoted: userId ? Array.isArray(post.upvotes) && post.upvotes.includes(userId) : false,
   upvotes: undefined,
 })
 
@@ -251,13 +251,13 @@ export const createPost = async (req, res) => {
 
     const parsedTags = Array.isArray(tags)
       ? tags
-          .map((t) => t.trim())
+          .map((tag) => tag.trim())
           .filter(Boolean)
           .slice(0, 5)
       : typeof tags === 'string'
         ? tags
             .split(',')
-            .map((t) => t.trim())
+            .map((tag) => tag.trim())
             .filter(Boolean)
             .slice(0, 5)
         : []

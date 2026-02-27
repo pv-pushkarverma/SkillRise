@@ -4,9 +4,9 @@ import { clerkClient } from '@clerk/express'
 export const protectEducator = async (req, res, next) => {
   try {
     const userId = req.auth.userId
-    const response = await clerkClient.users.getUser(userId)
+    const clerkUser = await clerkClient.users.getUser(userId)
 
-    if (response.publicMetadata.role !== 'educator') {
+    if (clerkUser.publicMetadata.role !== 'educator') {
       return res.json({
         success: false,
         message: 'Unauthorized Access',
@@ -26,9 +26,9 @@ export const protectEducator = async (req, res, next) => {
 export const protectAdmin = async (req, res, next) => {
   try {
     const userId = req.auth.userId
-    const response = await clerkClient.users.getUser(userId)
+    const clerkUser = await clerkClient.users.getUser(userId)
 
-    if (response.publicMetadata.role !== 'admin') {
+    if (clerkUser.publicMetadata.role !== 'admin') {
       return res.json({
         success: false,
         message: 'Unauthorized Access',

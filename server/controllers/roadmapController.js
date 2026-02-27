@@ -15,10 +15,10 @@ const parseJSON = (raw) => {
       return m ? JSON.parse(m[0]) : null
     },
   ]
-  for (const fn of strategies) {
+  for (const strategy of strategies) {
     try {
-      const r = fn()
-      if (r) return r
+      const result = strategy()
+      if (result) return result
     } catch {}
   }
   return null
@@ -73,9 +73,9 @@ export const generatePersonalRoadmap = async (req, res) => {
 
     const courseList = courseStats
       .map(
-        (c) =>
-          `- "${c.title}" — ${c.completionPercent}% complete (${c.doneLectures}/${c.totalLectures} lectures)` +
-          (c.description ? `\n  Summary: ${c.description}` : '')
+        (stat) =>
+          `- "${stat.title}" — ${stat.completionPercent}% complete (${stat.doneLectures}/${stat.totalLectures} lectures)` +
+          (stat.description ? `\n  Summary: ${stat.description}` : '')
       )
       .join('\n\n')
 

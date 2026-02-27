@@ -10,6 +10,12 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import Loading from '../../components/student/Loading'
 
+const QUIZ_GROUP_CONFIG = {
+  mastered: { color: 'text-teal-700 bg-teal-50', icon: '🏆', label: 'Mastered' },
+  on_track: { color: 'text-amber-700 bg-amber-50', icon: '🎯', label: 'On Track' },
+  needs_review: { color: 'text-red-700 bg-red-50', icon: '📖', label: 'Needs Review' },
+}
+
 const Player = () => {
   const { enrolledCourses, backendUrl, getToken, userData, fetchUserEnrolledCourses, navigate } =
     useContext(AppContext)
@@ -28,21 +34,18 @@ const Player = () => {
 
   // Saves the chosen lecture and persists it so the course resumes from here
   const selectLecture = (lecture, chapterIndex, lectureIndex) => {
-    const data = { ...lecture, chapter: chapterIndex + 1, lecture: lectureIndex + 1, chapterIndex }
-    setPlayerData(data)
-    localStorage.setItem(`lastPlayed_${courseId}`, JSON.stringify(data))
+    const lectureEntry = { ...lecture, chapter: chapterIndex + 1, lecture: lectureIndex + 1, chapterIndex }
+    setPlayerData(lectureEntry)
+    localStorage.setItem(`lastPlayed_${courseId}`, JSON.stringify(lectureEntry))
   }
 
   const getCourseData = () => {
     if (!Array.isArray(enrolledCourses) || !userData?._id) return
-    enrolledCourses.forEach((course) => {
-      if (course._id === courseId) {
-        setCourseData(course)
-        course.courseRatings.forEach((item) => {
-          if (item.userId === userData._id) setInitialRating(item.rating)
-        })
-      }
-    })
+    const course = enrolledCourses.find((c) => c._id === courseId)
+    if (!course) return
+    setCourseData(course)
+    const userRating = course.courseRatings.find((r) => r.userId === userData._id)
+    if (userRating) setInitialRating(userRating.rating)
   }
 
   const markLectureAsCompleted = async (lectureId) => {
@@ -362,31 +365,14 @@ const Player = () => {
                                   ? 'Retake Quiz'
                                   : 'Take Chapter Quiz'}
                               </button>
-                              {quizResultsMap[chapter.chapterId] &&
-                                (() => {
+                              {quizResultsMap[chapter.chapterId] && (() => {
                                   const r = quizResultsMap[chapter.chapterId]
-                                  const badgeColor =
-                                    r.group === 'mastered'
-                                      ? 'text-teal-700 bg-teal-50'
-                                      : r.group === 'on_track'
-                                        ? 'text-amber-700 bg-amber-50'
-                                        : 'text-red-700 bg-red-50'
-                                  const icon =
-                                    r.group === 'mastered'
-                                      ? '🏆'
-                                      : r.group === 'on_track'
-                                        ? '🎯'
-                                        : '📖'
+                                  const groupCfg = QUIZ_GROUP_CONFIG[r.group] || QUIZ_GROUP_CONFIG.needs_review
                                   return (
                                     <p
-                                      className={`mt-2 text-center text-xs rounded-lg py-1 px-2 font-medium ${badgeColor}`}
+                                      className={`mt-2 text-center text-xs rounded-lg py-1 px-2 font-medium ${groupCfg.color}`}
                                     >
-                                      {icon} Last: {r.percentage}% ·{' '}
-                                      {r.group === 'mastered'
-                                        ? 'Mastered'
-                                        : r.group === 'on_track'
-                                          ? 'On Track'
-                                          : 'Needs Review'}
+                                      {groupCfg.icon} Last: {r.percentage}% · {groupCfg.label}
                                     </p>
                                   )
                                 })()}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 
-const fmt = (secs) => {
+const formatTime = (secs) => {
   if (!secs || isNaN(secs)) return '0:00'
   const m = Math.floor(secs / 60)
   const s = Math.floor(secs % 60)
@@ -154,9 +154,9 @@ const VideoPlayer = ({ url }) => {
       playedRef.current = p
     }
   }
-  const handleDuration = (d) => {
-    setDuration(d)
-    durationRef.current = d
+  const handleDuration = (totalDuration) => {
+    setDuration(totalDuration)
+    durationRef.current = totalDuration
   }
 
   /* seek bar */
@@ -329,7 +329,7 @@ const VideoPlayer = ({ url }) => {
               />
 
               <span className="text-xs text-white/70 tabular-nums hidden sm:block">
-                {fmt(played * duration)} / {fmt(duration)}
+                {formatTime(played * duration)} / {formatTime(duration)}
               </span>
             </div>
 
@@ -352,22 +352,22 @@ const VideoPlayer = ({ url }) => {
                     <p className="text-[10px] text-white/40 uppercase tracking-wide px-4 pt-2 pb-1 font-semibold">
                       Quality
                     </p>
-                    {QUALITIES.map((q) => (
+                    {QUALITIES.map((qualityOption) => (
                       <button
-                        key={q.value}
+                        key={qualityOption.value}
                         onClick={() => {
-                          setQuality(q.value)
+                          setQuality(qualityOption.value)
                           setShowQualities(false)
                           const ip = playerRef.current?.getInternalPlayer()
-                          if (ip?.setPlaybackQuality) ip.setPlaybackQuality(q.value)
+                          if (ip?.setPlaybackQuality) ip.setPlaybackQuality(qualityOption.value)
                         }}
                         className={`block w-full px-5 py-1.5 text-xs text-left transition ${
-                          quality === q.value
+                          quality === qualityOption.value
                             ? 'text-teal-400 font-bold bg-white/5'
                             : 'text-white hover:bg-white/10'
                         }`}
                       >
-                        {q.label}
+                        {qualityOption.label}
                       </button>
                     ))}
                   </div>
@@ -391,20 +391,20 @@ const VideoPlayer = ({ url }) => {
                     <p className="text-[10px] text-white/40 uppercase tracking-wide px-4 pt-2 pb-1 font-semibold">
                       Speed
                     </p>
-                    {SPEEDS.map((s) => (
+                    {SPEEDS.map((spd) => (
                       <button
-                        key={s}
+                        key={spd}
                         onClick={() => {
-                          setSpeed(s)
+                          setSpeed(spd)
                           setShowSpeeds(false)
                         }}
                         className={`block w-full px-5 py-1.5 text-xs text-left transition ${
-                          speed === s
+                          speed === spd
                             ? 'text-teal-400 font-bold bg-white/5'
                             : 'text-white hover:bg-white/10'
                         }`}
                       >
-                        {s}×
+                        {spd}×
                       </button>
                     ))}
                   </div>

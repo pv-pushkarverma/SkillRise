@@ -4,9 +4,9 @@ export const createId = () =>
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
 
 export const stripHtml = (html) => {
-  const d = document.createElement('div')
-  d.innerHTML = html
-  return d.textContent || d.innerText || ''
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = html
+  return tempDiv.textContent || tempDiv.innerText || ''
 }
 
 export const inputCls =

@@ -2,9 +2,9 @@ import { useTheme } from '../../context/ThemeContext'
 
 const ScoreRing = ({ pct, group }) => {
   const { isDark } = useTheme()
-  const r = 40
-  const circ = 2 * Math.PI * r
-  const offset = circ - (pct / 100) * circ
+  const radius = 40
+  const circumference = 2 * Math.PI * radius
+  const offset = circumference - (pct / 100) * circumference
   const color = group === 'mastered' ? '#14b8a6' : group === 'on_track' ? '#f59e0b' : '#f87171'
   const textColor =
     group === 'mastered'
@@ -19,7 +19,7 @@ const ScoreRing = ({ pct, group }) => {
         <circle
           cx="50"
           cy="50"
-          r={r}
+          r={radius}
           fill="none"
           stroke={isDark ? '#374151' : '#e5e7eb'}
           strokeWidth="10"
@@ -27,11 +27,11 @@ const ScoreRing = ({ pct, group }) => {
         <circle
           cx="50"
           cy="50"
-          r={r}
+          r={radius}
           fill="none"
           stroke={color}
           strokeWidth="10"
-          strokeDasharray={circ}
+          strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
           style={{ transition: 'stroke-dashoffset 1s ease' }}

@@ -4,6 +4,8 @@ import { Purchase } from '../models/Purchase.js'
 import User from '../models/User.js'
 import { CourseProgress } from '../models/CourseProgress.js'
 
+const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
+
 //Get User Data
 export const getUserData = async (req, res) => {
   try {
@@ -76,12 +78,9 @@ export const purchaseCourse = async (req, res) => {
 
     const newPurchase = await Purchase.create(purchaseData)
 
-    //Stripe Gateway Initialize
-    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
     const currency = process.env.CURRENCY.toLowerCase()
 
-    //Creating Line Items for Stripe
-    const line_items = [
+    const lineItems = [
       {
         price_data: {
           currency,
@@ -97,7 +96,7 @@ export const purchaseCourse = async (req, res) => {
     const session = await stripeInstance.checkout.sessions.create({
       ui_mode: 'embedded',
       return_url: `${origin}/payment/success/${courseData._id}?session_id={CHECKOUT_SESSION_ID}`,
-      line_items: line_items,
+      line_items: lineItems,
       mode: 'payment',
       metadata: {
         purchaseId: newPurchase._id.toString(),
@@ -157,7 +156,7 @@ export const updateUserCourseProgress = async (req, res) => {
 export const getUserCourseProgress = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const { courseId, lectureId } = req.body
+    const { courseId } = req.body
     const progressData = await CourseProgress.findOne({ userId, courseId })
 
     res.json({
@@ -227,7 +226,6 @@ export const addUserRating = async (req, res) => {
 // Check Stripe session status (used by PaymentSuccess page)
 export const getSessionStatus = async (req, res) => {
   try {
-    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
     const session = await stripeInstance.checkout.sessions.retrieve(req.query.session_id)
     res.json({ success: true, status: session.status })
   } catch (error) {

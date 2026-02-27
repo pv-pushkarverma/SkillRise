@@ -26,6 +26,7 @@ import Quiz from './pages/student/Quiz'
 import BecomeEducator from './pages/student/BecomeEducator'
 import PaymentSuccess from './pages/student/PaymentSuccess'
 import Checkout from './pages/student/Checkout'
+import NotFound from './pages/student/NotFound'
 
 import useTimeTracker from './hooks/useTimeTracker'
 
@@ -61,6 +62,8 @@ const App = () => {
           <Route path="my-courses" element={<MyCourses />} />
           <Route path="students-enrolled" element={<StudentsEnrolled />} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   )

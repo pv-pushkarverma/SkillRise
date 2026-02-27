@@ -67,15 +67,15 @@ const ReadinessBar = ({ value }) => {
 }
 
 const StageCard = ({ stage, isLast }) => {
-  const cfg = STATUS[stage.status] || STATUS.upcoming
+  const statusConfig = STATUS[stage.status] || STATUS.upcoming
 
   return (
     <div className="flex gap-4 sm:gap-6">
       <div className="flex flex-col items-center shrink-0 w-9">
         <div
-          className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm ring-4 shadow ${cfg.dot} z-10`}
+          className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm ring-4 shadow ${statusConfig.dot} z-10`}
         >
-          {stage.icon || cfg.symbol}
+          {stage.icon || statusConfig.symbol}
         </div>
         {!isLast && (
           <div className="w-px flex-1 mt-1 bg-gradient-to-b from-gray-300 to-gray-100 dark:from-gray-600 dark:to-gray-800" />
@@ -83,7 +83,7 @@ const StageCard = ({ stage, isLast }) => {
       </div>
 
       <div
-        className={`flex-1 mb-10 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 border-l-4 ${cfg.border} shadow-sm overflow-hidden`}
+        className={`flex-1 mb-10 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 border-l-4 ${statusConfig.border} shadow-sm overflow-hidden`}
       >
         <div className="flex items-start justify-between gap-3 px-5 py-4 border-b border-gray-100 dark:border-gray-700">
           <div>
@@ -95,9 +95,9 @@ const StageCard = ({ stage, isLast }) => {
             )}
           </div>
           <span
-            className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full border ${cfg.badge}`}
+            className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full border ${statusConfig.badge}`}
           >
-            {cfg.label}
+            {statusConfig.label}
           </span>
         </div>
 
@@ -106,8 +106,8 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Skills</SectionLabel>
               <div className="flex flex-wrap gap-1.5">
-                {stage.skills.map((s) => (
-                  <Chip key={s} label={s} className={cfg.chip} />
+                {stage.skills.map((skill) => (
+                  <Chip key={skill} label={skill} className={statusConfig.chip} />
                 ))}
               </div>
             </div>
@@ -117,13 +117,13 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Highlights</SectionLabel>
               <ul className="flex flex-col gap-1.5">
-                {stage.highlights.map((h) => (
+                {stage.highlights.map((highlight) => (
                   <li
-                    key={h}
+                    key={highlight}
                     className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
                   >
                     <span className="text-teal-500 font-bold shrink-0 mt-0.5">✓</span>
-                    {h}
+                    {highlight}
                   </li>
                 ))}
               </ul>
@@ -134,20 +134,20 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Enrolled Courses</SectionLabel>
               <div className="flex flex-col gap-3">
-                {stage.courses.map((c) => (
-                  <div key={c.title} className="bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-3">
+                {stage.courses.map((course) => (
+                  <div key={course.title} className="bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-3">
                     <div className="flex justify-between text-sm mb-1.5">
                       <span className="font-medium text-gray-800 dark:text-gray-100">
-                        {c.title}
+                        {course.title}
                       </span>
                       <span className="text-gray-500 dark:text-gray-400 tabular-nums">
-                        {c.completion}%
+                        {course.completion}%
                       </span>
                     </div>
                     <div className="h-1.5 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                       <div
-                        className={`h-full rounded-full ${cfg.bar}`}
-                        style={{ width: `${c.completion}%` }}
+                        className={`h-full rounded-full ${statusConfig.bar}`}
+                        style={{ width: `${course.completion}%` }}
                       />
                     </div>
                   </div>
@@ -160,28 +160,28 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Recommended Topics</SectionLabel>
               <div className="flex flex-col gap-2">
-                {stage.recommendations.map((r) => (
+                {stage.recommendations.map((recommendation) => (
                   <div
-                    key={r.title}
+                    key={recommendation.title}
                     className="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-2.5"
                   >
                     <span
-                      className={`shrink-0 w-2 h-2 rounded-full mt-1.5 ${r.priority === 'high' ? 'bg-red-400' : 'bg-amber-400'}`}
+                      className={`shrink-0 w-2 h-2 rounded-full mt-1.5 ${recommendation.priority === 'high' ? 'bg-red-400' : 'bg-amber-400'}`}
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
-                        {r.title}
+                        {recommendation.title}
                       </p>
-                      {r.reason && (
+                      {recommendation.reason && (
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                          {r.reason}
+                          {recommendation.reason}
                         </p>
                       )}
                     </div>
                     <span
-                      className={`shrink-0 text-xs font-semibold capitalize ${r.priority === 'high' ? 'text-red-500' : 'text-amber-600'}`}
+                      className={`shrink-0 text-xs font-semibold capitalize ${recommendation.priority === 'high' ? 'text-red-500' : 'text-amber-600'}`}
                     >
-                      {r.priority}
+                      {recommendation.priority}
                     </span>
                   </div>
                 ))}
@@ -193,25 +193,25 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Career Destinations</SectionLabel>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {stage.paths.map((p) => (
+                {stage.paths.map((path) => (
                   <div
-                    key={p.title}
+                    key={path.title}
                     className="bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-3"
                   >
                     <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-1">
-                      {p.title}
+                      {path.title}
                     </p>
-                    {typeof p.readiness === 'number' && p.readiness > 0 && (
-                      <ReadinessBar value={p.readiness} />
+                    {typeof path.readiness === 'number' && path.readiness > 0 && (
+                      <ReadinessBar value={path.readiness} />
                     )}
-                    {p.gap?.length > 0 && (
+                    {path.gap?.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {p.gap.map((g) => (
+                        {path.gap.map((gapItem) => (
                           <span
-                            key={g}
+                            key={gapItem}
                             className="text-xs bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-500 text-gray-500 dark:text-gray-300 rounded-md px-2 py-0.5"
                           >
-                            {g}
+                            {gapItem}
                           </span>
                         ))}
                       </div>
@@ -238,13 +238,13 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Project Ideas</SectionLabel>
               <ul className="flex flex-col gap-1.5">
-                {stage.projects.map((p) => (
+                {stage.projects.map((project) => (
                   <li
-                    key={p}
+                    key={project}
                     className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
                   >
                     <span className="text-violet-400 font-bold shrink-0 mt-0.5">◈</span>
-                    {p}
+                    {project}
                   </li>
                 ))}
               </ul>
@@ -255,10 +255,10 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Learning Resources</SectionLabel>
               <div className="flex flex-wrap gap-1.5">
-                {stage.resources.map((r) => (
+                {stage.resources.map((resource) => (
                   <Chip
-                    key={r}
-                    label={r}
+                    key={resource}
+                    label={resource}
                     className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                   />
                 ))}
@@ -270,10 +270,10 @@ const StageCard = ({ stage, isLast }) => {
             <div>
               <SectionLabel>Certifications to Pursue</SectionLabel>
               <ul className="flex flex-col gap-1.5">
-                {stage.certifications.map((c) => (
-                  <li key={c} className="flex items-start gap-2 text-sm text-gray-700">
+                {stage.certifications.map((certification) => (
+                  <li key={certification} className="flex items-start gap-2 text-sm text-gray-700">
                     <span className="text-amber-500 shrink-0 mt-0.5">🏅</span>
-                    {c}
+                    {certification}
                   </li>
                 ))}
               </ul>

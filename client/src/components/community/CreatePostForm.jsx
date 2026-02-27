@@ -50,9 +50,9 @@ const CreatePostForm = ({ groups, onSubmit, onCancel, creating }) => {
             className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 text-sm text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
           >
             <option value="">No group (global)</option>
-            {groups.map((g) => (
-              <option key={g._id} value={g._id}>
-                {g.icon} {g.name}
+            {groups.map((group) => (
+              <option key={group._id} value={group._id}>
+                {group.icon} {group.name}
               </option>
             ))}
           </select>

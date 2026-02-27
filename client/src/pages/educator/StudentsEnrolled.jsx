@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import Loading from '../../components/student/Loading'
+import Skeleton from '../../components/Skeleton'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -26,7 +26,31 @@ const StudentsEnrolled = () => {
     if (isEducator) fetchEnrolledStudents()
   }, [isEducator]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!enrolledStudents) return <Loading />
+  if (!enrolledStudents) {
+    return (
+      <div className="min-h-screen p-6 md:p-8 space-y-6 bg-gray-50 dark:bg-gray-950">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          <Skeleton className="h-10 w-64 rounded-xl" />
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="px-6 py-3.5 flex items-center gap-4">
+                <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-4 w-44 ml-6" />
+                <Skeleton className="h-4 w-20 ml-auto hidden md:block" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const filtered = enrolledStudents.filter(
     (item) =>

@@ -54,6 +54,18 @@ app.use('/api/user', userRouter)
 app.use('/api/community', communityRouter)
 app.use('/api/quiz', quizRouter)
 
+// 404 — unknown route
+app.use((_req, res) => {
+  res.status(404).json({ success: false, message: 'Route not found' })
+})
+
+// Global error handler — catches next(err) and unhandled throws in middleware
+// eslint-disable-next-line no-unused-vars
+app.use((err, _req, res, _next) => {
+  console.error(err)
+  res.status(500).json({ success: false, message: err.message || 'Internal server error' })
+})
+
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {

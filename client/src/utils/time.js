@@ -21,7 +21,7 @@ export const formatDuration = (seconds) => {
   return `${m}m`
 }
 
-export const formatDate = (iso) => {
-  const d = new Date(iso)
+export const formatDate = (date) => {
+  const d = new Date(date)
   return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
 }
