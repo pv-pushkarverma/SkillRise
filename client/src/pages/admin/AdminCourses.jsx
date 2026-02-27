@@ -108,10 +108,10 @@ const AdminCourses = () => {
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell">
                       <p className="text-sm text-gray-700 dark:text-gray-300">
-                        {course.educator?.name || '—'}
+                        {course.educatorId?.name || '—'}
                       </p>
                       <p className="text-xs text-gray-400 dark:text-gray-500 truncate max-w-[140px]">
-                        {course.educator?.email || ''}
+                        {course.educatorId?.email || ''}
                       </p>
                     </td>
                     <td className="px-6 py-4">

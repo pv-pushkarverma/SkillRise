@@ -48,7 +48,7 @@ export const getAdminCourses = async (_req, res) => {
   try {
     const courses = await Course.find()
       .select('courseTitle educator enrolledStudents isPublished coursePrice discount createdAt')
-      .populate('educator', 'name email')
+      .populate('educatorId', 'name email')
       .sort({ createdAt: -1 })
 
     const purchases = await Purchase.aggregate([
@@ -64,7 +64,7 @@ export const getAdminCourses = async (_req, res) => {
     const coursesWithStats = courses.map((c) => ({
       _id: c._id,
       courseTitle: c.courseTitle,
-      educator: c.educator,
+      educatorId: c.educatorId,
       enrolledCount: c.enrolledStudents.length,
       isPublished: c.isPublished,
       coursePrice: c.coursePrice,
@@ -148,7 +148,7 @@ export const getAdminUsers = async (_req, res) => {
 
     const [clerkResponse, courseCounts] = await Promise.all([
       clerkClient.users.getUserList({ limit: 500 }),
-      Course.aggregate([{ $group: { _id: '$educator', count: { $sum: 1 } } }]),
+      Course.aggregate([{ $group: { _id: '$educatorId', count: { $sum: 1 } } }]),
     ])
 
     const roleMap = {}
