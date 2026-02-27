@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useClerk, useUser } from '@clerk/clerk-react'
 import axios from 'axios'
 import { AppContext } from '../../context/AppContext'
+import Skeleton from '../../components/Skeleton'
 import Avatar from '../../components/shared/Avatar'
 import ReplyCard from '../../components/community/ReplyCard'
 import { timeAgo } from '../../utils/time'
@@ -183,8 +184,44 @@ const PostDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-6">
+          <Skeleton className="h-4 w-32 mb-5" />
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 sm:p-7 mb-6 space-y-4">
+            <div className="flex gap-2">
+              <Skeleton className="h-6 w-24 rounded-full" />
+            </div>
+            <Skeleton className="h-7 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+            <div className="flex gap-2">
+              <Skeleton className="h-5 w-16 rounded-md" />
+              <Skeleton className="h-5 w-20 rounded-md" />
+            </div>
+            <div className="flex items-center gap-2.5 pt-4 border-t border-gray-100 dark:border-gray-700">
+              <Skeleton className="w-10 h-10 rounded-full shrink-0" />
+              <div className="space-y-1.5">
+                <Skeleton className="h-3.5 w-28" />
+                <Skeleton className="h-3 w-16" />
+              </div>
+            </div>
+          </div>
+          <Skeleton className="h-5 w-20 mb-4" />
+          {[...Array(2)].map((_, i) => (
+            <div
+              key={i}
+              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 mb-4 space-y-3"
+            >
+              <div className="flex items-center gap-2.5">
+                <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+                <Skeleton className="h-3.5 w-24" />
+              </div>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
+            </div>
+          ))}
+        </div>
       </div>
     )
   }

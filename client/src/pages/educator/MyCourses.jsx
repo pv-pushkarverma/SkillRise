@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
-import Loading from '../../components/student/Loading'
+import Skeleton from '../../components/Skeleton'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -24,13 +24,43 @@ const MyCourses = () => {
     if (isEducator) fetchEducatorCourses()
   }, [isEducator]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!courses) return <Loading />
+  if (!courses) {
+    return (
+      <div className="min-h-screen p-6 md:p-8 space-y-6 bg-gray-50 dark:bg-gray-950">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1.5">
+            <Skeleton className="h-8 w-36" />
+            <Skeleton className="h-4 w-48" />
+          </div>
+          <Skeleton className="h-10 w-32 rounded-xl" />
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="px-6 py-4 flex items-center gap-4">
+                <Skeleton className="w-14 h-10 rounded-lg shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-3 w-20" />
+                </div>
+                <Skeleton className="h-4 w-8 hidden sm:block" />
+                <Skeleton className="h-4 w-16 hidden sm:block" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
-  const totalStudents = courses.reduce((sum, c) => sum + c.enrolledStudents.length, 0)
-  const totalEarnings = courses.reduce((sum, c) => {
+  const totalStudents = courses.reduce((sum, course) => sum + course.enrolledStudents.length, 0)
+  const totalEarnings = courses.reduce((sum, course) => {
     return (
       sum +
-      Math.floor(c.enrolledStudents.length * (c.coursePrice - (c.discount * c.coursePrice) / 100))
+      Math.floor(
+        course.enrolledStudents.length *
+          (course.coursePrice - (course.discount * course.coursePrice) / 100)
+      )
     )
   }, 0)
 

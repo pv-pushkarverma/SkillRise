@@ -17,7 +17,7 @@ const CoursesList = () => {
   const { navigate, allCourses } = useContext(AppContext)
   const { input } = useParams()
 
-  const [filteredCourse, setFilteredCourse] = useState([])
+  const [filteredCourses, setFilteredCourse] = useState([])
   const [sortBy, setSortBy] = useState('default')
 
   useEffect(() => {
@@ -89,9 +89,9 @@ const CoursesList = () => {
         <div className="flex items-center gap-3 mb-6 flex-wrap">
           <p className="text-sm text-gray-500 dark:text-gray-400">
             <span className="font-semibold text-gray-800 dark:text-gray-100">
-              {filteredCourse.length}
+              {filteredCourses.length}
             </span>
-            &nbsp;{filteredCourse.length === 1 ? 'course' : 'courses'}
+            &nbsp;{filteredCourses.length === 1 ? 'course' : 'courses'}
             {input ? ` matching "${input}"` : ' available'}
           </p>
           {input && (
@@ -107,7 +107,7 @@ const CoursesList = () => {
         </div>
 
         {/* Course grid or empty state */}
-        {filteredCourse.length === 0 ? (
+        {filteredCourses.length === 0 ? (
           <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-16 text-center">
             <div className="text-5xl mb-4">🔍</div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
@@ -129,7 +129,7 @@ const CoursesList = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {filteredCourse.map((course, index) => (
+            {filteredCourses.map((course, index) => (
               <CourseCard key={index} course={course} />
             ))}
           </div>

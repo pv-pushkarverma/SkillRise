@@ -18,7 +18,7 @@ const GROUP_LABEL = {
 
 /* Build & persist a quiz for a given course + chapter */
 const buildQuiz = async (course, chapter) => {
-  const lectureList = chapter.chapterContent.map((l) => l.lectureTitle).join(', ')
+  const lectureList = chapter.chapterContent.map((lecture) => lecture.lectureTitle).join(', ')
 
   const prompt = `You are an educational quiz generator. Generate a quiz for a chapter titled "${chapter.chapterTitle}" from a course titled "${course.courseTitle}".
 The chapter covers these lectures: ${lectureList}.
@@ -195,10 +195,7 @@ export const getCourseQuizResults = async (req, res) => {
     const results = await QuizResult.find({ userId, courseId }).sort({ createdAt: -1 })
 
     const quizzes = await Quiz.find({ courseId }).select('chapterId chapterTitle')
-    const titleMap = {}
-    quizzes.forEach((q) => {
-      titleMap[q.chapterId] = q.chapterTitle
-    })
+    const titleMap = Object.fromEntries(quizzes.map((q) => [q.chapterId, q.chapterTitle]))
 
     const enriched = results.map((r) => ({
       ...r.toObject(),
@@ -224,13 +221,12 @@ export const getAllMyQuizResults = async (req, res) => {
       'courseId chapterId chapterTitle courseTitle'
     )
 
-    const titleMap = {}
-    quizzes.forEach((q) => {
-      titleMap[`${q.courseId}__${q.chapterId}`] = {
-        chapterTitle: q.chapterTitle,
-        courseTitle: q.courseTitle,
-      }
-    })
+    const titleMap = Object.fromEntries(
+      quizzes.map((q) => [
+        `${q.courseId}__${q.chapterId}`,
+        { chapterTitle: q.chapterTitle, courseTitle: q.courseTitle },
+      ])
+    )
 
     const enriched = results.map((r) => {
       const titles = titleMap[`${r.courseId}__${r.chapterId}`] || {}
@@ -253,17 +249,17 @@ export const getEducatorQuizInsights = async (req, res) => {
   try {
     const educatorId = req.auth.userId
 
-    const courses = await Course.find({ educator: educatorId })
+    const courses = await Course.find({ educatorId })
     const courseIds = courses.map((c) => c._id.toString())
 
     const allResults = await QuizResult.find({ courseId: { $in: courseIds } })
 
     // Group by courseId + chapterId
-    const map = {}
+    const statsMap = {}
     allResults.forEach((r) => {
       const key = `${r.courseId}__${r.chapterId}`
-      if (!map[key]) {
-        map[key] = {
+      if (!statsMap[key]) {
+        statsMap[key] = {
           courseId: r.courseId,
           chapterId: r.chapterId,
           attempts: 0,
@@ -273,13 +269,13 @@ export const getEducatorQuizInsights = async (req, res) => {
           mastered: 0,
         }
       }
-      map[key].attempts++
-      map[key].totalPct += r.percentage
-      map[key][r.group]++
+      statsMap[key].attempts++
+      statsMap[key].totalPct += r.percentage
+      statsMap[key][r.group]++
     })
 
     // Attach chapter + course titles
-    const insights = Object.values(map).map((entry) => {
+    const insights = Object.values(statsMap).map((entry) => {
       const course = courses.find((c) => c._id.toString() === entry.courseId)
       const chapter = course?.courseContent.find((ch) => ch.chapterId === entry.chapterId)
       return {

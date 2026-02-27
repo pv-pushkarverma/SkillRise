@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
-import Loading from '../../components/student/Loading'
+import Skeleton from '../../components/Skeleton'
 import { assets } from '../../assets/assets'
 import humanizeDuration from 'humanize-duration'
 import Footer from '../../components/student/Footer'
@@ -58,8 +58,48 @@ const CourseDetails = () => {
     setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }))
   }
 
-  if (!courseData) return <Loading />
+  if (!courseData) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="bg-gradient-to-b from-teal-50 to-gray-50 dark:from-gray-900 dark:to-gray-900 border-b border-gray-200 dark:border-gray-700">
+          <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10">
+            <Skeleton className="h-4 w-40 mb-6" />
+            <div className="flex flex-col lg:flex-row gap-8 items-start">
+              <div className="flex-1 space-y-3">
+                <Skeleton className="h-9 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-4/6" />
+                <div className="flex items-center gap-3 mt-4">
+                  <Skeleton className="h-4 w-8" />
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
+                <Skeleton className="h-4 w-36" />
+              </div>
+              <div className="w-full lg:w-80 xl:w-96 shrink-0">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                  <Skeleton className="w-full aspect-video rounded-none" />
+                  <div className="p-5 space-y-3">
+                    <Skeleton className="h-8 w-24" />
+                    <Skeleton className="h-12 w-full rounded-lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="px-4 sm:px-10 md:px-14 lg:px-36 py-10 max-w-3xl space-y-3">
+          <Skeleton className="h-6 w-40 mb-4" />
+          {[...Array(4)].map((_, i) => (
+            <Skeleton key={i} className="h-14 w-full rounded-xl" />
+          ))}
+        </div>
+      </div>
+    )
+  }
 
+  const rating = calculateRating(courseData)
   const discountedPrice = (
     courseData.coursePrice -
     (courseData.discount * courseData.coursePrice) / 100
@@ -101,18 +141,12 @@ const CourseDetails = () => {
               </div>
 
               <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  {calculateRating(courseData)}
-                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">{rating}</span>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <img
                       key={i}
-                      src={
-                        i < Math.floor(calculateRating(courseData))
-                          ? assets.star
-                          : assets.star_blank
-                      }
+                      src={i < Math.floor(rating) ? assets.star : assets.star_blank}
                       alt=""
                       className="w-3.5 h-3.5"
                     />
@@ -130,7 +164,7 @@ const CourseDetails = () => {
               </div>
 
               <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
-                By <span className="text-teal-600 font-medium">{courseData.educator.name}</span>
+                By <span className="text-teal-600 font-medium">{courseData.educatorId.name}</span>
               </p>
             </div>
 
@@ -185,9 +219,7 @@ const CourseDetails = () => {
                   <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-5">
                     <div className="flex items-center gap-1.5">
                       <img src={assets.star} alt="" className="w-3.5 h-3.5" />
-                      <span className="font-medium text-gray-700 dark:text-gray-200">
-                        {calculateRating(courseData)}
-                      </span>
+                      <span className="font-medium text-gray-700 dark:text-gray-200">{rating}</span>
                     </div>
                     <div className="h-4 w-px bg-gray-200 dark:bg-gray-600" />
                     <div className="flex items-center gap-1.5">

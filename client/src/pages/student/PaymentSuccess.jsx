@@ -24,8 +24,8 @@ const PaymentSuccess = () => {
 
     axios
       .get(`${backendUrl}/api/user/session-status?session_id=${sessionId}`)
-      .then((r) =>
-        setStatus(r.data.success && r.data.status === 'complete' ? 'complete' : 'failed')
+      .then((res) =>
+        setStatus(res.data.success && res.data.status === 'complete' ? 'complete' : 'failed')
       )
       .catch(() => setStatus('failed'))
   }, [searchParams, backendUrl])
@@ -34,8 +34,8 @@ const PaymentSuccess = () => {
   useEffect(() => {
     axios
       .get(`${backendUrl}/api/course/${courseId}`)
-      .then((r) => {
-        if (r.data.success) setCourse(r.data.courseData)
+      .then((res) => {
+        if (res.data.success) setCourse(res.data.courseData)
       })
       .catch(() => {})
   }, [courseId, backendUrl])
@@ -130,7 +130,7 @@ const PaymentSuccess = () => {
                   {course.courseTitle}
                 </p>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
-                  by {course.educator?.name}
+                  by {course.educatorId?.name}
                 </p>
               </div>
               {discountedPrice && (

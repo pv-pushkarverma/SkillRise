@@ -43,12 +43,12 @@ const PostCard = ({ post, onUpvote, isLoggedIn, onAuthRequired }) => {
 
       {post.tags?.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
-          {post.tags.map((t) => (
+          {post.tags.map((tag) => (
             <span
-              key={t}
+              key={tag}
               className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-md"
             >
-              {t}
+              {tag}
             </span>
           ))}
         </div>

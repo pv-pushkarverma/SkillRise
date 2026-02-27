@@ -41,8 +41,8 @@ export const addCourse = async (req, res) => {
       })
     }
 
-    const parsedCourseData = await JSON.parse(courseData)
-    parsedCourseData.educator = educatorId
+    const parsedCourseData = JSON.parse(courseData)
+    parsedCourseData.educatorId = educatorId
 
     const newCourse = await Course.create(parsedCourseData)
 
@@ -67,8 +67,8 @@ export const addCourse = async (req, res) => {
 //Get All Educator Courses
 export const getEducatorCourses = async (req, res) => {
   try {
-    const educator = req.auth.userId
-    const courses = await Course.find({ educator })
+    const educatorId = req.auth.userId
+    const courses = await Course.find({ educatorId })
 
     res.json({
       success: true,
@@ -85,8 +85,8 @@ export const getEducatorCourses = async (req, res) => {
 //Get Educator Dashboard Data
 export const educatorDashboardData = async (req, res) => {
   try {
-    const educator = req.auth.userId
-    const courses = await Course.find({ educator })
+    const educatorId = req.auth.userId
+    const courses = await Course.find({ educatorId })
     const totalCourses = courses.length
 
     //Get all course Ids
@@ -101,23 +101,16 @@ export const educatorDashboardData = async (req, res) => {
     const totalEarnings = purchases.reduce((sum, purchase) => sum + purchase.amount, 0)
 
     //Collect enrolled students id with course titles
-    const enrolledStudentsData = []
+    const allStudentIds = courses.flatMap((course) => course.enrolledStudents)
+    const allStudents = await User.find({ _id: { $in: allStudentIds } }, 'name imageUrl')
+    const studentMap = Object.fromEntries(allStudents.map((s) => [s._id.toString(), s]))
 
-    for (const course of courses) {
-      const students = await User.find(
-        {
-          _id: { $in: course.enrolledStudents },
-        },
-        'name imageUrl'
-      )
-
-      students.forEach((student) => {
-        enrolledStudentsData.push({
-          courseTitle: course.courseTitle,
-          student,
-        })
-      })
-    }
+    const enrolledStudentsData = courses.flatMap((course) =>
+      course.enrolledStudents
+        .map((studentId) => studentMap[studentId.toString()])
+        .filter(Boolean)
+        .map((student) => ({ courseTitle: course.courseTitle, student }))
+    )
 
     res.json({
       success: true,
@@ -138,8 +131,8 @@ export const educatorDashboardData = async (req, res) => {
 //Get Enrolled Students data with Purchases
 export const getEnrolledStudentsData = async (req, res) => {
   try {
-    const educator = req.auth.userId
-    const courses = await Course.find({ educator })
+    const educatorId = req.auth.userId
+    const courses = await Course.find({ educatorId })
     const courseIds = courses.map((course) => course._id)
 
     const purchases = await Purchase.find({

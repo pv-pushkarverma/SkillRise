@@ -46,21 +46,21 @@ const Community = () => {
 
   const fetchPosts = useCallback(
     async (reset = false) => {
-      const p = reset ? 1 : pageRef.current
+      const page = reset ? 1 : pageRef.current
       if (reset) {
         setPostsLoading(true)
         setPosts([])
       } else setLoadingMore(true)
 
       try {
-        const params = new URLSearchParams({ tab, page: p })
+        const params = new URLSearchParams({ tab, page })
         if (selectedGroup) params.set('groupId', selectedGroup._id)
         const headers = user ? { Authorization: `Bearer ${await getToken()}` } : {}
         const { data } = await axios.get(`${backendUrl}/api/community/posts?${params}`, { headers })
         if (data.success) {
           setPosts((prev) => (reset ? data.posts : [...prev, ...data.posts]))
           setHasMore(data.hasMore)
-          pageRef.current = p + 1
+          pageRef.current = page + 1
         }
       } catch (_) {}
 

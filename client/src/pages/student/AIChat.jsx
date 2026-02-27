@@ -102,7 +102,7 @@ const AIChat = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         )
       )
-      .then((r) => setChatHistory(r.data.chats))
+      .then((res) => setChatHistory(res.data.chats))
       .catch((e) => toast.error(e.message))
   }, [backendUrl, getToken])
 
@@ -112,10 +112,10 @@ const AIChat = () => {
 
   // Auto-resize textarea as user types
   useEffect(() => {
-    const ta = textareaRef.current
-    if (!ta) return
-    ta.style.height = 'auto'
-    ta.style.height = Math.min(ta.scrollHeight, 120) + 'px'
+    const textarea = textareaRef.current
+    if (!textarea) return
+    textarea.style.height = 'auto'
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px'
   }, [input])
 
   const startNewChat = () => {

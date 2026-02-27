@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import Loading from '../../components/student/Loading'
+import Skeleton from '../../components/Skeleton'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -59,7 +59,45 @@ const Dashboard = () => {
     }
   }, [isEducator]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!dashboardData) return <Loading />
+  if (!dashboardData) {
+    return (
+      <div className="min-h-screen p-6 md:p-8 space-y-8 bg-gray-50 dark:bg-gray-950">
+        <div className="space-y-1.5">
+          <Skeleton className="h-8 w-36" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <div className="flex flex-wrap gap-4">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-5 py-5 flex-1 min-w-[190px]"
+            >
+              <Skeleton className="w-11 h-11 rounded-xl shrink-0" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-7 w-20" />
+                <Skeleton className="h-3 w-28" />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700 space-y-1.5">
+            <Skeleton className="h-5 w-40" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+          <div className="divide-y divide-gray-100 dark:divide-gray-700">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="px-6 py-3.5 flex items-center gap-4">
+                <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-4 w-48 ml-auto" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen p-6 md:p-8 space-y-8 bg-gray-50 dark:bg-gray-950">

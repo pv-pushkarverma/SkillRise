@@ -12,9 +12,9 @@ const QuizQuestion = ({
   onSubmit,
   setCurrent,
 }) => {
-  const q = quiz.questions[current]
-  const totalQ = quiz.questions.length
-  const progressPct = Math.round(((current + 1) / totalQ) * 100)
+  const question = quiz.questions[current]
+  const totalQuestions = quiz.questions.length
+  const progressPct = Math.round(((current + 1) / totalQuestions) * 100)
   const answered = answers[current]
   const answeredCount = answers.filter((a) => a !== -1).length
 
@@ -32,7 +32,7 @@ const QuizQuestion = ({
             Exit quiz
           </button>
           <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
-            {answeredCount} / {totalQ} answered
+            {answeredCount} / {totalQuestions} answered
           </span>
         </div>
 
@@ -40,7 +40,7 @@ const QuizQuestion = ({
           <div className="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500 mb-1.5">
             <span>{quiz.chapterTitle}</span>
             <span>
-              Question {current + 1} of {totalQ}
+              Question {current + 1} of {totalQuestions}
             </span>
           </div>
           <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -71,11 +71,11 @@ const QuizQuestion = ({
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 space-y-5">
           <p className="text-base font-semibold text-gray-900 dark:text-white leading-relaxed">
-            {q.question}
+            {question.question}
           </p>
 
           <div className="space-y-2.5">
-            {q.options.map((opt, oi) => {
+            {question.options.map((opt, oi) => {
               const isSelected = answered === oi
               return (
                 <button
@@ -112,7 +112,7 @@ const QuizQuestion = ({
             Previous
           </button>
 
-          {current < totalQ - 1 ? (
+          {current < totalQuestions - 1 ? (
             <button
               onClick={onNext}
               className="flex-1 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold transition"

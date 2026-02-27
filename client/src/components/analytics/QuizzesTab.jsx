@@ -1,3 +1,21 @@
+const QUIZ_GROUP_CONFIG = {
+  mastered: {
+    badgeColor: 'text-teal-700 bg-teal-50 border-teal-100',
+    icon: '🏆',
+    label: 'Mastered',
+  },
+  on_track: {
+    badgeColor: 'text-amber-700 bg-amber-50 border-amber-100',
+    icon: '🎯',
+    label: 'On Track',
+  },
+  needs_review: {
+    badgeColor: 'text-red-700 bg-red-50 border-red-100',
+    icon: '📖',
+    label: 'Needs Review',
+  },
+}
+
 const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
   if (quizLoading) {
     return (
@@ -42,7 +60,10 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
             Avg Score
           </p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            {Math.round(quizHistory.reduce((s, r) => s + r.percentage, 0) / quizHistory.length)}%
+            {Math.round(
+              quizHistory.reduce((sum, attempt) => sum + attempt.percentage, 0) / quizHistory.length
+            )}
+            %
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">across all attempts</p>
         </div>
@@ -51,7 +72,7 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
             Mastered
           </p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            {quizHistory.filter((r) => r.group === 'mastered').length}
+            {quizHistory.filter((attempt) => attempt.group === 'mastered').length}
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">chapters mastered</p>
         </div>
@@ -62,51 +83,39 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
           <p className="font-semibold text-gray-800 dark:text-gray-100 text-sm">All Attempts</p>
         </div>
         <div className="divide-y divide-gray-100 dark:divide-gray-700">
-          {quizHistory.map((r) => {
-            const badgeColor =
-              r.group === 'mastered'
-                ? 'text-teal-700 bg-teal-50 border-teal-100'
-                : r.group === 'on_track'
-                  ? 'text-amber-700 bg-amber-50 border-amber-100'
-                  : 'text-red-700 bg-red-50 border-red-100'
-            const icon = r.group === 'mastered' ? '🏆' : r.group === 'on_track' ? '🎯' : '📖'
-            const label =
-              r.group === 'mastered'
-                ? 'Mastered'
-                : r.group === 'on_track'
-                  ? 'On Track'
-                  : 'Needs Review'
+          {quizHistory.map((attempt) => {
+            const groupCfg = QUIZ_GROUP_CONFIG[attempt.group] || QUIZ_GROUP_CONFIG.needs_review
             return (
               <div
-                key={r._id}
+                key={attempt._id}
                 className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">
-                    {r.chapterTitle}
+                    {attempt.chapterTitle}
                   </p>
                   <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 truncate">
-                    {r.courseTitle}
+                    {attempt.courseTitle}
                   </p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <span className="text-sm font-semibold text-gray-700 dark:text-gray-200 tabular-nums w-10 text-right">
-                    {r.percentage}%
+                    {attempt.percentage}%
                   </span>
                   <span
-                    className={`text-xs font-medium px-2 py-0.5 rounded-full border ${badgeColor}`}
+                    className={`text-xs font-medium px-2 py-0.5 rounded-full border ${groupCfg.badgeColor}`}
                   >
-                    {icon} {label}
+                    {groupCfg.icon} {groupCfg.label}
                   </span>
                   <span className="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">
-                    {new Date(r.createdAt).toLocaleDateString('en-US', {
+                    {new Date(attempt.createdAt).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric',
                     })}
                   </span>
                   <button
-                    onClick={() => navigate(`/quiz/${r.courseId}/${r.chapterId}`)}
+                    onClick={() => navigate(`/quiz/${attempt.courseId}/${attempt.chapterId}`)}
                     className="text-xs px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition"
                   >
                     Retake

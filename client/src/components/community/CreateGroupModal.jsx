@@ -58,18 +58,18 @@ const CreateGroupModal = ({ onSubmit, onClose, creating }) => {
               Icon
             </label>
             <div className="flex flex-wrap gap-1.5">
-              {GROUP_ICONS.map((ic) => (
+              {GROUP_ICONS.map((emoji) => (
                 <button
-                  key={ic}
+                  key={emoji}
                   type="button"
-                  onClick={() => setIcon(ic)}
+                  onClick={() => setIcon(emoji)}
                   className={`w-9 h-9 rounded-lg text-lg flex items-center justify-center transition border ${
-                    icon === ic
+                    icon === emoji
                       ? 'border-teal-500 bg-teal-50'
                       : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
-                  {ic}
+                  {emoji}
                 </button>
               ))}
             </div>

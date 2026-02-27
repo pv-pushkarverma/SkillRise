@@ -37,8 +37,8 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
 
   const bullets = result.recommendations
     .split('\n')
-    .map((l) => l.trim())
-    .filter((l) => l.length > 0)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">

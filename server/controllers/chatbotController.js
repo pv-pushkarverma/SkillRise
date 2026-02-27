@@ -5,13 +5,6 @@ import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
 import QuizResult from '../models/QuizResult.js'
 
-function formatMessages(messages) {
-  return messages.map((msg) => ({
-    role: msg.role,
-    content: msg.content,
-  }))
-}
-
 async function buildUserContext(userId) {
   try {
     const user = await User.findById(userId).populate(
@@ -72,9 +65,9 @@ async function buildUserContext(userId) {
       }
       const quizLines = quizResults
         .map((qr) => {
-          const ci = courseLookup[qr.courseId]
-          const courseTitle = ci?.title || 'Unknown Course'
-          const chapterTitle = ci?.chapters[qr.chapterId] || 'Unknown Chapter'
+          const courseInfo = courseLookup[qr.courseId]
+          const courseTitle = courseInfo?.title || 'Unknown Course'
+          const chapterTitle = courseInfo?.chapters[qr.chapterId] || 'Unknown Chapter'
           return `  • ${courseTitle} — ${chapterTitle}: ${qr.score}/${qr.total} (${qr.percentage}%) [${groupLabel[qr.group] || qr.group}]`
         })
         .join('\n')
@@ -143,7 +136,7 @@ export const aiChatbot = async (req, res) => {
     // Always inject fresh system prompt for the AI call (context may have changed)
     const messages = [
       { role: 'system', content: systemPrompt },
-      ...formatMessages(history).filter((m) => m.role !== 'system'),
+      ...history.filter((m) => m.role !== 'system').map(({ role, content }) => ({ role, content })),
       { role: 'user', content: content.trim() },
     ]
 

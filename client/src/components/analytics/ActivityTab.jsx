@@ -48,11 +48,11 @@ const ActivityTab = ({ analytics, activityLoading, activityError, navigate }) =>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">{activeDays}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">of the last 7 days</p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:col-span-2 lg:col-span-1">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 sm:col-span-2 lg:col-span-1">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">
             Most time spent
           </p>
-          <p className="text-3xl font-bold text-gray-900 truncate">{topPage}</p>
+          <p className="text-3xl font-bold text-gray-900 dark:text-white truncate">{topPage}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {pageStats[0] ? formatDuration(pageStats[0].totalDuration) : '—'}
           </p>

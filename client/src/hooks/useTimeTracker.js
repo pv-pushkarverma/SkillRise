@@ -38,8 +38,8 @@ const useTimeTracker = () => {
   useEffect(() => {
     if (!user) return
     getToken()
-      .then((t) => {
-        tokenRef.current = t
+      .then((token) => {
+        tokenRef.current = token
       })
       .catch(() => {})
   }, [getToken, user])

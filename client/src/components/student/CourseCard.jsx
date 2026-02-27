@@ -6,10 +6,11 @@ import { AppContext } from '../../context/AppContext'
 const CourseCard = ({ course }) => {
   const { calculateRating } = useContext(AppContext)
 
+  const rating = calculateRating(course)
   const educatorName =
-    (course && typeof course.educator === 'object' && course.educator?.name) ||
+    (course && typeof course.educatorId === 'object' && course.educatorId?.name) ||
     course?.educatorName ||
-    (typeof course?.educator === 'string' ? 'Educator' : null) ||
+    (typeof course?.educatorId === 'string' ? 'Educator' : null) ||
     'Unknown educator'
 
   const price =
@@ -32,14 +33,12 @@ const CourseCard = ({ course }) => {
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{educatorName}</p>
 
         <div className="flex items-center space-x-2 mt-3">
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
-            {calculateRating(course)}
-          </p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{rating}</p>
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <img
                 key={i}
-                src={i < Math.floor(calculateRating(course)) ? assets.star : assets.star_blank}
+                src={i < Math.floor(rating) ? assets.star : assets.star_blank}
                 alt=""
                 className="w-3.5 h-3.5"
               />

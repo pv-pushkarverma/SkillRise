@@ -34,6 +34,7 @@ import Quiz from './pages/student/Quiz'
 import BecomeEducator from './pages/student/BecomeEducator'
 import PaymentSuccess from './pages/student/PaymentSuccess'
 import Checkout from './pages/student/Checkout'
+import NotFound from './pages/student/NotFound'
 
 import useTimeTracker from './hooks/useTimeTracker'
 
@@ -86,6 +87,8 @@ const App = () => {
           <Route path="purchases" element={<AdminPurchases />} />
           <Route path="educator-applications" element={<EducatorApplications />} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   )

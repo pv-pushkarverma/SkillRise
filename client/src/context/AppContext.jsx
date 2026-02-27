@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 export const AppContext = createContext()
 
-export const AppContextProvider = (props) => {
+export const AppContextProvider = ({ children }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL
 
   const navigate = useNavigate()
@@ -61,31 +61,23 @@ export const AppContextProvider = (props) => {
 
   //calculate course rating
   const calculateRating = (course) => {
-    if (course.courseRatings.length === 0) {
-      return 0
-    }
-    let totalRating = 0
-    course.courseRatings.forEach((rating) => {
-      totalRating += rating.rating
-    })
-    return Math.floor(totalRating / course.courseRatings.length)
+    if (course.courseRatings.length === 0) return 0
+    const total = course.courseRatings.reduce((sum, r) => sum + r.rating, 0)
+    return Math.floor(total / course.courseRatings.length)
   }
 
   //Function to calculate course chapter time
   const calculateChapterTime = (chapter) => {
-    let time = 0
-    chapter.chapterContent.map((lecture) => (time += lecture.lectureDuration))
+    const time = chapter.chapterContent.reduce((sum, lec) => sum + lec.lectureDuration, 0)
     return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] })
   }
 
   //Function to calculate course duration
   const calculateCourseDuration = (course) => {
-    let time = 0
-
-    course.courseContent.map((chapter) =>
-      chapter.chapterContent.map((lecture) => (time += lecture.lectureDuration))
+    const time = course.courseContent.reduce(
+      (sum, chapter) => sum + chapter.chapterContent.reduce((s, lec) => s + lec.lectureDuration, 0),
+      0
     )
-
     return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] })
   }
 
@@ -171,5 +163,5 @@ export const AppContextProvider = (props) => {
     setApplicationStatus,
   }
 
-  return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }

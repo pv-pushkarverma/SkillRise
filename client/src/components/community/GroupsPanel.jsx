@@ -1,29 +1,38 @@
-const GroupRow = ({ g, selectedId, onSelect, onToggleMembership, isLoggedIn, onAuthRequired }) => (
+const GroupRow = ({
+  group,
+  selectedId,
+  onSelect,
+  onToggleMembership,
+  isLoggedIn,
+  onAuthRequired,
+}) => (
   <div
     className={`flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-pointer transition group ${
-      selectedId === g._id
+      selectedId === group._id
         ? 'bg-teal-50 text-teal-700'
         : 'hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
     }`}
-    onClick={() => onSelect(selectedId === g._id ? null : g)}
+    onClick={() => onSelect(selectedId === group._id ? null : group)}
   >
-    <span className="text-base shrink-0">{g.icon}</span>
+    <span className="text-base shrink-0">{group.icon}</span>
     <div className="flex-1 min-w-0">
-      <p className="text-sm font-medium truncate">{g.name}</p>
-      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{g.memberCount} members</p>
+      <p className="text-sm font-medium truncate">{group.name}</p>
+      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">
+        {group.memberCount} members
+      </p>
     </div>
     <button
       onClick={(e) => {
         e.stopPropagation()
-        isLoggedIn ? onToggleMembership(g) : onAuthRequired()
+        isLoggedIn ? onToggleMembership(group) : onAuthRequired()
       }}
       className={`shrink-0 text-xs px-2 py-0.5 rounded-full border transition ${
-        g.isMember
+        group.isMember
           ? 'border-teal-200 text-teal-600 bg-teal-50 hover:bg-teal-100'
           : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
       }`}
     >
-      {g.isMember ? 'Joined' : 'Join'}
+      {group.isMember ? 'Joined' : 'Join'}
     </button>
   </div>
 )
@@ -38,6 +47,7 @@ const GroupsPanel = ({
   onAuthRequired,
 }) => {
   const joined = groups.filter((g) => g.isMember)
+  const joinedIds = new Set(joined.map((g) => g._id))
   const selectedId = selectedGroup?._id
 
   return (
@@ -74,7 +84,7 @@ const GroupsPanel = ({
           {joined.map((g) => (
             <GroupRow
               key={g._id}
-              g={g}
+              group={g}
               selectedId={selectedId}
               onSelect={onSelectGroup}
               onToggleMembership={onToggleMembership}
@@ -88,19 +98,19 @@ const GroupsPanel = ({
         </>
       )}
 
-      {groups.map((g) =>
-        joined.some((j) => j._id === g._id) ? null : (
+      {groups
+        .filter((g) => !joinedIds.has(g._id))
+        .map((g) => (
           <GroupRow
             key={g._id}
-            g={g}
+            group={g}
             selectedId={selectedId}
             onSelect={onSelectGroup}
             onToggleMembership={onToggleMembership}
             isLoggedIn={isLoggedIn}
             onAuthRequired={onAuthRequired}
           />
-        )
-      )}
+        ))}
     </div>
   )
 }
