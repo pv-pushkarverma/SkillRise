@@ -60,7 +60,7 @@ app.use((_req, res) => {
 })
 
 // Global error handler — catches next(err) and unhandled throws in middleware
- 
+
 app.use((err, _req, res, _next) => {
   console.error(err)
   res.status(500).json({ success: false, message: err.message || 'Internal server error' })

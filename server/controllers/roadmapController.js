@@ -19,7 +19,9 @@ const parseJSON = (raw) => {
     try {
       const result = strategy()
       if (result) return result
-    } catch {}
+    } catch {
+      /* empty */
+    }
   }
   return null
 }
