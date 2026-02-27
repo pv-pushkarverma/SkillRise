@@ -209,7 +209,10 @@ const PostDetail = () => {
           </div>
           <Skeleton className="h-5 w-20 mb-4" />
           {[...Array(2)].map((_, i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 mb-4 space-y-3">
+            <div
+              key={i}
+              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 mb-4 space-y-3"
+            >
               <div className="flex items-center gap-2.5">
                 <Skeleton className="w-8 h-8 rounded-full shrink-0" />
                 <Skeleton className="h-3.5 w-24" />

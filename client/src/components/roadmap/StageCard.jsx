@@ -135,7 +135,10 @@ const StageCard = ({ stage, isLast }) => {
               <SectionLabel>Enrolled Courses</SectionLabel>
               <div className="flex flex-col gap-3">
                 {stage.courses.map((course) => (
-                  <div key={course.title} className="bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-3">
+                  <div
+                    key={course.title}
+                    className="bg-gray-50 dark:bg-gray-700 rounded-xl px-3 py-3"
+                  >
                     <div className="flex justify-between text-sm mb-1.5">
                       <span className="font-medium text-gray-800 dark:text-gray-100">
                         {course.title}

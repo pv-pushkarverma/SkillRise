@@ -67,7 +67,10 @@ const MyEnrollments = () => {
           {/* Mobile skeleton */}
           <div className="sm:hidden space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 flex gap-3">
+              <div
+                key={i}
+                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 flex gap-3"
+              >
                 <Skeleton className="w-20 h-14 rounded-lg shrink-0" />
                 <div className="flex-1 space-y-2">
                   <Skeleton className="h-4 w-full" />

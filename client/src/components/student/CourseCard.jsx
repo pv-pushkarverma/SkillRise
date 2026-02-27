@@ -33,9 +33,7 @@ const CourseCard = ({ course }) => {
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{educatorName}</p>
 
         <div className="flex items-center space-x-2 mt-3">
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
-            {rating}
-          </p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">{rating}</p>
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <img

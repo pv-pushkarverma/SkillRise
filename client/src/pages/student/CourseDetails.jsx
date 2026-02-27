@@ -141,18 +141,12 @@ const CourseDetails = () => {
               </div>
 
               <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  {rating}
-                </span>
+                <span className="font-semibold text-gray-900 dark:text-white">{rating}</span>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <img
                       key={i}
-                      src={
-                        i < Math.floor(rating)
-                          ? assets.star
-                          : assets.star_blank
-                      }
+                      src={i < Math.floor(rating) ? assets.star : assets.star_blank}
                       alt=""
                       className="w-3.5 h-3.5"
                     />
@@ -225,9 +219,7 @@ const CourseDetails = () => {
                   <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-5">
                     <div className="flex items-center gap-1.5">
                       <img src={assets.star} alt="" className="w-3.5 h-3.5" />
-                      <span className="font-medium text-gray-700 dark:text-gray-200">
-                        {rating}
-                      </span>
+                      <span className="font-medium text-gray-700 dark:text-gray-200">{rating}</span>
                     </div>
                     <div className="h-4 w-px bg-gray-200 dark:bg-gray-600" />
                     <div className="flex items-center gap-1.5">

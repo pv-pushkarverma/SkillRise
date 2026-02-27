@@ -57,7 +57,10 @@ const MyCourses = () => {
   const totalEarnings = courses.reduce((sum, course) => {
     return (
       sum +
-      Math.floor(course.enrolledStudents.length * (course.coursePrice - (course.discount * course.coursePrice) / 100))
+      Math.floor(
+        course.enrolledStudents.length *
+          (course.coursePrice - (course.discount * course.coursePrice) / 100)
+      )
     )
   }, 0)
 

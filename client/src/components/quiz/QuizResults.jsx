@@ -110,7 +110,7 @@ const QuizResults = ({ result, quiz, answers, courseId, navigate, onRetake }) =>
                 className="flex gap-2.5 text-sm text-gray-700 dark:text-gray-200 leading-relaxed"
               >
                 <span className="text-teal-500 shrink-0 mt-0.5">•</span>
-                <span>{line.replace(/^[•\-]\s*/, '')}</span>
+                <span>{line.replace(/^[•\\-]\s*/, '')}</span>
               </li>
             ))}
           </ul>

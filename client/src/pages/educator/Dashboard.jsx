@@ -68,7 +68,10 @@ const Dashboard = () => {
         </div>
         <div className="flex flex-wrap gap-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex items-center gap-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-5 py-5 flex-1 min-w-[190px]">
+            <div
+              key={i}
+              className="flex items-center gap-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-5 py-5 flex-1 min-w-[190px]"
+            >
               <Skeleton className="w-11 h-11 rounded-xl shrink-0" />
               <div className="space-y-2 flex-1">
                 <Skeleton className="h-7 w-20" />

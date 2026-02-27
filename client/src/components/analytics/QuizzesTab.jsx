@@ -1,7 +1,19 @@
 const QUIZ_GROUP_CONFIG = {
-  mastered: { badgeColor: 'text-teal-700 bg-teal-50 border-teal-100', icon: '🏆', label: 'Mastered' },
-  on_track: { badgeColor: 'text-amber-700 bg-amber-50 border-amber-100', icon: '🎯', label: 'On Track' },
-  needs_review: { badgeColor: 'text-red-700 bg-red-50 border-red-100', icon: '📖', label: 'Needs Review' },
+  mastered: {
+    badgeColor: 'text-teal-700 bg-teal-50 border-teal-100',
+    icon: '🏆',
+    label: 'Mastered',
+  },
+  on_track: {
+    badgeColor: 'text-amber-700 bg-amber-50 border-amber-100',
+    icon: '🎯',
+    label: 'On Track',
+  },
+  needs_review: {
+    badgeColor: 'text-red-700 bg-red-50 border-red-100',
+    icon: '📖',
+    label: 'Needs Review',
+  },
 }
 
 const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
@@ -48,7 +60,10 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
             Avg Score
           </p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            {Math.round(quizHistory.reduce((sum, attempt) => sum + attempt.percentage, 0) / quizHistory.length)}%
+            {Math.round(
+              quizHistory.reduce((sum, attempt) => sum + attempt.percentage, 0) / quizHistory.length
+            )}
+            %
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">across all attempts</p>
         </div>

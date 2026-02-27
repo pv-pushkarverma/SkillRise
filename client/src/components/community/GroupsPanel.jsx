@@ -1,4 +1,11 @@
-const GroupRow = ({ group, selectedId, onSelect, onToggleMembership, isLoggedIn, onAuthRequired }) => (
+const GroupRow = ({
+  group,
+  selectedId,
+  onSelect,
+  onToggleMembership,
+  isLoggedIn,
+  onAuthRequired,
+}) => (
   <div
     className={`flex items-center gap-2.5 px-3 py-2 rounded-xl cursor-pointer transition group ${
       selectedId === group._id
@@ -10,7 +17,9 @@ const GroupRow = ({ group, selectedId, onSelect, onToggleMembership, isLoggedIn,
     <span className="text-base shrink-0">{group.icon}</span>
     <div className="flex-1 min-w-0">
       <p className="text-sm font-medium truncate">{group.name}</p>
-      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{group.memberCount} members</p>
+      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">
+        {group.memberCount} members
+      </p>
     </div>
     <button
       onClick={(e) => {

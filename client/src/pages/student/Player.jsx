@@ -34,7 +34,12 @@ const Player = () => {
 
   // Saves the chosen lecture and persists it so the course resumes from here
   const selectLecture = (lecture, chapterIndex, lectureIndex) => {
-    const lectureEntry = { ...lecture, chapter: chapterIndex + 1, lecture: lectureIndex + 1, chapterIndex }
+    const lectureEntry = {
+      ...lecture,
+      chapter: chapterIndex + 1,
+      lecture: lectureIndex + 1,
+      chapterIndex,
+    }
     setPlayerData(lectureEntry)
     localStorage.setItem(`lastPlayed_${courseId}`, JSON.stringify(lectureEntry))
   }
@@ -365,9 +370,11 @@ const Player = () => {
                                   ? 'Retake Quiz'
                                   : 'Take Chapter Quiz'}
                               </button>
-                              {quizResultsMap[chapter.chapterId] && (() => {
+                              {quizResultsMap[chapter.chapterId] &&
+                                (() => {
                                   const r = quizResultsMap[chapter.chapterId]
-                                  const groupCfg = QUIZ_GROUP_CONFIG[r.group] || QUIZ_GROUP_CONFIG.needs_review
+                                  const groupCfg =
+                                    QUIZ_GROUP_CONFIG[r.group] || QUIZ_GROUP_CONFIG.needs_review
                                   return (
                                     <p
                                       className={`mt-2 text-center text-xs rounded-lg py-1 px-2 font-medium ${groupCfg.color}`}

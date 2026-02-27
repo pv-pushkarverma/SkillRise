@@ -5,7 +5,6 @@ import User from '../models/User.js'
 import { CourseProgress } from '../models/CourseProgress.js'
 import QuizResult from '../models/QuizResult.js'
 
-
 async function buildUserContext(userId) {
   try {
     const user = await User.findById(userId).populate(
