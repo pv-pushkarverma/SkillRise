@@ -1,6 +1,8 @@
-import React from 'react'
-import { Route, Routes, useMatch } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
+import { useUser } from '@clerk/clerk-react'
+import { AppContext } from './context/AppContext'
 
 import 'quill/dist/quill.snow.css'
 
@@ -22,6 +24,9 @@ import MyCourses from './pages/educator/MyCourses'
 import StudentsEnrolled from './pages/educator/StudentsEnrolled'
 import Admin from './pages/admin/Admin'
 import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminCourses from './pages/admin/AdminCourses'
+import AdminUsers from './pages/admin/AdminUsers'
+import AdminPurchases from './pages/admin/AdminPurchases'
 import EducatorApplications from './pages/admin/EducatorApplications'
 import Navbar from './components/student/Navbar'
 import AIChat from './pages/student/AIChat'
@@ -31,6 +36,14 @@ import PaymentSuccess from './pages/student/PaymentSuccess'
 import Checkout from './pages/student/Checkout'
 
 import useTimeTracker from './hooks/useTimeTracker'
+
+const HomeOrRedirect = () => {
+  const { isLoaded } = useUser()
+  const { isAdmin } = useContext(AppContext)
+  if (!isLoaded) return null
+  if (isAdmin) return <Navigate to="/admin" replace />
+  return <Home />
+}
 
 const App = () => {
   useTimeTracker()
@@ -42,7 +55,7 @@ const App = () => {
       <ToastContainer />
       {!isEducatorRoute && !isAdminRoute && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<HomeOrRedirect />} />
         <Route path="/course-list" element={<CoursesList />} />
         <Route path="/course-list/:input" element={<CoursesList />} />
         <Route path="/course/:id" element={<CourseDetails />} />
@@ -68,6 +81,9 @@ const App = () => {
 
         <Route path="/admin" element={<Admin />}>
           <Route index element={<AdminDashboard />} />
+          <Route path="courses" element={<AdminCourses />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="purchases" element={<AdminPurchases />} />
           <Route path="educator-applications" element={<EducatorApplications />} />
         </Route>
       </Routes>

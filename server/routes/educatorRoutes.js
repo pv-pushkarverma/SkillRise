@@ -14,14 +14,13 @@ import {
 
 const educatorRouter = express.Router()
 
-// Educator application
 educatorRouter.post('/apply', submitApplication)
 educatorRouter.get('/application-status', getApplicationStatus)
 
-// Educator-only routes
-educatorRouter.post('/add-course', upload.single('image'), protectEducator, addCourse)
-educatorRouter.get('/courses', protectEducator, getEducatorCourses)
-educatorRouter.get('/dashboard', protectEducator, educatorDashboardData)
-educatorRouter.get('/enrolled-students', protectEducator, getEnrolledStudentsData)
+educatorRouter.use(protectEducator)
+educatorRouter.post('/add-course', upload.single('image'), addCourse)
+educatorRouter.get('/courses', getEducatorCourses)
+educatorRouter.get('/dashboard', educatorDashboardData)
+educatorRouter.get('/enrolled-students', getEnrolledStudentsData)
 
 export default educatorRouter

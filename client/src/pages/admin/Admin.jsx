@@ -1,13 +1,16 @@
 import { useContext } from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
+import { useUser } from '@clerk/clerk-react'
 import Navbar from '../../components/admin/Navbar'
 import Sidebar from '../../components/admin/Sidebar'
 import Footer from '../../components/educator/Footer'
 
 const Admin = () => {
+  const { isLoaded } = useUser()
   const { isAdmin } = useContext(AppContext)
 
+  if (!isLoaded) return null
   if (!isAdmin) return <Navigate to="/" replace />
 
   return (

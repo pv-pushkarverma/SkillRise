@@ -10,4 +10,5 @@ const courseProgressSchema = new mongoose.Schema(
   { minimize: false, timestamps: true }
 )
 
-export const CourseProgress = mongoose.model('CourseProgress', courseProgressSchema)
+const CourseProgress = mongoose.model('CourseProgress', courseProgressSchema)
+export default CourseProgress

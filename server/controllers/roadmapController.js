@@ -1,5 +1,5 @@
 import User from '../models/User.js'
-import { CourseProgress } from '../models/CourseProgress.js'
+import CourseProgress from '../models/CourseProgress.js'
 import { generateAIResponse } from '../services/aiChatbotService.js'
 
 // JSON extractor to handles raw JSON, markdown code blocks, etc.
