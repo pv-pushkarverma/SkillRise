@@ -80,7 +80,6 @@ const App = () => {
           <Route path="students-enrolled" element={<StudentsEnrolled />} />
         </Route>
 
-        
         <Route path="/admin" element={<Admin />}>
           <Route index element={<AdminDashboard />} />
           <Route path="courses" element={<AdminCourses />} />
@@ -88,7 +87,7 @@ const App = () => {
           <Route path="purchases" element={<AdminPurchases />} />
           <Route path="educator-applications" element={<EducatorApplications />} />
         </Route>
-  
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
