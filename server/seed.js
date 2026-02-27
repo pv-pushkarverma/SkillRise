@@ -357,7 +357,7 @@ const courseData = [
     coursePrice: 2499,
     isPublished: true,
     discount: 20,
-    educator: 'user_seed_educator5',
+    educatorId: 'user_seed_educator5',
     courseContent: [
       {
         chapterId: 'ch_ts_basics',
@@ -430,7 +430,7 @@ const courseData = [
     coursePrice: 3499,
     isPublished: true,
     discount: 25,
-    educator: 'user_seed_educator3',
+    educatorId: 'user_seed_educator3',
     courseContent: [
       {
         chapterId: 'ch_docker_core',
@@ -503,7 +503,7 @@ const courseData = [
     coursePrice: 3299,
     isPublished: true,
     discount: 10,
-    educator: 'user_seed_educator5',
+    educatorId: 'user_seed_educator5',
     courseContent: [
       {
         chapterId: 'ch_rn_basics',
@@ -572,7 +572,7 @@ const courseData = [
     coursePrice: 2799,
     isPublished: true,
     discount: 15,
-    educator: 'user_seed_educator2',
+    educatorId: 'user_seed_educator2',
     courseContent: [
       {
         chapterId: 'ch_django_basics',
@@ -641,7 +641,7 @@ const courseData = [
     coursePrice: 3199,
     isPublished: true,
     discount: 20,
-    educator: 'user_seed_educator7',
+    educatorId: 'user_seed_educator7',
     courseContent: [
       {
         chapterId: 'ch_cyber_basics',
@@ -710,7 +710,7 @@ const courseData = [
     coursePrice: 4999,
     isPublished: true,
     discount: 10,
-    educator: 'user_seed_educator6',
+    educatorId: 'user_seed_educator6',
     courseContent: [
       {
         chapterId: 'ch_sd_fundamentals',
@@ -783,7 +783,7 @@ const courseData = [
     coursePrice: 3799,
     isPublished: true,
     discount: 20,
-    educator: 'user_seed_educator1',
+    educatorId: 'user_seed_educator1',
     courseContent: [
       {
         chapterId: 'ch_next_routing',

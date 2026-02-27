@@ -12,4 +12,5 @@ const courseProgressSchema = new mongoose.Schema(
 
 courseProgressSchema.index({ userId: 1, courseId: 1 }, { unique: true })
 
-export const CourseProgress = mongoose.model('CourseProgress', courseProgressSchema)
+const CourseProgress = mongoose.model('CourseProgress', courseProgressSchema)
+export default CourseProgress
