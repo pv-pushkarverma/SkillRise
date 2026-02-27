@@ -60,7 +60,7 @@ const Footer = () => {
         </div>
 
         <p className="py-5 text-center text-xs text-white/40">
-          Copyright 2025 SkillRise™. All rights reserved.
+          Copyright @2026 SkillRise™. All rights reserved.
         </p>
       </div>
     </footer>

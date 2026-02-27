@@ -4,8 +4,8 @@
 
 **A full-stack e-learning platform with AI-powered features, built for students and educators.**
 
-[![CI](https://github.com/pv-pushkarverma/skillrise/actions/workflows/ci.yml/badge.svg)](https://github.com/pv-pushkarverma/skillrise/actions/workflows/ci.yml)
-[![Deploy](https://github.com/pv-pushkarverma/skillrise/actions/workflows/deploy.yml/badge.svg)](https://github.com/pv-pushkarverma/skillrise/actions/workflows/deploy.yml)
+[![CI](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/build.yml/badge.svg)](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/build.yml)
+[![Deploy](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/deploy.yml/badge.svg)](https://github.com/pv-pushkarverma/SkillRise/actions/workflows/deploy.yml)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?logo=node.js)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb)
@@ -33,6 +33,14 @@
 - **Media Uploads** — Thumbnail and content uploads via Cloudinary
 - **Dashboard** — Enrollment stats, revenue, and quiz insights
 - **Student Management** — View enrolled students per course
+- **Educator Applications** — Apply to become an educator via the platform
+
+### For Admins
+- **Dashboard** — Platform-wide stats (students, educators, revenue, enrollments, courses, pending applications) with charts — top courses by enrollment bar chart and weekly revenue area chart
+- **Courses** — Full course list with educator info, enrollment count, revenue per course, and published/draft status
+- **Users** — Separate Students and Educators tabs; students show enrolled course count, educators show courses created count
+- **Purchases** — Full purchase history with status filter (All / Completed / Pending / Failed)
+- **Educator Applications** — Review, approve, or reject educator applications with optional rejection reason
 
 ---
 
@@ -63,12 +71,14 @@ skillrise/
 │   │   ├── hooks/           # Custom hooks (useTimeTracker, etc.)
 │   │   └── pages/
 │   │       ├── student/     # Home, CourseDetails, Player, AIChat, Roadmap...
-│   │       └── educator/    # Dashboard, AddCourse, MyCourses...
+│   │       ├── educator/    # Dashboard, AddCourse, MyCourses...
+│   │       └── admin/       # AdminDashboard, AdminCourses, AdminUsers, AdminPurchases, EducatorApplications
 │   ├── Dockerfile
 │   └── nginx.conf
 ├── server/                  # Express API
 │   ├── configs/             # MongoDB, Cloudinary setup
-│   ├── controllers/         # Route handlers + webhooks
+│   ├── controllers/         # Route handlers (admin, educator, course, user, webhooks)
+│   ├── middlewares/         # protectAdmin, protectEducator auth guards
 │   ├── models/              # Mongoose schemas
 │   ├── routes/              # API route definitions
 │   ├── seed.js              # Database seeder
@@ -205,7 +215,7 @@ docker compose down
 
 ### On Pull Request → `main` or `dev`
 
-Both jobs run in parallel via [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
+Both jobs run in parallel via [`.github/workflows/build.yml`](.github/workflows/build.yml):
 
 | Job | Steps |
 |---|---|
@@ -237,17 +247,17 @@ VITE_BACKEND_URL
 
 ## API Routes
 
-| Prefix | Description |
-|---|---|
-| `GET /` | Health check |
-| `POST /clerk` | Clerk webhook (user sync) |
-| `POST /stripe` | Stripe webhook (payment fulfillment) |
-| `/api/course` | Public course endpoints |
-| `/api/user` | Student actions (enroll, progress, AI chat, roadmap) |
-| `/api/educator` | Educator course management |
-| `/api/admin` | Admin controls |
-| `/api/community` | Groups, posts, replies |
-| `/api/quiz` | Quiz generation and results |
+| Prefix | Auth | Description |
+|---|---|---|
+| `GET /` | — | Health check |
+| `POST /clerk` | Clerk signature | User sync webhook |
+| `POST /stripe` | Stripe signature | Payment fulfillment webhook |
+| `/api/course` | Public | Browse, search, and fetch course details |
+| `/api/user` | Clerk (any user) | Enroll, track progress, AI chat, roadmap, analytics |
+| `/api/educator` | Educator role | Course creation, dashboard, student management |
+| `/api/admin` | Admin role | Platform stats, charts, users, courses, purchases, applications |
+| `/api/community` | Clerk (any user) | Groups, posts, upvotes, threaded replies |
+| `/api/quiz` | Clerk (any user) | Quiz generation and result submission |
 
 ---
 

@@ -2,7 +2,7 @@ import ChatSession from '../models/AiChat.js'
 import { generateAIResponse } from '../services/aiChatbotService.js'
 import { v4 as uuidv4 } from 'uuid'
 import User from '../models/User.js'
-import { CourseProgress } from '../models/CourseProgress.js'
+import CourseProgress from '../models/CourseProgress.js'
 import QuizResult from '../models/QuizResult.js'
 
 
@@ -177,7 +177,7 @@ export const recentAIChats = async (req, res) => {
       .reverse()
 
     res.json({ chats })
-  } catch (error) {
+  } catch {
     return res.status(500).json({ success: false, message: 'Error while fetching conversations' })
   }
 }
@@ -202,7 +202,7 @@ export const getChatSession = async (req, res) => {
     }
 
     return res.json(fullChats[0])
-  } catch (error) {
+  } catch {
     return res.status(500).json({ success: false, message: 'Error while fetching conversation' })
   }
 }
