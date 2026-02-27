@@ -24,7 +24,7 @@ const Player = () => {
   const [courseData, setCourseData] = useState(null)
   const [openSections, setOpenSections] = useState({})
   const [playerData, setPlayerData] = useState(null)
-  const [progressData, setProgressData] = useState(null)
+  const [progressData, setProgressData] = useState(undefined)
   const [initialRating, setInitialRating] = useState(0)
   const [quizResultsMap, setQuizResultsMap] = useState({}) // chapterId -> last result
 
@@ -135,50 +135,52 @@ const Player = () => {
 
   const hasAutoSelectedRef = useRef(false)
 
-  // 1. Restore from localStorage as soon as courseData is ready
+  // Load lecture from localStorage as soon as courseData is ready
   useEffect(() => {
     if (!courseData || hasAutoSelectedRef.current) return
+    if (progressData === undefined) return
+
     try {
+      // Check first in localStorage
       const saved = localStorage.getItem(`lastPlayed_${courseId}`)
       if (saved) {
         const data = JSON.parse(saved)
         setPlayerData(data)
-        if (data.chapterIndex !== undefined) setOpenSections({ [data.chapterIndex]: true })
+        if (data.chapterIndex !== undefined) {
+          setOpenSections({ [data.chapterIndex]: true })
+        }
+        hasAutoSelectedRef.current = true
+        return
+      }
+
+      const completed = progressData?.lectureCompleted ?? []
+
+      let found = null
+      outer: for (let ci = 0; ci < courseData.courseContent.length; ci++) {
+        for (let li = 0; li < courseData.courseContent[ci].chapterContent.length; li++) {
+          const lec = courseData.courseContent[ci].chapterContent[li]
+          if (!completed.includes(lec.lectureId)) {
+            found = { ...lec, chapter: ci + 1, lecture: li + 1, chapterIndex: ci }
+            break outer
+          }
+        }
+      }
+
+      // if not in local storage and progress (new or completed)
+      if (!found) {
+        const first = courseData.courseContent[0]?.chapterContent[0]
+        if (first) {
+          found = { ...first, chapter: 1, lecture: 1, chapterIndex: 0 }
+        }
+      }
+
+      if (found) {
+        setPlayerData(found)
+        setOpenSections({ [found.chapterIndex]: true })
         hasAutoSelectedRef.current = true
       }
     } catch {
-      /* corrupted — ignore */
-    }
-  }, [courseData, courseId])
-
-  // 2. If no localStorage, pick the first incomplete lecture once progressData arrives
-  useEffect(() => {
-    if (!courseData || !progressData || hasAutoSelectedRef.current) return
-    if (localStorage.getItem(`lastPlayed_${courseId}`)) return
-
-    let found = null
-    outer: for (let ci = 0; ci < courseData.courseContent.length; ci++) {
-      for (let li = 0; li < courseData.courseContent[ci].chapterContent.length; li++) {
-        const lec = courseData.courseContent[ci].chapterContent[li]
-        if (!progressData.lectureCompleted?.includes(lec.lectureId)) {
-          found = { ...lec, chapter: ci + 1, lecture: li + 1, chapterIndex: ci }
-          break outer
-        }
-      }
-    }
-
-    // All complete — fall back to first lecture
-    if (!found) {
-      const ch = courseData.courseContent[0]
-      if (ch?.chapterContent.length) {
-        found = { ...ch.chapterContent[0], chapter: 1, lecture: 1, chapterIndex: 0 }
-      }
-    }
-
-    if (found) {
-      setPlayerData(found)
-      setOpenSections({ [found.chapterIndex]: true })
-      hasAutoSelectedRef.current = true
+      /* corrupted storage — ignore safely */
     }
   }, [courseData, progressData, courseId])
 
