@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import Skeleton from '../../components/Skeleton'
+import Skeleton from '../../components/common/Skeleton'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'

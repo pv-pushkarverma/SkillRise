@@ -3,12 +3,6 @@ export const createId = () =>
     ? crypto.randomUUID()
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
 
-export const stripHtml = (html) => {
-  const tempDiv = document.createElement('div')
-  tempDiv.innerHTML = html
-  return tempDiv.textContent || tempDiv.innerText || ''
-}
-
 export const inputCls =
   'w-full px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-400 bg-white dark:bg-gray-700 dark:text-gray-100 transition placeholder-gray-400 dark:placeholder-gray-500'
 

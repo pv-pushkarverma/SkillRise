@@ -1,4 +1,16 @@
-import { assets } from '../../assets/assets'
+import microsoftLogo from '../../assets/microsoft_logo.svg'
+import walmartLogo from '../../assets/walmart_logo.svg'
+import accentureLogo from '../../assets/accenture_logo.svg'
+import adobeLogo from '../../assets/adobe_logo.svg'
+import paypalLogo from '../../assets/paypal_logo.svg'
+
+const COMPANIES = [
+  { name: 'Microsoft', src: microsoftLogo },
+  { name: 'Walmart', src: walmartLogo },
+  { name: 'Accenture', src: accentureLogo },
+  { name: 'Adobe', src: adobeLogo },
+  { name: 'PayPal', src: paypalLogo },
+]
 
 const Companies = ({ compact = false }) => {
   return (
@@ -10,11 +22,14 @@ const Companies = ({ compact = false }) => {
       <div
         className={`flex flex-wrap items-center justify-center gap-6 md:gap-16 ${compact ? 'mt-6' : 'md:mt-10 mt-5'}`}
       >
-        <img src={assets.microsoft_logo} alt="Microsoft" className="w-20 md:w-28" />
-        <img src={assets.walmart_logo} alt="Walmart" className="w-20 md:w-28" />
-        <img src={assets.accenture_logo} alt="Accenture" className="w-20 md:w-28" />
-        <img src={assets.adobe_logo} alt="Adobe" className="w-20 md:w-28" />
-        <img src={assets.paypal_logo} alt="Paypal" className="w-20 md:w-28" />
+        {COMPANIES.map(({ name, src }) => (
+          <img
+            key={name}
+            src={src}
+            alt={name}
+            className="w-20 md:w-28 grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition"
+          />
+        ))}
       </div>
     </div>
   )

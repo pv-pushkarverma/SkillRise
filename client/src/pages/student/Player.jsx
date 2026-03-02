@@ -1,6 +1,6 @@
 import humanizeDuration from 'humanize-duration'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { assets } from '../../assets/assets'
+import { ChevronDown, CheckCircle2, Play } from 'lucide-react'
 import { AppContext } from '../../context/AppContext'
 import { useParams } from 'react-router-dom'
 import Footer from '../../components/student/Footer'
@@ -8,7 +8,7 @@ import Rating from '../../components/student/Rating'
 import VideoPlayer from '../../components/student/VideoPlayer'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import Loading from '../../components/student/Loading'
+import Loading from '../../components/common/Loading'
 
 const QUIZ_GROUP_CONFIG = {
   mastered: { color: 'text-teal-700 bg-teal-50', icon: '🏆', label: 'Mastered' },
@@ -132,6 +132,26 @@ const Player = () => {
     }
     fetchQuizResults()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Enrollment guard: if courseData is still null after mount, the webhook may not have
+  // fired yet. Re-fetch enrolled courses after 3s, then redirect after 10s if still missing.
+  useEffect(() => {
+    if (courseData) return // Already enrolled — clear any pending timers on re-run
+
+    // Re-fetch enrolled courses in case the Razorpay webhook just finished processing
+    const retryId = setTimeout(fetchUserEnrolledCourses, 3000)
+
+    // If still not enrolled after 10s, redirect to course page so user isn't stuck
+    const giveUpId = setTimeout(() => {
+      toast.error('Enrollment not confirmed. If you completed payment, please contact support.')
+      navigate(`/course/${courseId}`)
+    }, 10000)
+
+    return () => {
+      clearTimeout(retryId)
+      clearTimeout(giveUpId)
+    }
+  }, [courseData]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const hasAutoSelectedRef = useRef(false)
 
@@ -299,9 +319,7 @@ const Player = () => {
                       onClick={() => toggleSection(index)}
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <img
-                          src={assets.down_arrow_icon}
-                          alt=""
+                        <ChevronDown
                           className={`w-3.5 h-3.5 shrink-0 transform transition-transform ${openSections[index] ? 'rotate-180' : ''}`}
                         />
                         <p className="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">
@@ -330,11 +348,11 @@ const Player = () => {
                                   : 'hover:bg-gray-100 dark:hover:bg-gray-600'
                               }`}
                             >
-                              <img
-                                src={isCompleted ? assets.teal_tick_icon : assets.play_icon}
-                                alt=""
-                                className="w-3.5 h-3.5 shrink-0 opacity-70"
-                              />
+                              {isCompleted ? (
+                                <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-teal-600" />
+                              ) : (
+                                <Play className="w-3.5 h-3.5 shrink-0 opacity-50 text-gray-500 dark:text-gray-400" />
+                              )}
                               <div className="flex-1 min-w-0">
                                 <p
                                   className={`text-xs truncate ${isActive ? 'text-teal-700 font-semibold' : 'text-gray-700 dark:text-gray-200'}`}

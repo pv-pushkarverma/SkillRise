@@ -4,6 +4,13 @@ import { v4 as uuidv4 } from 'uuid'
 import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
 import QuizResult from '../models/QuizResult.js'
+import { z } from 'zod'
+
+// Zod schemas — request bodies
+const AiChatBodySchema = z.object({
+  content: z.string().trim().min(1),
+  sessionId: z.string().optional(),
+})
 
 async function buildUserContext(userId) {
   try {
@@ -75,7 +82,11 @@ async function buildUserContext(userId) {
       const latestRec = quizResults.find((qr) => qr.recommendations)
       quizSection = `Quiz Performance (most recent first):\n${quizLines}`
       if (latestRec?.recommendations) {
-        quizSection += `\n\nLatest AI Study Recommendations:\n${latestRec.recommendations}`
+        const safeRec = latestRec.recommendations
+          .slice(0, 500)
+          .replace(/[=\[\]`#]/g, '')
+          .trim()
+        quizSection += `\n\nLatest AI Study Recommendations:\n${safeRec}`
       }
     }
 
@@ -107,24 +118,24 @@ ${userContext}
 export const aiChatbot = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const { content, sessionId } = req.body
-
-    if (!content?.trim()) {
+    const bodyResult = AiChatBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
       return res.status(400).json({ success: false, message: 'Missing message' })
     }
+    const { content, sessionId } = bodyResult.data
 
     // Build fresh personalized system prompt on every request
     const userContext = await buildUserContext(userId)
     const systemPrompt = buildSystemPrompt(userContext)
 
-    // Find existing session or create new one
-    let chat = await ChatSession.findOne({ sessionId })
+    // Find existing session or create new one (userId ensures ownership)
+    let chat = await ChatSession.findOne({ sessionId, userId })
 
     if (!chat) {
       chat = await ChatSession.create({
         userId,
         sessionId: uuidv4(),
-        messages: [{ role: 'system', content: systemPrompt }],
+        messages: [],
       })
     }
 
@@ -169,7 +180,7 @@ export const recentAIChats = async (req, res) => {
         return {
           _id: session._id,
           sessionId: session.sessionId,
-          messages: session.messages[1]?.content,
+          messages: session.messages[0]?.content,
           updatedAt: session.updatedAt.toDateString(),
         }
       })
@@ -191,7 +202,7 @@ export const getChatSession = async (req, res) => {
       {
         $project: {
           _id: 1,
-          messages: { $slice: ['$messages', 1, { $size: '$messages' }] },
+          messages: 1,
         },
       },
     ])

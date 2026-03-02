@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { AppContext } from '../../context/AppContext'
 
@@ -7,31 +7,10 @@ const REDIRECT_AFTER = 6
 
 const PaymentSuccess = () => {
   const { courseId } = useParams()
-  const [searchParams] = useSearchParams()
   const { backendUrl } = useContext(AppContext)
 
   const [course, setCourse] = useState(null)
-  // Derive initial status from URL so Razorpay never shows a spinner
-  const [status, setStatus] = useState(() => {
-    const params = new URLSearchParams(window.location.search)
-    const provider = params.get('provider')
-    const sessionId = params.get('session_id')
-    return provider === 'razorpay' || (!sessionId && !provider) ? 'complete' : 'loading'
-  })
   const [countdown, setCountdown] = useState(REDIRECT_AFTER)
-
-  // Only needed for Stripe — verify session status server-side
-  useEffect(() => {
-    const sessionId = searchParams.get('session_id')
-    if (!sessionId) return
-
-    axios
-      .get(`${backendUrl}/api/user/session-status?session_id=${sessionId}`)
-      .then((res) =>
-        setStatus(res.data.success && res.data.status === 'complete' ? 'complete' : 'failed')
-      )
-      .catch(() => setStatus('failed'))
-  }, [searchParams, backendUrl])
 
   // Fetch course info for display
   useEffect(() => {
@@ -43,56 +22,20 @@ const PaymentSuccess = () => {
       .catch(() => {})
   }, [courseId, backendUrl])
 
-  // Auto-redirect countdown (only on success, gives webhook time to process)
+  // Auto-redirect countdown — gives the Razorpay webhook time to process enrollment
+  // before the player page loads and checks if the user is enrolled.
   useEffect(() => {
-    if (status !== 'complete') return
     if (countdown === 0) {
       window.location.href = `/player/${courseId}`
       return
     }
     const t = setTimeout(() => setCountdown((c) => c - 1), 1000)
     return () => clearTimeout(t)
-  }, [status, countdown, courseId])
+  }, [countdown, courseId])
 
   const discountedPrice = course
     ? (course.coursePrice - (course.discount * course.coursePrice) / 100).toFixed(2)
     : null
-
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    )
-  }
-
-  if (status === 'failed') {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center px-4 gap-4 text-center">
-        <div className="w-16 h-16 bg-red-50 border-2 border-red-100 rounded-full flex items-center justify-center">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            className="w-8 h-8 text-red-500"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-        <h1 className="text-xl font-bold text-gray-900 dark:text-white">Payment not completed</h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Your payment was not processed. No charge was made.
-        </p>
-        <Link
-          to={`/course/${courseId}`}
-          className="mt-2 bg-teal-600 hover:bg-teal-700 text-white px-6 py-2.5 rounded-xl text-sm font-medium transition"
-        >
-          Back to course
-        </Link>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center px-4 py-12">

@@ -157,7 +157,6 @@ const Roadmap = () => {
                 </div>
               ) : (
                 <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
-                  <div className="h-1.5 w-full bg-gradient-to-r from-teal-400 via-blue-400 to-violet-500" />
                   <div className="p-10 text-center">
                     <div className="text-5xl mb-4">🗺️</div>
                     <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
@@ -223,7 +222,6 @@ const Roadmap = () => {
         {tab === 'custom' && (
           <div>
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden mb-6">
-              <div className="h-1.5 w-full bg-gradient-to-r from-violet-400 via-pink-400 to-amber-400" />
               <div className="p-6">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1">
                   Generate a roadmap for any topic

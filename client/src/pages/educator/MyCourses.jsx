@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
-import Skeleton from '../../components/Skeleton'
+import Skeleton from '../../components/common/Skeleton'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
@@ -53,12 +53,12 @@ const MyCourses = () => {
     )
   }
 
-  const totalStudents = courses.reduce((sum, course) => sum + course.enrolledStudents.length, 0)
+  const totalStudents = courses.reduce((sum, course) => sum + course.enrolledStudentsCount, 0)
   const totalEarnings = courses.reduce((sum, course) => {
     return (
       sum +
       Math.floor(
-        course.enrolledStudents.length *
+        course.enrolledStudentsCount *
           (course.coursePrice - (course.discount * course.coursePrice) / 100)
       )
     )
@@ -131,7 +131,7 @@ const MyCourses = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {courses.map((course) => {
                 const earnings = Math.floor(
-                  course.enrolledStudents.length *
+                  course.enrolledStudentsCount *
                     (course.coursePrice - (course.discount * course.coursePrice) / 100)
                 )
                 const discountedPrice = Math.floor(
@@ -176,7 +176,7 @@ const MyCourses = () => {
                           <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
                         </svg>
                         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                          {course.enrolledStudents.length}
+                          {course.enrolledStudentsCount}
                         </span>
                       </div>
                     </td>

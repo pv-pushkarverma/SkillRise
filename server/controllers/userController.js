@@ -2,15 +2,41 @@ import Course from '../models/Course.js'
 import Purchase from '../models/Purchase.js'
 import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
-import { createOrder as paymentCreateOrder } from '../services/payments/payment.service.js'
-import { verifyPayment as razorpayVerify } from '../services/payments/razorpay.service.js'
+import { createOrder as razorpayCreateOrder, verifyPayment as razorpayVerify } from '../services/payments/razorpay.service.js'
 import { completePurchase } from '../services/order.service.js'
+import { z } from 'zod'
+
+// Zod schemas — request bodies
+const PurchaseCourseBodySchema = z.object({
+  courseId: z.string().min(1),
+})
+
+const UpdateProgressBodySchema = z.object({
+  courseId: z.string().min(1),
+  lectureId: z.string().min(1),
+})
+
+const GetProgressBodySchema = z.object({
+  courseId: z.string().min(1),
+})
+
+const AddRatingBodySchema = z.object({
+  courseId: z.string().min(1),
+  rating: z.number().int().min(1).max(5),
+})
+
+const VerifyRazorpayBodySchema = z.object({
+  razorpay_order_id: z.string().min(1),
+  razorpay_payment_id: z.string().min(1),
+  razorpay_signature: z.string().min(1),
+  purchaseId: z.string().min(1),
+})
 
 //Get User Data
 export const getUserData = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const user = await User.findById(userId)
+    const user = await User.findById(userId).select('_id name email imageUrl enrolledCourses')
 
     if (!user) {
       return res.json({
@@ -24,9 +50,10 @@ export const getUserData = async (req, res) => {
       user,
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -35,16 +62,20 @@ export const getUserData = async (req, res) => {
 export const userEnrolledCourses = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const userData = await User.findById(userId).populate('enrolledCourses')
+    const userData = await User.findById(userId).populate({
+      path: 'enrolledCourses',
+      select: '-enrolledStudents -courseRatings',
+    })
 
     res.json({
       success: true,
       enrolledCourses: userData.enrolledCourses,
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -52,9 +83,13 @@ export const userEnrolledCourses = async (req, res) => {
 //Course Purchase
 export const purchaseCourse = async (req, res) => {
   try {
-    const { origin } = req.headers
     const userId = req.auth.userId
-    const { courseId, provider = process.env.DEFAULT_PAYMENT_PROVIDER || 'stripe' } = req.body
+
+    const bodyResult = PurchaseCourseBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({ success: false, message: 'Invalid request data' })
+    }
+    const { courseId } = bodyResult.data
 
     const [userData, courseData] = await Promise.all([
       User.findById(userId),
@@ -69,26 +104,39 @@ export const purchaseCourse = async (req, res) => {
       (courseData.coursePrice - (courseData.discount * courseData.coursePrice) / 100).toFixed(2)
     )
 
+    // Step 1: Create a Purchase record immediately (status: 'created').
+    // This acts as a soft reservation before the user pays — both the
+    // synchronous verify endpoint and the Razorpay webhook reference it by ID.
     const newPurchase = await Purchase.create({
       courseId: courseData._id,
       userId,
       amount,
       currency: process.env.CURRENCY || 'INR',
-      paymentProvider: provider,
+      paymentProvider: 'razorpay',
       status: 'created',
     })
 
-    const providerResult = await paymentCreateOrder(provider, {
-      purchaseId: newPurchase._id,
-      courseId: courseData._id,
-      amount,
-      courseTitle: courseData.courseTitle,
-      origin,
-    })
+    // Step 2: Create a Razorpay order and get back orderId + keyId.
+    // The orderId is shown to the Razorpay modal and later verified in /verify-razorpay.
+    // If this fails, we clean up the Purchase record in the catch block below
+    // so it doesn't sit as an orphaned 'created' doc in the DB.
+    let orderId, keyId
+    try {
+      ;({ orderId, keyId } = await razorpayCreateOrder({
+        purchaseId: newPurchase._id,
+        amount,
+        courseTitle: courseData.courseTitle,
+      }))
+    } catch (razorpayError) {
+      // Razorpay call failed — delete the Purchase we just created to keep the DB clean
+      await Purchase.findByIdAndDelete(newPurchase._id).exec()
+      throw razorpayError
+    }
 
-    res.json({ success: true, purchaseId: newPurchase._id.toString(), ...providerResult })
+    res.json({ success: true, purchaseId: newPurchase._id.toString(), orderId, keyId })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -96,7 +144,13 @@ export const purchaseCourse = async (req, res) => {
 export const updateUserCourseProgress = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const { courseId, lectureId } = req.body
+
+    const bodyResult = UpdateProgressBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({ success: false, message: 'Invalid request data' })
+    }
+    const { courseId, lectureId } = bodyResult.data
+
     const progressData = await CourseProgress.findOne({ userId, courseId })
 
     if (progressData) {
@@ -122,9 +176,10 @@ export const updateUserCourseProgress = async (req, res) => {
       message: 'Progress Updated',
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -133,7 +188,13 @@ export const updateUserCourseProgress = async (req, res) => {
 export const getUserCourseProgress = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const { courseId } = req.body
+
+    const bodyResult = GetProgressBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({ success: false, message: 'Invalid request data' })
+    }
+    const { courseId } = bodyResult.data
+
     const progressData = await CourseProgress.findOne({ userId, courseId })
 
     res.json({
@@ -141,9 +202,10 @@ export const getUserCourseProgress = async (req, res) => {
       progressData,
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -151,15 +213,14 @@ export const getUserCourseProgress = async (req, res) => {
 //Add Ratings
 export const addUserRating = async (req, res) => {
   const userId = req.auth.userId
-  const { courseId, rating } = req.body
+
+  const bodyResult = AddRatingBodySchema.safeParse(req.body)
+  if (!bodyResult.success) {
+    return res.status(400).json({ success: false, message: 'Invalid Details' })
+  }
+  const { courseId, rating } = bodyResult.data
 
   try {
-    if (!courseId || !userId || !rating || rating < 1 || rating > 5) {
-      return res.json({
-        success: false,
-        message: 'Invalid Details',
-      })
-    }
     const course = await Course.findById(courseId)
 
     if (!course) {
@@ -193,9 +254,9 @@ export const addUserRating = async (req, res) => {
       message: 'Rating Added',
     })
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -204,7 +265,11 @@ export const addUserRating = async (req, res) => {
 // Acts as primary completion path for local dev; webhook is fallback in production
 export const verifyRazorpayPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, purchaseId } = req.body
+    const bodyResult = VerifyRazorpayBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({ success: false, message: 'Invalid request data' })
+    }
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, purchaseId } = bodyResult.data
 
     const isValid = razorpayVerify({
       orderId: razorpay_order_id,
@@ -216,20 +281,26 @@ export const verifyRazorpayPayment = async (req, res) => {
       return res.json({ success: false, message: 'Invalid payment signature' })
     }
 
+    // Verify the purchaseId belongs to this user and matches the orderId that was signed.
+    // Without this, a valid signature for Order A could be used to complete a different purchase (Order B).
+    const purchase = await Purchase.findById(purchaseId)
+    if (
+      !purchase ||
+      purchase.userId !== req.auth.userId ||
+      purchase.providerOrderId !== razorpay_order_id
+    ) {
+      return res.status(403).json({ success: false, message: 'Purchase verification failed' })
+    }
+
+    if (purchase.status === 'completed') {
+      return res.status(409).json({ success: false, message: 'Purchase already completed' })
+    }
+
     await completePurchase(purchaseId, razorpay_payment_id)
     res.json({ success: true })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
-// Check Stripe session status (used by PaymentSuccess page for Stripe flows)
-export const getSessionStatus = async (req, res) => {
-  try {
-    const { stripeInstance } = await import('../services/payments/stripe.service.js')
-    const session = await stripeInstance.checkout.sessions.retrieve(req.query.session_id)
-    res.json({ success: true, status: session.status })
-  } catch (error) {
-    res.json({ success: false, message: error.message })
-  }
-}

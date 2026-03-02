@@ -16,15 +16,13 @@ const purchaseSchema = new mongoose.Schema(
 
     paymentProvider: {
       type: String,
-      enum: ['stripe', 'razorpay'],
+      enum: ['razorpay'],
       required: true,
     },
 
     providerOrderId: { type: String },
 
     providerPaymentId: { type: String },
-
-    failureReason: { type: String },
 
     status: {
       type: String,

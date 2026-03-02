@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
-import Skeleton from '../../components/Skeleton'
+import Skeleton from '../../components/common/Skeleton'
 import { Line } from 'rc-progress'
 import Footer from '../../components/student/Footer'
 import axios from 'axios'

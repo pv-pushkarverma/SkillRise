@@ -1,6 +1,7 @@
-import { useContext, useEffect, useRef, useState } from 'react'
-import Quill from 'quill'
+import { useContext, useState } from 'react'
+import MDEditor from '@uiw/react-md-editor'
 import { AppContext } from '../../context/AppContext'
+import { useTheme } from '../../context/ThemeContext'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import {
@@ -8,24 +9,29 @@ import {
   SectionHeader,
   Field,
   inputCls,
-  stripHtml,
 } from '../../components/educator/course/CourseFormShared'
 import ChapterList from '../../components/educator/course/ChapterList'
 import CoursePreview from '../../components/educator/course/CoursePreview'
 
 const AddCourse = () => {
   const { backendUrl, getToken } = useContext(AppContext)
-  const quillRef = useRef(null)
-  const editorRef = useRef(null)
+  const { isDark } = useTheme()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [courseTitle, setCourseTitle] = useState('')
   const [coursePrice, setCoursePrice] = useState('')
   const [discount, setDiscount] = useState('')
+  const [description, setDescription] = useState('')
   const [image, setImage] = useState(null)
   const [isDragOver, setIsDragOver] = useState(false)
-  const [descPreview, setDescPreview] = useState('')
   const [chapters, setChapters] = useState([])
+
+  // Strip markdown syntax for the plain-text live preview snippet
+  const descPreview = description
+    .replace(/[#*`_>[\]()!-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 120)
 
   const price = parseFloat(coursePrice) || 0
   const disc = parseFloat(discount) || 0
@@ -52,7 +58,7 @@ const AddCourse = () => {
       toast.error('Course title is required')
       return
     }
-    if (quillRef.current.getText().trim() === '') {
+    if (!description.trim()) {
       toast.error('Course description is empty')
       return
     }
@@ -72,7 +78,7 @@ const AddCourse = () => {
     setIsSubmitting(true)
     const courseData = {
       courseTitle: courseTitle.trim(),
-      courseDescription: quillRef.current.root.innerHTML,
+      courseDescription: description,
       coursePrice: price,
       discount: disc,
       courseContent: chapters,
@@ -93,7 +99,7 @@ const AddCourse = () => {
         setDiscount('')
         setImage(null)
         setChapters([])
-        quillRef.current.root.innerHTML = ''
+        setDescription('')
       } else {
         toast.error(data.message)
       }
@@ -103,20 +109,6 @@ const AddCourse = () => {
       setIsSubmitting(false)
     }
   }
-
-  useEffect(() => {
-    if (!quillRef.current && editorRef.current) {
-      quillRef.current = new Quill(editorRef.current, { theme: 'snow' })
-    }
-  }, [])
-
-  // poll Quill content for live preview
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (quillRef.current) setDescPreview(stripHtml(quillRef.current.root.innerHTML).slice(0, 120))
-    }, 1000)
-    return () => clearInterval(id)
-  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-6 md:p-8">
@@ -177,11 +169,17 @@ const AddCourse = () => {
                 </Field>
 
                 <Field label="Course Description">
-                  <div className="border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-teal-500/20 focus-within:border-teal-400 transition">
-                    <div ref={editorRef} className="min-h-[160px]" />
+                  <div data-color-mode={isDark ? 'dark' : 'light'}>
+                    <MDEditor
+                      value={description}
+                      onChange={(val) => setDescription(val || '')}
+                      height={220}
+                      preview="edit"
+                    />
                   </div>
                   <p className="text-xs text-gray-400 mt-1">
-                    Describe what students will learn, prerequisites, and who this is for
+                    Describe what students will learn, prerequisites, and who this is for. Supports{' '}
+                    <strong>Markdown</strong> formatting.
                   </p>
                 </Field>
               </div>

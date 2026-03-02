@@ -1,20 +1,27 @@
 import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { AppContext } from '../../context/AppContext'
-import Skeleton from '../../components/Skeleton'
-import { assets } from '../../assets/assets'
+import Skeleton from '../../components/common/Skeleton'
 import humanizeDuration from 'humanize-duration'
 import Footer from '../../components/student/Footer'
 import ReactPlayer from 'react-player'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import MarkdownRenderer from '../../components/chatbot/MarkDownRenderer'
+import { Star, CheckCircle2, Play, Clock, Timer, BookOpen } from 'lucide-react'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '../../components/ui/accordion'
+import { Button } from '../../components/ui/button'
+import { Badge } from '../../components/ui/badge'
 
 const CourseDetails = () => {
   const { id } = useParams()
 
   const [courseData, setCourseData] = useState(null)
-  const [openSections, setOpenSections] = useState({})
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
   const [playerData, setPlayerData] = useState(null)
 
@@ -53,10 +60,6 @@ const CourseDetails = () => {
       setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
     }
   }, [userData, courseData])
-
-  const toggleSection = (index) => {
-    setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }))
-  }
 
   if (!courseData) {
     return (
@@ -144,11 +147,12 @@ const CourseDetails = () => {
                 <span className="font-semibold text-gray-900 dark:text-white">{rating}</span>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
-                    <img
+                    <Star
                       key={i}
-                      src={i < Math.floor(rating) ? assets.star : assets.star_blank}
-                      alt=""
                       className="w-3.5 h-3.5"
+                      fill={i < Math.floor(rating) ? '#f59e0b' : 'none'}
+                      stroke={i < Math.floor(rating) ? '#f59e0b' : '#d1d5db'}
+                      strokeWidth={1.5}
                     />
                   ))}
                 </div>
@@ -193,11 +197,7 @@ const CourseDetails = () => {
                   {!isAlreadyEnrolled && (
                     <>
                       <div className="flex items-center gap-2 mb-3">
-                        <img
-                          className="w-3.5 opacity-70"
-                          src={assets.time_left_clock_icon}
-                          alt=""
-                        />
+                        <Timer className="w-3.5 h-3.5 opacity-70 text-red-400" />
                         <p className="text-sm text-red-500">
                           <span className="font-medium">5 days</span> left at this price
                         </p>
@@ -218,27 +218,24 @@ const CourseDetails = () => {
 
                   <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-5">
                     <div className="flex items-center gap-1.5">
-                      <img src={assets.star} alt="" className="w-3.5 h-3.5" />
+                      <Star className="w-3.5 h-3.5 fill-amber-400 stroke-amber-400" />
                       <span className="font-medium text-gray-700 dark:text-gray-200">{rating}</span>
                     </div>
                     <div className="h-4 w-px bg-gray-200 dark:bg-gray-600" />
                     <div className="flex items-center gap-1.5">
-                      <img src={assets.time_clock_icon} alt="" className="w-3.5 h-3.5" />
+                      <Clock className="w-3.5 h-3.5" />
                       <span>{calculateCourseDuration(courseData)}</span>
                     </div>
                     <div className="h-4 w-px bg-gray-200 dark:bg-gray-600" />
                     <div className="flex items-center gap-1.5">
-                      <img src={assets.lesson_icon} alt="" className="w-3.5 h-3.5" />
+                      <BookOpen className="w-3.5 h-3.5" />
                       <span>{calculateNoOfLectures(courseData)} lessons</span>
                     </div>
                   </div>
 
-                  <button
-                    onClick={enrollCourse}
-                    className="w-full py-3 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-semibold transition text-sm"
-                  >
+                  <Button onClick={enrollCourse} size="lg" className="w-full">
                     {isAlreadyEnrolled ? 'Resume Learning' : 'Enrol Now'}
-                  </button>
+                  </Button>
 
                   <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700">
                     <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-3">
@@ -253,7 +250,7 @@ const CourseDetails = () => {
                         'Certificate of completion',
                       ].map((item) => (
                         <li key={item} className="flex items-start gap-2">
-                          <span className="text-teal-500 font-bold mt-0.5">✓</span>
+                          <CheckCircle2 className="w-4 h-4 text-teal-500 mt-0.5 shrink-0" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -271,43 +268,23 @@ const CourseDetails = () => {
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
           Course Structure
         </h2>
-        <div className="flex flex-col gap-2 max-w-3xl">
+        <Accordion type="multiple" className="flex flex-col gap-2 max-w-3xl">
           {courseData.courseContent.map((chapter, index) => (
-            <div
-              key={index}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
-            >
-              <div
-                className="flex items-center justify-between px-4 py-3.5 cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-                onClick={() => toggleSection(index)}
-              >
-                <div className="flex items-center gap-2.5">
-                  <img
-                    className={`w-4 h-4 transform transition-transform ${openSections[index] ? 'rotate-180' : ''}`}
-                    src={assets.down_arrow_icon}
-                    alt=""
-                  />
-                  <p className="font-medium text-gray-800 dark:text-gray-100 text-sm">
-                    {chapter.chapterTitle}
-                  </p>
-                </div>
-                <p className="text-xs text-gray-400 shrink-0 ml-4">
+            <AccordionItem key={index} value={`chapter-${index}`}>
+              <AccordionTrigger>
+                <span className="text-sm font-medium text-gray-800 dark:text-gray-100 text-left">
+                  {chapter.chapterTitle}
+                </span>
+                <Badge variant="secondary" className="ml-auto mr-3 shrink-0 text-xs font-normal">
                   {chapter.chapterContent.length} lectures · {calculateChapterTime(chapter)}
-                </p>
-              </div>
-
-              <div
-                className={`overflow-hidden transition-all duration-300 ${openSections[index] ? 'max-h-96' : 'max-h-0'}`}
-              >
-                <div className="border-t border-gray-100 dark:border-gray-700 px-4 py-2 flex flex-col">
+                </Badge>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-col">
                   {chapter.chapterContent.map((lecture, i) => (
                     <div key={i} className="flex items-center justify-between py-2">
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <img
-                          src={assets.play_icon}
-                          alt=""
-                          className="w-3.5 h-3.5 shrink-0 opacity-50"
-                        />
+                        <Play className="w-3.5 h-3.5 shrink-0 opacity-40 text-gray-500 dark:text-gray-400" />
                         <span className="text-sm text-gray-700 dark:text-gray-200 truncate">
                           {lecture.lectureTitle}
                         </span>
@@ -315,11 +292,7 @@ const CourseDetails = () => {
                       <div className="flex items-center gap-3 shrink-0 ml-4">
                         {lecture.isPreviewFree && (
                           <button
-                            onClick={() =>
-                              setPlayerData({
-                                videoId: lecture.lectureUrl,
-                              })
-                            }
+                            onClick={() => setPlayerData({ videoId: lecture.lectureUrl })}
                             className="text-xs text-teal-600 font-medium hover:text-teal-700 transition"
                           >
                             Preview
@@ -334,10 +307,10 @@ const CourseDetails = () => {
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </div>
+        </Accordion>
       </div>
 
       <Footer />

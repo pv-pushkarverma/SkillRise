@@ -3,8 +3,15 @@ import { AppContext } from '../../context/AppContext'
 import SearchBar from '../../components/student/SearchBar'
 import { useParams } from 'react-router-dom'
 import CourseCard from '../../components/student/CourseCard'
-import { assets } from '../../assets/assets'
+import { X } from 'lucide-react'
 import Footer from '../../components/student/Footer'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../components/ui/select'
 
 const SORT_OPTIONS = [
   { value: 'default', label: 'Default' },
@@ -72,17 +79,38 @@ const CoursesList = () => {
           <div className="flex-1">
             <SearchBar data={input} />
           </div>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="h-11 px-4 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:border-teal-400 transition cursor-pointer shrink-0"
-          >
-            {SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-48 shrink-0">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Popular topic pills */}
+        <div className="flex flex-wrap items-center gap-2 mb-5">
+          <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mr-1">
+            Popular:
+          </span>
+          {['Web Dev', 'Data Science', 'Design', 'AI', 'Python', 'JavaScript'].map((topic) => (
+            <button
+              key={topic}
+              onClick={() => navigate(`/course-list/${topic}`)}
+              className={`px-3 py-1 rounded-full text-xs font-medium border transition ${
+                input?.toLowerCase() === topic.toLowerCase()
+                  ? 'bg-teal-600 text-white border-teal-600'
+                  : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-teal-400 hover:text-teal-600 dark:hover:text-teal-400'
+              }`}
+            >
+              {topic}
+            </button>
+          ))}
         </div>
 
         {/* Result count + active search pill */}
@@ -100,7 +128,7 @@ const CoursesList = () => {
               onClick={() => navigate('/course-list')}
               className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
             >
-              <img src={assets.cross_icon} alt="clear" className="w-2.5 h-2.5 opacity-60" />
+              <X className="w-2.5 h-2.5 opacity-60" />
               Clear search
             </button>
           )}

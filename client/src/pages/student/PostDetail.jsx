@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useClerk, useUser } from '@clerk/clerk-react'
 import axios from 'axios'
 import { AppContext } from '../../context/AppContext'
-import Skeleton from '../../components/Skeleton'
+import Skeleton from '../../components/common/Skeleton'
 import Avatar from '../../components/shared/Avatar'
 import ReplyCard from '../../components/community/ReplyCard'
 import { timeAgo } from '../../utils/time'
@@ -25,7 +25,7 @@ const PostDetail = () => {
   const [deleting, setDeleting] = useState(false)
 
   const requireAuth = () => openSignIn()
-  const isPostAuthor = user && post?.authorId === user.id
+  const isPostAuthor = post?.isAuthor
 
   const loadPost = useCallback(async () => {
     setLoading(true)

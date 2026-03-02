@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import Loading from '../../components/student/Loading'
+import Loading from '../../components/common/Loading'
 
 const Avatar = ({ user }) =>
   user.imageUrl ? (

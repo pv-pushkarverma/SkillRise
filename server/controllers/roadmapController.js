@@ -1,6 +1,7 @@
 import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
 import { generateAIResponse } from '../services/aiChatbotService.js'
+import { z } from 'zod'
 
 // JSON extractor to handles raw JSON, markdown code blocks, etc.
 const parseJSON = (raw) => {
@@ -25,6 +26,28 @@ const parseJSON = (raw) => {
   }
   return null
 }
+
+// Zod schemas — AI response
+const RoadmapStageSchema = z.looseObject({
+  id: z.string(),
+  label: z.string(),
+  status: z.string(),
+})
+
+const RoadmapSchema = z.looseObject({
+  title: z.string().min(1),
+  summary: z.string().min(1),
+  stages: z.array(RoadmapStageSchema).min(1),
+})
+
+// Zod schemas — request bodies
+const CustomRoadmapBodySchema = z.object({
+  topic: z.string()
+    .trim()
+    .min(2)
+    .max(120)
+    .transform((val) => val.replace(/[\n\r`"\\]/g, ' ').replace(/\s+/g, ' ').trim()),
+})
 
 // Personal Roadmap
 export const generatePersonalRoadmap = async (req, res) => {
@@ -89,7 +112,7 @@ ${courseList}
 Return ONLY this exact JSON shape:
 {
   "title": "Your Personalized Learning Roadmap",
-  "summary": "2–3 sentence motivating overview of their learning journey and potential",
+  "summary": "4–5 sentence motivating overview of their learning journey and potential",
   "stages": [
     {
       "id": "mastered",
@@ -98,7 +121,7 @@ Return ONLY this exact JSON shape:
       "icon": "🏆",
       "skills": ["concrete skill 1", "concrete skill 2", "skill 3", "skill 4"],
       "highlights": ["key achievement 1", "key achievement 2", "key achievement 3"],
-      "description": "1–2 sentences about their accomplishments"
+      "description": "4–5 sentences about their accomplishments"
     },
     {
       "id": "in_progress",
@@ -107,7 +130,7 @@ Return ONLY this exact JSON shape:
       "icon": "⚡",
       "skills": ["active skill 1", "active skill 2", "active skill 3"],
       "courses": [{"title": "Exact Course Title", "completion": 45}],
-      "description": "1–2 sentences about what they are actively learning"
+      "description": "4-5 sentences about what they are actively learning"
     },
     {
       "id": "next_steps",
@@ -120,7 +143,7 @@ Return ONLY this exact JSON shape:
         {"title": "Specific Topic", "priority": "medium", "reason": "concrete reason"},
         {"title": "Specific Topic", "priority": "medium", "reason": "concrete reason"}
       ],
-      "description": "1–2 sentences about the logical next steps"
+      "description": "4–5 sentences about the logical next steps"
     },
     {
       "id": "career_paths",
@@ -132,7 +155,7 @@ Return ONLY this exact JSON shape:
         {"title": "Specific Job Role", "readiness": 55, "gap": ["missing skill 1", "missing skill 2"]},
         {"title": "Specific Job Role", "readiness": 40, "gap": ["missing skill 1"]}
       ],
-      "description": "1–2 sentences about career opportunities aligned with their progress"
+      "description": "4–5 sentences about career opportunities aligned with their progress"
     }
   ]
 }`
@@ -147,27 +170,33 @@ Return ONLY this exact JSON shape:
     ])
 
     const roadmap = parseJSON(raw)
-    if (!roadmap)
+    if (!roadmap) {
       return res.json({ success: false, message: 'Failed to parse AI response. Please try again.' })
+    }
 
-    res.json({ success: true, roadmap, courseStats })
+    const roadmapValidation = RoadmapSchema.safeParse(roadmap)
+    if (!roadmapValidation.success) {
+      return res.json({ success: false, message: 'Failed to parse AI response. Please try again.' })
+    }
+
+    res.json({ success: true, roadmap: roadmapValidation.data, courseStats })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
 // Custom Roadmap
 export const generateCustomRoadmap = async (req, res) => {
   try {
-    const { topic } = req.body
-    if (!topic?.trim() || topic.trim().length < 2) {
-      return res.json({
+    const bodyResult = CustomRoadmapBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({
         success: false,
         message: 'Please provide a valid topic (at least 2 characters).',
       })
     }
-
-    const safeTopic = topic.trim().slice(0, 120)
+    const safeTopic = bodyResult.data.topic
 
     const prompt = `You are a professional learning path advisor. Generate a comprehensive, actionable learning roadmap for: "${safeTopic}"
 
@@ -232,11 +261,18 @@ Return ONLY this exact JSON shape (no markdown, no prose outside JSON):
     ])
 
     const roadmap = parseJSON(raw)
-    if (!roadmap)
+    if (!roadmap) {
       return res.json({ success: false, message: 'Failed to parse AI response. Please try again.' })
+    }
 
-    res.json({ success: true, roadmap })
+    const roadmapValidation = RoadmapSchema.safeParse(roadmap)
+    if (!roadmapValidation.success) {
+      return res.json({ success: false, message: 'Failed to parse AI response. Please try again.' })
+    }
+
+    res.json({ success: true, roadmap: roadmapValidation.data })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }

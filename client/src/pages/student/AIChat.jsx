@@ -129,11 +129,9 @@ const AIChat = () => {
   const fetchConversation = async (sid) => {
     try {
       const token = await getToken()
-      const { data } = await axios.post(
-        `${backendUrl}/api/user/${sid}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      const { data } = await axios.get(`${backendUrl}/api/user/chat/${sid}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       setSessionId(sid)
       setMessages(data.messages || [])
       setShowMobileHistory(false)

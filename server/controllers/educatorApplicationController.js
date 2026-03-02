@@ -45,7 +45,8 @@ export const submitApplication = async (req, res) => {
       message: 'Application submitted successfully. We will review it shortly.',
     })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -53,11 +54,12 @@ export const submitApplication = async (req, res) => {
 export const getApplicationStatus = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const application = await EducatorApplication.findOne({ userId })
+    const application = await EducatorApplication.findOne({ userId }).select('status rejectionReason professionalTitle bio expertise linkedinUrl')
 
     res.json({ success: true, application: application || null })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -70,7 +72,8 @@ export const listApplications = async (req, res) => {
 
     res.json({ success: true, applications })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -94,7 +97,8 @@ export const approveApplication = async (req, res) => {
 
     res.json({ success: true, message: 'Application approved. Educator role granted.' })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -116,6 +120,7 @@ export const rejectApplication = async (req, res) => {
 
     res.json({ success: true, message: 'Application rejected.' })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }

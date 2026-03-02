@@ -1,20 +1,30 @@
 import TimeTracking from '../models/TimeTracking.js'
 import Course from '../models/Course.js'
+import { z } from 'zod'
+
+// Zod schemas — request bodies
+const TrackTimeBodySchema = z.object({
+  page: z.string().min(1),
+  path: z.string().min(1),
+  duration: z.number().positive(),
+})
 
 // Track Time
 export const trackTime = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const { page, path, duration } = req.body
 
-    if (!page || !path || !duration || duration < 1) {
-      return res.json({ success: false, message: 'Invalid tracking data' })
+    const bodyResult = TrackTimeBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({ success: false, message: 'Invalid tracking data' })
     }
+    const { page, path, duration } = bodyResult.data
 
     await TimeTracking.create({ userId, page, path, duration: Math.round(duration) })
     res.json({ success: true })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -152,6 +162,7 @@ export const getAnalytics = async (req, res) => {
       analytics: { totalDuration, totalSessions, pageStats, dailyStats, courseBreakdown },
     })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }

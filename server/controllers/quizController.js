@@ -2,6 +2,7 @@ import Course from '../models/Course.js'
 import Quiz from '../models/Quiz.js'
 import QuizResult from '../models/QuizResult.js'
 import { generateAIResponse } from '../services/aiChatbotService.js'
+import { z } from 'zod'
 
 // helpers
 const getGroup = (pct) => {
@@ -15,6 +16,30 @@ const GROUP_LABEL = {
   on_track: 'On Track',
   mastered: 'Mastered',
 }
+
+// Zod schemas — AI response
+const QuizQuestionSchema = z.object({
+  question: z.string().min(1),
+  options: z.array(z.string()).length(4),
+  correctIndex: z.number().int().min(0).max(3),
+  explanation: z.string().optional(),
+})
+
+const QuizResponseSchema = z.object({
+  questions: z.array(QuizQuestionSchema).min(1).max(20),
+})
+
+// Zod schemas — request bodies
+const GenerateQuizBodySchema = z.object({
+  courseId: z.string().min(1),
+  chapterId: z.string().min(1),
+})
+
+const SubmitQuizBodySchema = z.object({
+  courseId: z.string().min(1),
+  chapterId: z.string().min(1),
+  answers: z.array(z.number().int().min(0).max(3)).min(1),
+})
 
 /* Build & persist a quiz for a given course + chapter */
 const buildQuiz = async (course, chapter) => {
@@ -38,16 +63,17 @@ Return ONLY valid JSON (no markdown, no extra text) in this exact structure:
 
   const raw = await generateAIResponse([{ role: 'user', content: prompt }])
 
-  let parsed
+  let rawParsed
   try {
     const jsonStr = raw.replace(/```json|```/g, '').trim()
-    parsed = JSON.parse(jsonStr)
+    rawParsed = JSON.parse(jsonStr)
   } catch {
     throw new Error('AI returned invalid JSON for quiz generation')
   }
 
-  if (!Array.isArray(parsed.questions) || parsed.questions.length === 0) {
-    throw new Error('AI returned no questions')
+  const quizValidation = QuizResponseSchema.safeParse(rawParsed)
+  if (!quizValidation.success) {
+    throw new Error('AI returned invalid quiz structure')
   }
 
   const quiz = await Quiz.findOneAndUpdate(
@@ -57,7 +83,7 @@ Return ONLY valid JSON (no markdown, no extra text) in this exact structure:
       chapterId: chapter.chapterId,
       chapterTitle: chapter.chapterTitle,
       courseTitle: course.courseTitle,
-      questions: parsed.questions,
+      questions: quizValidation.data.questions,
     },
     { upsert: true, new: true }
   )
@@ -83,9 +109,14 @@ export const getQuiz = async (req, res) => {
       quiz = await buildQuiz(course, chapter)
     }
 
-    res.json({ success: true, quiz })
+    const safeQuiz = {
+      ...quiz.toObject(),
+      questions: quiz.questions.map(({ question, options }) => ({ question, options })),
+    }
+    res.json({ success: true, quiz: safeQuiz })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -93,7 +124,11 @@ export const getQuiz = async (req, res) => {
 // Body: { courseId, chapterId }
 export const generateQuiz = async (req, res) => {
   try {
-    const { courseId, chapterId } = req.body
+    const bodyResult = GenerateQuizBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({ success: false, message: 'Invalid request data' })
+    }
+    const { courseId, chapterId } = bodyResult.data
 
     const course = await Course.findById(courseId)
     if (!course) return res.json({ success: false, message: 'Course not found' })
@@ -104,7 +139,8 @@ export const generateQuiz = async (req, res) => {
     const quiz = await buildQuiz(course, chapter)
     res.json({ success: true, quiz })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -112,10 +148,19 @@ export const generateQuiz = async (req, res) => {
 export const submitQuiz = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const { courseId, chapterId, answers } = req.body
+
+    const bodyResult = SubmitQuizBodySchema.safeParse(req.body)
+    if (!bodyResult.success) {
+      return res.status(400).json({ success: false, message: 'Invalid request data' })
+    }
+    const { courseId, chapterId, answers } = bodyResult.data
 
     const quiz = await Quiz.findOne({ courseId, chapterId })
     if (!quiz) return res.json({ success: false, message: 'Quiz not found' })
+
+    if (answers.length !== quiz.questions.length) {
+      return res.status(400).json({ success: false, message: 'Answer count does not match question count' })
+    }
 
     // Score
     let score = 0
@@ -165,9 +210,19 @@ Return only the bullet points (start each with •). No intro, no conclusion.`
       answers,
     })
 
-    res.json({ success: true, result })
+    res.json({
+      success: true,
+      result: {
+        score: result.score,
+        total: result.total,
+        percentage: result.percentage,
+        group: result.group,
+        recommendations: result.recommendations,
+      },
+    })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -181,7 +236,8 @@ export const getQuizResults = async (req, res) => {
     const results = await QuizResult.find({ userId, courseId, chapterId }).sort({ createdAt: -1 })
     res.json({ success: true, results })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -198,13 +254,16 @@ export const getCourseQuizResults = async (req, res) => {
     const titleMap = Object.fromEntries(quizzes.map((q) => [q.chapterId, q.chapterTitle]))
 
     const enriched = results.map((r) => ({
-      ...r.toObject(),
+      chapterId: r.chapterId,
       chapterTitle: titleMap[r.chapterId] || 'Unknown Chapter',
+      percentage: r.percentage,
+      group: r.group,
     }))
 
     res.json({ success: true, results: enriched })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -231,15 +290,18 @@ export const getAllMyQuizResults = async (req, res) => {
     const enriched = results.map((r) => {
       const titles = titleMap[`${r.courseId}__${r.chapterId}`] || {}
       return {
-        ...r.toObject(),
         chapterTitle: titles.chapterTitle || 'Unknown Chapter',
         courseTitle: titles.courseTitle || 'Unknown Course',
+        percentage: r.percentage,
+        group: r.group,
+        createdAt: r.createdAt,
       }
     })
 
     res.json({ success: true, results: enriched })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -291,6 +353,7 @@ export const getEducatorQuizInsights = async (req, res) => {
 
     res.json({ success: true, insights })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }

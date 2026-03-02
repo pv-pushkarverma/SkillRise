@@ -1,8 +1,6 @@
 import crypto from 'crypto'
 import { Webhook } from 'svix'
-import Stripe from 'stripe'
 import User from '../models/User.js'
-import Purchase from '../models/Purchase.js'
 import { completePurchase } from '../services/order.service.js'
 
 // ─── Clerk ───────────────────────────────────────────────────────────────────
@@ -53,66 +51,22 @@ export const clerkWebhooks = async (req, res) => {
         res.json({})
     }
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
-}
-
-// ─── Stripe ──────────────────────────────────────────────────────────────────
-
-const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY)
-
-export const stripeWebhooks = async (req, res) => {
-  const sig = req.headers['stripe-signature']
-  let event
-
-  try {
-    event = Stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET)
-  } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`)
-  }
-
-  switch (event.type) {
-    case 'payment_intent.succeeded': {
-      const paymentIntent = event.data.object
-
-      const sessions = await stripeInstance.checkout.sessions.list({
-        payment_intent: paymentIntent.id,
-      })
-
-      const { purchaseId } = sessions.data[0].metadata
-      await completePurchase(purchaseId, paymentIntent.id)
-      break
-    }
-
-    case 'payment_intent.payment_failed': {
-      const paymentIntent = event.data.object
-
-      const sessions = await stripeInstance.checkout.sessions.list({
-        payment_intent: paymentIntent.id,
-      })
-
-      const { purchaseId } = sessions.data[0].metadata
-      const purchase = await Purchase.findById(purchaseId)
-      if (purchase && purchase.status !== 'completed') {
-        purchase.status = 'failed'
-        purchase.failureReason = paymentIntent.last_payment_error?.message || 'Payment failed'
-        await purchase.save()
-      }
-      break
-    }
-
-    default:
-      console.warn(`Unhandled Stripe event: ${event.type}`)
-  }
-
-  res.json({ received: true })
 }
 
 // ─── Razorpay ────────────────────────────────────────────────────────────────
+// Razorpay calls this endpoint after a payment is captured on their side.
+// It acts as a reliable fallback: even if the frontend's verify-razorpay call
+// fails (network drop, browser close), enrollment still completes here.
 
 export const razorpayWebhooks = async (req, res) => {
   const signature = req.headers['x-razorpay-signature']
-  const rawBody = req.body // Buffer from express.raw()
+  // req.body is a raw Buffer here (express.raw middleware), not parsed JSON.
+  // Razorpay's HMAC is computed over the exact bytes they sent, so we must
+  // verify before parsing — any JSON.parse would change the bytes.
+  const rawBody = req.body
 
   const expectedSignature = crypto
     .createHmac('sha256', process.env.RAZORPAY_WEBHOOK_SECRET)
@@ -130,6 +84,8 @@ export const razorpayWebhooks = async (req, res) => {
 
   if (event.event === 'payment.captured') {
     const payment = event.payload?.payment?.entity
+    // purchaseId was stored in Razorpay's `notes` field when the order was created.
+    // This is how our internal ID survives through Razorpay's system.
     const purchaseId = payment?.notes?.purchaseId
     const paymentId = payment?.id
 

@@ -4,14 +4,15 @@ import { ToastContainer } from 'react-toastify'
 import { useUser } from '@clerk/clerk-react'
 import { AppContext } from './context/AppContext'
 
-import 'quill/dist/quill.snow.css'
+import '@uiw/react-md-editor/markdown-editor.css'
+import '@uiw/react-markdown-preview/markdown.css'
 
 import Home from './pages/student/Home'
 import CoursesList from './pages/student/CoursesList'
 import CourseDetails from './pages/student/CourseDetails'
 import MyEnrollments from './pages/student/MyEnrollments'
 import Player from './pages/student/Player'
-import Loading from './components/student/Loading'
+import Loading from './components/common/Loading'
 import Analytics from './pages/student/Analytics'
 import Roadmap from './pages/student/Roadmap'
 import Community from './pages/student/Community'
@@ -35,7 +36,16 @@ import BecomeEducator from './pages/student/BecomeEducator'
 import PaymentSuccess from './pages/student/PaymentSuccess'
 import Checkout from './pages/student/Checkout'
 import NotFound from './pages/student/NotFound'
+import AboutUs from './pages/general/AboutUs'
+import ContactUs from './pages/general/ContactUs'
+import DataPrivacy from './pages/general/DataPrivacy'
+import TermsOfService from './pages/general/TermsOfService'
+import SiteCookies from './pages/general/SiteCookies'
+import Careers from './pages/general/Careers'
+import Blog from './pages/general/Blog'
+import HelpCenter from './pages/general/HelpCenter'
 
+import ScrollToTop from './components/common/ScrollToTop'
 import useTimeTracker from './hooks/useTimeTracker'
 
 const HomeOrRedirect = () => {
@@ -53,6 +63,7 @@ const App = () => {
   const isAdminRoute = useMatch('/admin/*')
   return (
     <div className="text-default min-h-screen bg-white dark:bg-gray-950 dark:text-gray-100 transition-colors duration-200">
+      <ScrollToTop />
       <ToastContainer />
       {!isEducatorRoute && !isAdminRoute && <Navbar />}
       <Routes>
@@ -72,6 +83,14 @@ const App = () => {
         <Route path="/become-educator" element={<BecomeEducator />} />
         <Route path="/checkout/:courseId" element={<Checkout />} />
         <Route path="/payment/success/:courseId" element={<PaymentSuccess />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/privacy" element={<DataPrivacy />} />
+        <Route path="/terms-of-service" element={<TermsOfService />} />
+        <Route path="/cookies" element={<SiteCookies />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/help" element={<HelpCenter />} />
 
         <Route path="/educator" element={<Educator />}>
           <Route path="/educator" element={<Dashboard />} />

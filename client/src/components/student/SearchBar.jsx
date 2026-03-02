@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { assets } from '../../assets/assets'
+import { Search } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const SearchBar = ({ data }) => {
@@ -16,7 +16,7 @@ const SearchBar = ({ data }) => {
       onSubmit={onSearchHandler}
       className="flex items-center w-full border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 overflow-hidden focus-within:border-teal-400 transition"
     >
-      <img src={assets.search_icon} alt="search" className="w-4 h-4 ml-4 shrink-0 opacity-40" />
+      <Search className="w-4 h-4 ml-4 shrink-0 opacity-40 text-gray-500 dark:text-gray-400" />
       <input
         value={input}
         onChange={(e) => setInput(e.target.value)}

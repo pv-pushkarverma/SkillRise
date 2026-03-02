@@ -106,7 +106,7 @@ const courseData = [
   {
     courseTitle: 'Full-Stack Web Development with React & Node.js',
     courseDescription:
-      '<h2>Master modern full-stack development</h2><p>Learn to build production-ready web applications using React 19, Node.js, Express, and MongoDB. This comprehensive course takes you from zero to deploying a complete application.</p><ul><li>React hooks, context, and state management</li><li>RESTful APIs with Express</li><li>MongoDB & Mongoose</li><li>Authentication with JWT</li><li>Deployment with Docker</li></ul>',
+      '## Master modern full-stack development\n\nLearn to build production-ready web applications using React 19, Node.js, Express, and MongoDB. This comprehensive course takes you from zero to deploying a complete application.\n\n- React hooks, context, and state management\n- RESTful APIs with Express\n- MongoDB & Mongoose\n- Authentication with JWT\n- Deployment with Docker',
     courseThumbnail: 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&q=80',
     coursePrice: 3999,
     isPublished: true,
@@ -210,7 +210,7 @@ const courseData = [
   {
     courseTitle: 'Data Science & Machine Learning with Python',
     courseDescription:
-      '<h2>From data to insights</h2><p>A hands-on introduction to data science using Python. You will work with real datasets, build machine learning models, and visualize results.</p><ul><li>NumPy, Pandas, Matplotlib</li><li>Supervised & unsupervised learning</li><li>scikit-learn pipelines</li><li>Neural network basics with TensorFlow</li></ul>',
+      '## From data to insights\n\nA hands-on introduction to data science using Python. You will work with real datasets, build machine learning models, and visualize results.\n\n- NumPy, Pandas, Matplotlib\n- Supervised & unsupervised learning\n- scikit-learn pipelines\n- Neural network basics with TensorFlow',
     courseThumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
     coursePrice: 4499,
     isPublished: true,
@@ -283,7 +283,7 @@ const courseData = [
   {
     courseTitle: 'UI/UX Design: From Wireframes to Prototypes',
     courseDescription:
-      '<h2>Design products people love</h2><p>Learn the complete UI/UX design process — from user research and wireframing to high-fidelity prototypes in Figma. No prior design experience required.</p><ul><li>Design thinking & user research</li><li>Wireframing & information architecture</li><li>Figma components and auto-layout</li><li>Usability testing</li></ul>',
+      '## Design products people love\n\nLearn the complete UI/UX design process — from user research and wireframing to high-fidelity prototypes in Figma. No prior design experience required.\n\n- Design thinking & user research\n- Wireframing & information architecture\n- Figma components and auto-layout\n- Usability testing',
     courseThumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80',
     coursePrice: 2999,
     isPublished: true,
@@ -352,7 +352,7 @@ const courseData = [
   {
     courseTitle: 'TypeScript Masterclass for JavaScript Developers',
     courseDescription:
-      '<h2>Level up from JavaScript to TypeScript</h2><p>TypeScript is now an industry standard. This course takes you from JavaScript fundamentals to advanced TypeScript patterns used in production codebases.</p><ul><li>Types, interfaces, and generics</li><li>TypeScript with React</li><li>Utility types and advanced patterns</li><li>Migrating a JS project to TS</li></ul>',
+      '## Level up from JavaScript to TypeScript\n\nTypeScript is now an industry standard. This course takes you from JavaScript fundamentals to advanced TypeScript patterns used in production codebases.\n\n- Types, interfaces, and generics\n- TypeScript with React\n- Utility types and advanced patterns\n- Migrating a JS project to TS',
     courseThumbnail: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&q=80',
     coursePrice: 2499,
     isPublished: true,
@@ -425,7 +425,7 @@ const courseData = [
   {
     courseTitle: 'DevOps with Docker & Kubernetes',
     courseDescription:
-      '<h2>Ship software like a pro</h2><p>Learn container-based DevOps from Docker basics to Kubernetes orchestration. Build, ship, and scale applications reliably in production environments.</p><ul><li>Docker images, containers, and volumes</li><li>Docker Compose for multi-service apps</li><li>Kubernetes pods, deployments, and services</li><li>Helm charts and production deployments</li></ul>',
+      '## Ship software like a pro\n\nLearn container-based DevOps from Docker basics to Kubernetes orchestration. Build, ship, and scale applications reliably in production environments.\n\n- Docker images, containers, and volumes\n- Docker Compose for multi-service apps\n- Kubernetes pods, deployments, and services\n- Helm charts and production deployments',
     courseThumbnail: 'https://images.unsplash.com/photo-1605745341112-85968b19335b?w=800&q=80',
     coursePrice: 3499,
     isPublished: true,
@@ -498,7 +498,7 @@ const courseData = [
   {
     courseTitle: 'React Native: Build iOS & Android Apps',
     courseDescription:
-      '<h2>One codebase, two platforms</h2><p>Build real mobile applications for iOS and Android using React Native and Expo. If you know React, you already know most of what you need.</p><ul><li>React Native core components</li><li>Navigation with React Navigation</li><li>State management with Zustand</li><li>Accessing device APIs (camera, location)</li><li>Publishing to App Store & Play Store</li></ul>',
+      '## One codebase, two platforms\n\nBuild real mobile applications for iOS and Android using React Native and Expo. If you know React, you already know most of what you need.\n\n- React Native core components\n- Navigation with React Navigation\n- State management with Zustand\n- Accessing device APIs (camera, location)\n- Publishing to App Store & Play Store',
     courseThumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80',
     coursePrice: 3299,
     isPublished: true,
@@ -567,7 +567,7 @@ const courseData = [
   {
     courseTitle: 'Django & REST API Development',
     courseDescription:
-      '<h2>Backend development with Python</h2><p>Build powerful REST APIs using Django and Django REST Framework. Learn authentication, serializers, viewsets, and deploy a production-ready API.</p><ul><li>Django models, views, and URLs</li><li>Django REST Framework serializers</li><li>JWT authentication</li><li>API documentation with Swagger</li><li>Deployment on AWS</li></ul>',
+      '## Backend development with Python\n\nBuild powerful REST APIs using Django and Django REST Framework. Learn authentication, serializers, viewsets, and deploy a production-ready API.\n\n- Django models, views, and URLs\n- Django REST Framework serializers\n- JWT authentication\n- API documentation with Swagger\n- Deployment on AWS',
     courseThumbnail: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=800&q=80',
     coursePrice: 2799,
     isPublished: true,
@@ -636,7 +636,7 @@ const courseData = [
   {
     courseTitle: 'Cybersecurity Fundamentals',
     courseDescription:
-      '<h2>Understand and defend against threats</h2><p>A practical introduction to cybersecurity concepts for developers and IT professionals. Learn how attacks work so you can build better defenses.</p><ul><li>OWASP Top 10 vulnerabilities</li><li>Network security basics</li><li>SQL injection & XSS prevention</li><li>Cryptography fundamentals</li><li>Penetration testing intro</li></ul>',
+      '## Understand and defend against threats\n\nA practical introduction to cybersecurity concepts for developers and IT professionals. Learn how attacks work so you can build better defenses.\n\n- OWASP Top 10 vulnerabilities\n- Network security basics\n- SQL injection & XSS prevention\n- Cryptography fundamentals\n- Penetration testing intro',
     courseThumbnail: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80',
     coursePrice: 3199,
     isPublished: true,
@@ -705,7 +705,7 @@ const courseData = [
   {
     courseTitle: 'System Design for Engineers',
     courseDescription:
-      '<h2>Design systems that scale</h2><p>Learn how to architect large-scale distributed systems. Essential for senior engineering interviews and real-world backend engineering at scale.</p><ul><li>Scalability: horizontal vs vertical</li><li>Load balancers, caches, CDNs</li><li>Databases: SQL vs NoSQL, sharding</li><li>Message queues & event-driven architecture</li><li>Designing Twitter, YouTube, Uber</li></ul>',
+      '## Design systems that scale\n\nLearn how to architect large-scale distributed systems. Essential for senior engineering interviews and real-world backend engineering at scale.\n\n- Scalability: horizontal vs vertical\n- Load balancers, caches, CDNs\n- Databases: SQL vs NoSQL, sharding\n- Message queues & event-driven architecture\n- Designing Twitter, YouTube, Uber',
     courseThumbnail: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80',
     coursePrice: 4999,
     isPublished: true,
@@ -778,7 +778,7 @@ const courseData = [
   {
     courseTitle: 'Next.js: Full-Stack React Framework',
     courseDescription:
-      '<h2>The React framework for production</h2><p>Next.js is the go-to choice for production React apps. Learn server-side rendering, app router, server components, API routes, and full-stack features built into the framework.</p><ul><li>App Router & file-based routing</li><li>Server Components & Client Components</li><li>Data fetching: SSR, SSG, ISR</li><li>API routes & server actions</li><li>Authentication with NextAuth</li></ul>',
+      '## The React framework for production\n\nNext.js is the go-to choice for production React apps. Learn server-side rendering, app router, server components, API routes, and full-stack features built into the framework.\n\n- App Router & file-based routing\n- Server Components & Client Components\n- Data fetching: SSR, SSG, ISR\n- API routes & server actions\n- Authentication with NextAuth',
     courseThumbnail: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80',
     coursePrice: 3799,
     isPublished: true,

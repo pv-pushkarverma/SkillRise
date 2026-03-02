@@ -40,7 +40,8 @@ export const getAdminStats = async (_req, res) => {
       },
     })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -76,7 +77,8 @@ export const getAdminCourses = async (_req, res) => {
 
     res.json({ success: true, courses: coursesWithStats })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -86,12 +88,14 @@ export const getAdminPurchases = async (req, res) => {
     const filter = status && status !== 'all' ? { status } : {}
 
     const purchases = await Purchase.find(filter)
+      .select('userId courseId amount currency status paymentProvider createdAt')
       .populate('courseId', 'courseTitle')
       .sort({ createdAt: -1 })
 
     res.json({ success: true, purchases })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -136,7 +140,8 @@ export const getAdminChartData = async (_req, res) => {
 
     res.json({ success: true, topCourseData, weeklyRevenue })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -174,6 +179,7 @@ export const getAdminUsers = async (_req, res) => {
 
     res.json({ success: true, users: usersWithStats })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }

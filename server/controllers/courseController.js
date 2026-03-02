@@ -5,16 +5,23 @@ export const getAllCourse = async (req, res) => {
   try {
     const courses = await Course.find({ isPublished: true })
       .select(['-courseContent', '-enrolledStudents'])
-      .populate({ path: 'educatorId' })
+      .populate({ path: 'educatorId', select: 'name imageUrl' })
+
+    const safeCourses = courses.map((c) => {
+      const obj = c.toObject()
+      obj.courseRatings = obj.courseRatings.map(({ rating }) => ({ rating }))
+      return obj
+    })
 
     res.json({
       success: true,
-      courses,
+      courses: safeCourses,
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -24,7 +31,7 @@ export const getCourseById = async (req, res) => {
   const { id } = req.params
 
   try {
-    const courseData = await Course.findById(id).populate({ path: 'educatorId' })
+    const courseData = await Course.findById(id).populate({ path: 'educatorId', select: 'name imageUrl' })
 
     if (!courseData) return res.json({ success: false, message: 'Course not found' })
 
@@ -36,14 +43,18 @@ export const getCourseById = async (req, res) => {
       })
     })
 
+    const courseObj = courseData.toObject()
+    courseObj.courseRatings = courseObj.courseRatings.map(({ rating }) => ({ rating }))
+
     res.json({
       success: true,
-      courseData,
+      courseData: courseObj,
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }

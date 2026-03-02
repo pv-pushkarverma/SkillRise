@@ -3,7 +3,7 @@ import { AppContext } from '../../context/AppContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import Loading from '../../components/student/Loading'
+import Loading from '../../components/common/Loading'
 import {
   BarChart,
   Bar,

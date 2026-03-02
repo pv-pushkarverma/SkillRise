@@ -82,6 +82,8 @@ const seedDefaultGroups = async () => {
 //   Helper: enrich post objects (strip upvotes array, add counts)
 const enrichPost = (post, userId) => ({
   ...post,
+  authorId: undefined,
+  isAuthor: userId ? post.authorId === userId : false,
   group: post.groupId ?? post.group ?? null,
   groupId: undefined,
   upvoteCount: Array.isArray(post.upvotes) ? post.upvotes.length : 0,
@@ -102,10 +104,11 @@ export const getGroups = async (req, res) => {
       memberSet = new Set(memberships.map((m) => m.groupId.toString()))
     }
 
-    const result = groups.map((g) => ({ ...g, isMember: memberSet.has(g._id.toString()) }))
+    const result = groups.map(({ createdBy, ...g }) => ({ ...g, isMember: memberSet.has(g._id.toString()) }))
     res.json({ success: true, groups: result })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -150,9 +153,11 @@ export const createGroup = async (req, res) => {
       { new: true }
     ).lean()
 
-    res.json({ success: true, group: { ...updated, isMember: true } })
+    const { createdBy, ...groupData } = updated
+    res.json({ success: true, group: { ...groupData, isMember: true } })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -174,7 +179,8 @@ export const toggleMembership = async (req, res) => {
       res.json({ success: true, isMember: true })
     }
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -232,7 +238,8 @@ export const getPosts = async (req, res) => {
     const enriched = posts.map((p) => enrichPost(p, userId))
     res.json({ success: true, posts: enriched, hasMore: skip + posts.length < total, total })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -282,7 +289,8 @@ export const createPost = async (req, res) => {
       post: enrichPost({ ...populated, group: populated.groupId }, userId),
     })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -301,6 +309,8 @@ export const getPost = async (req, res) => {
 
     const replies = rawReplies.map((r) => ({
       ...r,
+      authorId: undefined,
+      isAuthor: userId ? r.authorId === userId : false,
       upvoteCount: r.upvotes.length,
       isUpvoted: userId ? r.upvotes.includes(userId) : false,
       upvotes: undefined,
@@ -311,7 +321,8 @@ export const getPost = async (req, res) => {
       post: { ...enrichPost({ ...post, group: post.groupId }, userId), replies },
     })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -329,7 +340,8 @@ export const togglePostUpvote = async (req, res) => {
 
     res.json({ success: true, upvoteCount: post.upvotes.length, isUpvoted: idx === -1 })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -348,7 +360,8 @@ export const toggleResolve = async (req, res) => {
     await post.save()
     res.json({ success: true, isResolved: post.isResolved })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -367,7 +380,8 @@ export const deletePost = async (req, res) => {
     await CommunityPost.deleteOne({ _id: post._id })
     res.json({ success: true })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -399,10 +413,11 @@ export const createReply = async (req, res) => {
 
     res.json({
       success: true,
-      reply: { ...reply.toObject(), upvoteCount: 0, isUpvoted: false, upvotes: undefined },
+      reply: { ...reply.toObject(), authorId: undefined, isAuthor: true, upvoteCount: 0, isUpvoted: false, upvotes: undefined },
     })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -421,7 +436,8 @@ export const toggleReplyUpvote = async (req, res) => {
 
     res.json({ success: true, upvoteCount: reply.upvotes.length, isUpvoted: idx === -1 })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
 
@@ -453,6 +469,7 @@ export const acceptAnswer = async (req, res) => {
 
     res.json({ success: true, isAcceptedAnswer: nowAccepted, postResolved: post.isResolved })
   } catch (error) {
-    res.json({ success: false, message: error.message })
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }

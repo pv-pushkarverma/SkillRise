@@ -1,7 +1,7 @@
 import express from 'express'
+import { requireAuth } from '@clerk/express'
 import {
   addUserRating,
-  getSessionStatus,
   getUserCourseProgress,
   getUserData,
   purchaseCourse,
@@ -20,6 +20,8 @@ import { generatePersonalRoadmap, generateCustomRoadmap } from '../controllers/r
 
 const userRouter = express.Router()
 
+userRouter.use(requireAuth())
+
 userRouter.get('/data', getUserData)
 userRouter.get('/enrolled-courses', userEnrolledCourses)
 userRouter.get('/analytics', getAnalytics)
@@ -32,12 +34,11 @@ userRouter.post('/track-time', trackTime)
 userRouter.post('/generate-personal-roadmap', generatePersonalRoadmap)
 userRouter.post('/generate-custom-roadmap', generateCustomRoadmap)
 
-userRouter.get('/session-status', getSessionStatus)
 userRouter.post('/verify-razorpay', verifyRazorpayPayment)
 
 userRouter.post('/ai-chat', aiChatbot)
 userRouter.post('/previous-chats', recentAIChats)
-userRouter.post('/:sessionId', getChatSession)
+userRouter.get('/chat/:sessionId', getChatSession)
 userRouter.delete('/chat/:sessionId', deleteChatSession)
 
 export default userRouter

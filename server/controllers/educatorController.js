@@ -20,9 +20,10 @@ export const updateRoleToEducator = async (req, res) => {
       message: 'You can publish a course now',
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -41,10 +42,18 @@ export const addCourse = async (req, res) => {
       })
     }
 
-    const parsedCourseData = JSON.parse(courseData)
-    parsedCourseData.educatorId = educatorId
+    const { courseTitle, courseDescription, coursePrice, discount, courseContent, isPublished } =
+      JSON.parse(courseData)
 
-    const newCourse = await Course.create(parsedCourseData)
+    const newCourse = await Course.create({
+      courseTitle,
+      courseDescription,
+      coursePrice,
+      discount,
+      courseContent,
+      isPublished,
+      educatorId,
+    })
 
     const imageUpload = await cloudinary.uploader.upload(imageFile.path)
 
@@ -57,9 +66,10 @@ export const addCourse = async (req, res) => {
       message: 'Course Added Succesfully',
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -69,15 +79,20 @@ export const getEducatorCourses = async (req, res) => {
   try {
     const educatorId = req.auth.userId
     const courses = await Course.find({ educatorId })
+      .select('courseTitle courseThumbnail coursePrice discount isPublished createdAt enrolledStudents')
+      .lean()
 
-    res.json({
-      success: true,
-      courses,
-    })
+    const sanitized = courses.map(({ enrolledStudents, ...rest }) => ({
+      ...rest,
+      enrolledStudentsCount: enrolledStudents.length,
+    }))
+
+    res.json({ success: true, courses: sanitized })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -121,9 +136,10 @@ export const educatorDashboardData = async (req, res) => {
       },
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }
@@ -153,9 +169,10 @@ export const getEnrolledStudentsData = async (req, res) => {
       enrolledStudents,
     })
   } catch (error) {
-    res.json({
+    console.error(error)
+    res.status(500).json({
       success: false,
-      message: error.message,
+      message: 'An unexpected error occurred',
     })
   }
 }

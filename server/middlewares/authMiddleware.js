@@ -1,45 +1,37 @@
-import { clerkClient } from '@clerk/express'
-
 //Protect Educator Route
-export const protectEducator = async (req, res, next) => {
+export const protectEducator = (req, res, next) => {
   try {
-    const userId = req.auth.userId
-    const clerkUser = await clerkClient.users.getUser(userId)
+    if (!req.auth?.userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized Access' })
+    }
 
-    if (clerkUser.publicMetadata.role !== 'educator') {
-      return res.json({
-        success: false,
-        message: 'Unauthorized Access',
-      })
+    const role = req.auth.sessionClaims?.metadata?.role
+
+    if (role !== 'educator') {
+      return res.status(403).json({ success: false, message: 'Unauthorized Access' })
     }
 
     next()
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    })
+    res.status(500).json({ success: false, message: 'Internal Server Error' })
   }
 }
 
 //Protect Admin Route
-export const protectAdmin = async (req, res, next) => {
+export const protectAdmin = (req, res, next) => {
   try {
-    const userId = req.auth.userId
-    const clerkUser = await clerkClient.users.getUser(userId)
+    if (!req.auth?.userId) {
+      return res.status(401).json({ success: false, message: 'Unauthorized Access' })
+    }
 
-    if (clerkUser.publicMetadata.role !== 'admin') {
-      return res.json({
-        success: false,
-        message: 'Unauthorized Access',
-      })
+    const role = req.auth.sessionClaims?.metadata?.role
+
+    if (role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Unauthorized Access' })
     }
 
     next()
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-    })
+    res.status(500).json({ success: false, message: 'Internal Server Error' })
   }
 }

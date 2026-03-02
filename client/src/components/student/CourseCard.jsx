@@ -1,7 +1,8 @@
 import { useContext } from 'react'
-import { assets } from '../../assets/assets'
 import { Link } from 'react-router-dom'
+import { Star } from 'lucide-react'
 import { AppContext } from '../../context/AppContext'
+import { Badge } from '../ui/badge'
 
 const CourseCard = ({ course }) => {
   const { calculateRating } = useContext(AppContext)
@@ -15,6 +16,8 @@ const CourseCard = ({ course }) => {
 
   const price =
     typeof course?.coursePrice === 'number' ? course.coursePrice : Number(course?.coursePrice ?? 0)
+
+  const fullStars = Math.floor(rating)
 
   return (
     <Link
@@ -32,15 +35,16 @@ const CourseCard = ({ course }) => {
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{educatorName}</p>
 
-        <div className="flex items-center space-x-2 mt-3">
+        <div className="flex items-center gap-1.5 mt-3">
           <p className="text-sm font-medium text-gray-900 dark:text-white">{rating}</p>
           <div className="flex">
             {[...Array(5)].map((_, i) => (
-              <img
+              <Star
                 key={i}
-                src={i < Math.floor(rating) ? assets.star : assets.star_blank}
-                alt=""
                 className="w-3.5 h-3.5"
+                fill={i < fullStars ? '#f59e0b' : 'none'}
+                stroke={i < fullStars ? '#f59e0b' : '#d1d5db'}
+                strokeWidth={1.5}
               />
             ))}
           </div>
@@ -53,9 +57,7 @@ const CourseCard = ({ course }) => {
           <p className="text-base font-semibold text-gray-900 dark:text-white">
             ₹ {Number.isFinite(price) ? price.toFixed(2) : '0.00'}
           </p>
-          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-100">
-            View details
-          </span>
+          <Badge>View details</Badge>
         </div>
       </div>
     </Link>
