@@ -98,7 +98,7 @@ skillrise/
 
 - Node.js 20+
 - MongoDB (local or Atlas)
-- Accounts: [Clerk](https://clerk.com), [Stripe](https://stripe.com), [Cloudinary](https://cloudinary.com), [Groq](https://console.groq.com)
+- Accounts: [Clerk](https://clerk.com), [Razorpay](https://razorpay.com), [Cloudinary](https://cloudinary.com), [Groq](https://console.groq.com)
 
 ### 1. Clone the repo
 
@@ -170,12 +170,12 @@ npm run dev      # Vite dev server → http://localhost:5173
 
 ### 6. Set up webhooks (for auth + payments to work locally)
 
-Use [Stripe CLI](https://stripe.com/docs/stripe-cli) and [ngrok](https://ngrok.com) or [Clerk's dashboard](https://dashboard.clerk.com) to forward webhooks to `http://localhost:3000`:
+Use [RazorPay](https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/integration-steps/#1-build-integration) and [ngrok](https://ngrok.com) or [Clerk's dashboard](https://dashboard.clerk.com) to forward webhooks to `http://localhost:3000`:
 
 | Webhook | Endpoint |
 |---|---|
 | Clerk user events | `POST /clerk` |
-| Stripe payment events | `POST /stripe` |
+| Razorpay payment events | `POST /razorpay` |
 
 ---
 
@@ -251,7 +251,7 @@ VITE_BACKEND_URL
 |---|---|---|
 | `GET /` | — | Health check |
 | `POST /clerk` | Clerk signature | User sync webhook |
-| `POST /stripe` | Stripe signature | Payment fulfillment webhook |
+| `POST /razorpay` | Razorpay signature | Payment fulfillment webhook |
 | `/api/course` | Public | Browse, search, and fetch course details |
 | `/api/user` | Clerk (any user) | Enroll, track progress, AI chat, roadmap, analytics |
 | `/api/educator` | Educator role | Course creation, dashboard, student management |
