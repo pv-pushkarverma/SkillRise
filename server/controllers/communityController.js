@@ -1,83 +1,9 @@
+/* eslint-disable no-unused-vars */
 import Group from '../models/Group.js'
 import CommunityPost from '../models/CommunityPost.js'
 import Reply from '../models/Reply.js'
 import GroupMembership from '../models/GroupMembership.js'
 import User from '../models/User.js'
-
-// Default groups seeded on first request
-const DEFAULT_GROUPS = [
-  {
-    name: 'Web Development',
-    slug: 'web-development',
-    icon: '🌐',
-    description: 'HTML, CSS, JavaScript, React, Node.js and all things web',
-    isOfficial: true,
-  },
-  {
-    name: 'Machine Learning & AI',
-    slug: 'machine-learning-ai',
-    icon: '🤖',
-    description: 'Deep learning, NLP, computer vision and AI tools',
-    isOfficial: true,
-  },
-  {
-    name: 'Data Science',
-    slug: 'data-science',
-    icon: '📊',
-    description: 'Data analysis, visualization, statistics and Python',
-    isOfficial: true,
-  },
-  {
-    name: 'Mobile Development',
-    slug: 'mobile-dev',
-    icon: '📱',
-    description: 'iOS, Android, React Native, Flutter and mobile',
-    isOfficial: true,
-  },
-  {
-    name: 'DevOps & Cloud',
-    slug: 'devops-cloud',
-    icon: '☁️',
-    description: 'Docker, Kubernetes, AWS, CI/CD pipelines',
-    isOfficial: true,
-  },
-  {
-    name: 'Cybersecurity',
-    slug: 'cybersecurity',
-    icon: '🔐',
-    description: 'Security fundamentals, ethical hacking and best practices',
-    isOfficial: true,
-  },
-  {
-    name: 'System Design',
-    slug: 'system-design',
-    icon: '🏗️',
-    description: 'Architecture, scalability and distributed systems',
-    isOfficial: true,
-  },
-  {
-    name: 'Career & Jobs',
-    slug: 'career-jobs',
-    icon: '💼',
-    description: 'Interview prep, resume tips and job hunting strategies',
-    isOfficial: true,
-  },
-  {
-    name: 'General Discussion',
-    slug: 'general',
-    icon: '💬',
-    description: 'Off-topic discussions, introductions and community chat',
-    isOfficial: true,
-  },
-]
-
-let seeded = false
-const seedDefaultGroups = async () => {
-  if (seeded) return
-  const count = await Group.countDocuments()
-  if (count === 0) await Group.insertMany(DEFAULT_GROUPS)
-  seeded = true
-}
 
 //   Helper: enrich post objects (strip upvotes array, add counts)
 const enrichPost = (post, userId) => ({
@@ -94,7 +20,6 @@ const enrichPost = (post, userId) => ({
 // Groups
 export const getGroups = async (req, res) => {
   try {
-    await seedDefaultGroups()
     const userId = req.auth?.userId
     const groups = await Group.find().sort({ isOfficial: -1, memberCount: -1 }).lean()
 
@@ -104,7 +29,10 @@ export const getGroups = async (req, res) => {
       memberSet = new Set(memberships.map((m) => m.groupId.toString()))
     }
 
-    const result = groups.map(({ createdBy, ...g }) => ({ ...g, isMember: memberSet.has(g._id.toString()) }))
+    const result = groups.map(({ createdBy, ...g }) => ({
+      ...g,
+      isMember: memberSet.has(g._id.toString()),
+    }))
     res.json({ success: true, groups: result })
   } catch (error) {
     console.error(error)
@@ -413,7 +341,14 @@ export const createReply = async (req, res) => {
 
     res.json({
       success: true,
-      reply: { ...reply.toObject(), authorId: undefined, isAuthor: true, upvoteCount: 0, isUpvoted: false, upvotes: undefined },
+      reply: {
+        ...reply.toObject(),
+        authorId: undefined,
+        isAuthor: true,
+        upvoteCount: 0,
+        isUpvoted: false,
+        upvotes: undefined,
+      },
     })
   } catch (error) {
     console.error(error)

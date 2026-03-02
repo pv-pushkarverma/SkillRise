@@ -1,5 +1,5 @@
 import ChatSession from '../models/AiChat.js'
-import { generateAIResponse } from '../services/aiChatbotService.js'
+import { generateAIResponse } from '../services/chatbot/aiChatbotService.js'
 import { v4 as uuidv4 } from 'uuid'
 import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
@@ -84,7 +84,7 @@ async function buildUserContext(userId) {
       if (latestRec?.recommendations) {
         const safeRec = latestRec.recommendations
           .slice(0, 500)
-          .replace(/[=\[\]`#]/g, '')
+          .replace(/[=\\[\]`#]/g, '')
           .trim()
         quizSection += `\n\nLatest AI Study Recommendations:\n${safeRec}`
       }

@@ -88,7 +88,7 @@ export const getAdminPurchases = async (req, res) => {
     const filter = status && status !== 'all' ? { status } : {}
 
     const purchases = await Purchase.find(filter)
-      .select('userId courseId amount currency status paymentProvider createdAt')
+      .select('userId courseId amount currency status createdAt')
       .populate('courseId', 'courseTitle')
       .sort({ createdAt: -1 })
 

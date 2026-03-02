@@ -1,9 +1,13 @@
+/* eslint-disable no-unused-vars */
 import Course from '../models/Course.js'
 import Purchase from '../models/Purchase.js'
 import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
-import { createOrder as razorpayCreateOrder, verifyPayment as razorpayVerify } from '../services/payments/razorpay.service.js'
-import { completePurchase } from '../services/order.service.js'
+import {
+  createOrder as razorpayCreateOrder,
+  verifyPayment as razorpayVerify,
+} from '../services/payments/razorpay.service.js'
+import { completePurchase } from '../services/payments/order.service.js'
 import { z } from 'zod'
 
 // Zod schemas — request bodies
@@ -112,7 +116,6 @@ export const purchaseCourse = async (req, res) => {
       userId,
       amount,
       currency: process.env.CURRENCY || 'INR',
-      paymentProvider: 'razorpay',
       status: 'created',
     })
 
@@ -269,7 +272,8 @@ export const verifyRazorpayPayment = async (req, res) => {
     if (!bodyResult.success) {
       return res.status(400).json({ success: false, message: 'Invalid request data' })
     }
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, purchaseId } = bodyResult.data
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, purchaseId } =
+      bodyResult.data
 
     const isValid = razorpayVerify({
       orderId: razorpay_order_id,
@@ -303,4 +307,3 @@ export const verifyRazorpayPayment = async (req, res) => {
     res.status(500).json({ success: false, message: 'An unexpected error occurred' })
   }
 }
-

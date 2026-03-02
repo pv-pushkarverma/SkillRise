@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import { Webhook } from 'svix'
 import User from '../models/User.js'
-import { completePurchase } from '../services/order.service.js'
+import { completePurchase } from '../services/payments/order.service.js'
 
 // ─── Clerk ───────────────────────────────────────────────────────────────────
 

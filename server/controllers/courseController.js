@@ -31,7 +31,10 @@ export const getCourseById = async (req, res) => {
   const { id } = req.params
 
   try {
-    const courseData = await Course.findById(id).populate({ path: 'educatorId', select: 'name imageUrl' })
+    const courseData = await Course.findById(id).populate({
+      path: 'educatorId',
+      select: 'name imageUrl',
+    })
 
     if (!courseData) return res.json({ success: false, message: 'Course not found' })
 

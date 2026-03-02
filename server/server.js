@@ -45,8 +45,8 @@ const makeLimiter = (windowMs, limit, message) =>
     // This means one user can't bypass the limit by switching IPs.
     keyGenerator: (req) => req.auth?.userId || ipKeyGenerator(req),
     message: { success: false, message },
-    standardHeaders: true,  // sends standard RateLimit-* headers so clients know when to retry
-    legacyHeaders: false,   // don't send old X-RateLimit-* headers (redundant)
+    standardHeaders: true, // sends standard RateLimit-* headers so clients know when to retry
+    legacyHeaders: false, // don't send old X-RateLimit-* headers (redundant)
   })
 
 // AI chat — 30 req / 10 min

@@ -1,6 +1,6 @@
 import User from '../models/User.js'
 import CourseProgress from '../models/CourseProgress.js'
-import { generateAIResponse } from '../services/aiChatbotService.js'
+import { generateAIResponse } from '../services/chatbot/aiChatbotService.js'
 import { z } from 'zod'
 
 // JSON extractor to handles raw JSON, markdown code blocks, etc.
@@ -42,11 +42,17 @@ const RoadmapSchema = z.looseObject({
 
 // Zod schemas — request bodies
 const CustomRoadmapBodySchema = z.object({
-  topic: z.string()
+  topic: z
+    .string()
     .trim()
     .min(2)
     .max(120)
-    .transform((val) => val.replace(/[\n\r`"\\]/g, ' ').replace(/\s+/g, ' ').trim()),
+    .transform((val) =>
+      val
+        .replace(/[\n\r`"\\]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+    ),
 })
 
 // Personal Roadmap

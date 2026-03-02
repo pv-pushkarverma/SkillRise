@@ -54,7 +54,9 @@ export const submitApplication = async (req, res) => {
 export const getApplicationStatus = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const application = await EducatorApplication.findOne({ userId }).select('status rejectionReason professionalTitle bio expertise linkedinUrl')
+    const application = await EducatorApplication.findOne({ userId }).select(
+      'status rejectionReason professionalTitle bio expertise linkedinUrl'
+    )
 
     res.json({ success: true, application: application || null })
   } catch (error) {

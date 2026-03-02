@@ -14,12 +14,6 @@ const purchaseSchema = new mongoose.Schema(
 
     currency: { type: String, default: 'INR' },
 
-    paymentProvider: {
-      type: String,
-      enum: ['razorpay'],
-      required: true,
-    },
-
     providerOrderId: { type: String },
 
     providerPaymentId: { type: String },

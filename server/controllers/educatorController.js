@@ -1,32 +1,7 @@
-import { clerkClient } from '@clerk/express'
 import Course from '../models/Course.js'
 import { v2 as cloudinary } from 'cloudinary'
 import Purchase from '../models/Purchase.js'
 import User from '../models/User.js'
-
-//Update role to Educator
-export const updateRoleToEducator = async (req, res) => {
-  try {
-    const userId = req.auth.userId
-
-    await clerkClient.users.updateUserMetadata(userId, {
-      publicMetadata: {
-        role: 'educator',
-      },
-    })
-
-    res.json({
-      success: true,
-      message: 'You can publish a course now',
-    })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({
-      success: false,
-      message: 'An unexpected error occurred',
-    })
-  }
-}
 
 //Add New Course
 export const addCourse = async (req, res) => {
@@ -79,7 +54,9 @@ export const getEducatorCourses = async (req, res) => {
   try {
     const educatorId = req.auth.userId
     const courses = await Course.find({ educatorId })
-      .select('courseTitle courseThumbnail coursePrice discount isPublished createdAt enrolledStudents')
+      .select(
+        'courseTitle courseThumbnail coursePrice discount isPublished createdAt enrolledStudents'
+      )
       .lean()
 
     const sanitized = courses.map(({ enrolledStudents, ...rest }) => ({

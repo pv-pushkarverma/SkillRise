@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 //Protect Educator Route
 export const protectEducator = (req, res, next) => {
   try {

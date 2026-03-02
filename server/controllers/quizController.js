@@ -1,7 +1,7 @@
 import Course from '../models/Course.js'
 import Quiz from '../models/Quiz.js'
 import QuizResult from '../models/QuizResult.js'
-import { generateAIResponse } from '../services/aiChatbotService.js'
+import { generateAIResponse } from '../services/chatbot/aiChatbotService.js'
 import { z } from 'zod'
 
 // helpers
@@ -159,7 +159,9 @@ export const submitQuiz = async (req, res) => {
     if (!quiz) return res.json({ success: false, message: 'Quiz not found' })
 
     if (answers.length !== quiz.questions.length) {
-      return res.status(400).json({ success: false, message: 'Answer count does not match question count' })
+      return res
+        .status(400)
+        .json({ success: false, message: 'Answer count does not match question count' })
     }
 
     // Score
