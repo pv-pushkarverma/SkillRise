@@ -25,15 +25,7 @@ const CourseDetails = () => {
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
   const [playerData, setPlayerData] = useState(null)
 
-  const {
-    calculateRating,
-    calculateChapterTime,
-    calculateCourseDuration,
-    calculateNoOfLectures,
-    backendUrl,
-    userData,
-    navigate,
-  } = useContext(AppContext)
+  const { backendUrl, userData, navigate } = useContext(AppContext)
 
   const fetchCourseData = async () => {
     try {
@@ -102,7 +94,6 @@ const CourseDetails = () => {
     )
   }
 
-  const rating = calculateRating(courseData)
   const discountedPrice = (
     courseData.coursePrice -
     (courseData.discount * courseData.coursePrice) / 100
@@ -144,26 +135,27 @@ const CourseDetails = () => {
               </div>
 
               <div className="flex flex-wrap items-center gap-2 mt-4 text-sm">
-                <span className="font-semibold text-gray-900 dark:text-white">{rating}</span>
+                <span className="font-semibold text-gray-900 dark:text-white">
+                  {courseData.averageRating}
+                </span>
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       className="w-3.5 h-3.5"
-                      fill={i < Math.floor(rating) ? '#f59e0b' : 'none'}
-                      stroke={i < Math.floor(rating) ? '#f59e0b' : '#d1d5db'}
+                      fill={i < courseData.averageRating ? '#f59e0b' : 'none'}
+                      stroke={i < courseData.averageRating ? '#f59e0b' : '#d1d5db'}
                       strokeWidth={1.5}
                     />
                   ))}
                 </div>
                 <span className="text-teal-600">
-                  ({courseData.courseRatings.length}{' '}
-                  {courseData.courseRatings.length === 1 ? 'rating' : 'ratings'})
+                  ({courseData.totalRatings} {courseData.totalRatings === 1 ? 'rating' : 'ratings'})
                 </span>
                 <span className="text-gray-300">·</span>
                 <span className="text-gray-500 dark:text-gray-400">
-                  {courseData.enrolledStudents.length}{' '}
-                  {courseData.enrolledStudents.length === 1 ? 'student' : 'students'}
+                  {courseData.totalEnrolledStudents}{' '}
+                  {courseData.totalEnrolledStudents === 1 ? 'student' : 'students'}
                 </span>
               </div>
 
@@ -219,17 +211,19 @@ const CourseDetails = () => {
                   <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-5">
                     <div className="flex items-center gap-1.5">
                       <Star className="w-3.5 h-3.5 fill-amber-400 stroke-amber-400" />
-                      <span className="font-medium text-gray-700 dark:text-gray-200">{rating}</span>
+                      <span className="font-medium text-gray-700 dark:text-gray-200">
+                        {courseData.averageRating}
+                      </span>
                     </div>
                     <div className="h-4 w-px bg-gray-200 dark:bg-gray-600" />
                     <div className="flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5" />
-                      <span>{calculateCourseDuration(courseData)}</span>
+                      <span>{humanizeDuration(courseData.totalDurationMinutes * 60 * 1000)}</span>
                     </div>
                     <div className="h-4 w-px bg-gray-200 dark:bg-gray-600" />
                     <div className="flex items-center gap-1.5">
                       <BookOpen className="w-3.5 h-3.5" />
-                      <span>{calculateNoOfLectures(courseData)} lessons</span>
+                      <span>{courseData.totalLectures} lessons</span>
                     </div>
                   </div>
 
@@ -276,7 +270,7 @@ const CourseDetails = () => {
                   {chapter.chapterTitle}
                 </span>
                 <Badge variant="secondary" className="ml-auto mr-3 shrink-0 text-xs font-normal">
-                  {chapter.chapterContent.length} lectures · {calculateChapterTime(chapter)}
+                  {chapter.chapterContent.length} lectures ·
                 </Badge>
               </AccordionTrigger>
               <AccordionContent>

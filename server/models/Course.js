@@ -35,9 +35,16 @@ const courseSchema = new mongoose.Schema(
 
     courseRatings: [{ userId: { type: String }, rating: { type: Number, min: 1, max: 5 } }],
 
+    averageRating: { type: Number, default: 0 },
+    totalRatings: { type: Number, default: 0 },
+
+    totalLectures: { type: Number, default: 0 },
+    totalDurationMinutes: { type: Number, default: 0 },
+
     educatorId: { type: String, ref: 'User', required: true },
 
     enrolledStudents: [{ type: String, ref: 'User' }],
+    totalEnrolledStudents: { type: Number, default: 0 },
   },
   { timestamps: true, minimize: false }
 )

@@ -9,16 +9,8 @@ import CoursesTab from '../../components/analytics/CoursesTab'
 import QuizzesTab from '../../components/analytics/QuizzesTab'
 
 const Analytics = () => {
-  const {
-    backendUrl,
-    getToken,
-    enrolledCourses,
-    calculateCourseDuration,
-    navigate,
-    userData,
-    fetchUserEnrolledCourses,
-    calculateNoOfLectures,
-  } = useContext(AppContext)
+  const { backendUrl, getToken, enrolledCourses, navigate, userData, fetchUserEnrolledCourses } =
+    useContext(AppContext)
   const { user } = useUser()
   const { openSignIn } = useClerk()
   const { search } = useLocation()
@@ -98,11 +90,10 @@ const Analytics = () => {
               { courseId: course._id },
               { headers: { Authorization: `Bearer ${token}` } }
             )
-            const totalLectures = calculateNoOfLectures(course)
             const lectureCompleted = data.progressData
               ? data.progressData.lectureCompleted.length
               : 0
-            return { totalLectures, lectureCompleted }
+            return { lectureCompleted }
           })
         )
         setProgressArray(result)
@@ -113,7 +104,7 @@ const Analytics = () => {
       }
     }
     fetchProgress()
-  }, [backendUrl, calculateNoOfLectures, enrolledCourses, getToken])
+  }, [backendUrl, enrolledCourses, getToken])
 
   if (!user) {
     return (
@@ -211,7 +202,6 @@ const Analytics = () => {
             coursesLoading={coursesLoading}
             inProgressCount={inProgressCount}
             completedCount={completedCount}
-            calculateCourseDuration={calculateCourseDuration}
             navigate={navigate}
           />
         )}

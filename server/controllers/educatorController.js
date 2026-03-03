@@ -20,6 +20,20 @@ export const addCourse = async (req, res) => {
     const { courseTitle, courseDescription, coursePrice, discount, courseContent, isPublished } =
       JSON.parse(courseData)
 
+    // Calculate total lectures and total duration
+    let totalLectures = 0
+    let totalDurationMinutes = 0
+
+    courseContent.forEach((chapter) => {
+      if (Array.isArray(chapter.chapterContent)) {
+        totalLectures += chapter.chapterContent.length
+
+        chapter.chapterContent.forEach((lecture) => {
+          totalDurationMinutes += lecture.lectureDuration
+        })
+      }
+    })
+
     const newCourse = await Course.create({
       courseTitle,
       courseDescription,
@@ -28,6 +42,8 @@ export const addCourse = async (req, res) => {
       courseContent,
       isPublished,
       educatorId,
+      totalLectures,
+      totalDurationMinutes,
     })
 
     const imageUpload = await cloudinary.uploader.upload(imageFile.path)

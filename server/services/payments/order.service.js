@@ -26,6 +26,7 @@ export const completePurchase = async (purchaseId, providerPaymentId) => {
   // Enroll user in course (addToSet prevents duplicates)
   await Course.findByIdAndUpdate(purchase.courseId, {
     $addToSet: { enrolledStudents: purchase.userId },
+    $inc: { totalEnrolledStudents: 1 },
   })
 
   await User.findByIdAndUpdate(purchase.userId, {

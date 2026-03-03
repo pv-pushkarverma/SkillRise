@@ -4,6 +4,7 @@ import helmet from 'helmet'
 import 'dotenv/config'
 import connectDB from './configs/mongodb.js'
 import { clerkWebhooks, razorpayWebhooks } from './controllers/webhooks.js'
+import { verifyCertificatePublic } from './controllers/userController.js'
 import educatorRouter from './routes/educatorRoutes.js'
 import adminRouter from './routes/adminRoutes.js'
 import { clerkMiddleware } from '@clerk/express'
@@ -103,6 +104,7 @@ const adminLimiter = makeLimiter(
 //Routes
 app.get('/', (_req, res) => res.send('API Working'))
 app.post('/clerk', clerkWebhooks)
+app.get('/api/certificate/verify/:certificateId', verifyCertificatePublic)
 
 // Each limiter is applied to its specific path BEFORE the router mounts.
 // Express runs middleware in order — so the limiter runs first, and only
