@@ -1,10 +1,11 @@
+import humanizeDuration from 'humanize-duration'
+
 const CoursesTab = ({
   enrolledCourses,
   progressArray,
   coursesLoading,
   inProgressCount,
   completedCount,
-  calculateCourseDuration,
   navigate,
 }) => (
   <>
@@ -52,7 +53,7 @@ const CoursesTab = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {enrolledCourses.map((course, idx) => {
           const prog = progressArray[idx]
-          const total = prog?.totalLectures || 0
+          const total = course.totalLectures || 0
           const completed = prog?.lectureCompleted || 0
           const pct = total > 0 ? Math.round((completed / total) * 100) : 0
           const isDone = pct === 100
@@ -62,14 +63,10 @@ const CoursesTab = ({
               key={course._id}
               className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
             >
-              <img
-                src={course.courseThumbnail}
-                alt=""
-                className="w-full aspect-video object-cover"
-              />
+              <img src={course.thumbnail} alt="" className="w-full aspect-video object-cover" />
               <div className="p-4 flex flex-col flex-1">
                 <h3 className="text-sm font-medium text-gray-800 dark:text-gray-100 line-clamp-2 mb-3 flex-1">
-                  {course.courseTitle}
+                  {course.title}
                 </h3>
 
                 {coursesLoading || !prog ? (
@@ -93,7 +90,7 @@ const CoursesTab = ({
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-400 dark:text-gray-500">
-                    {calculateCourseDuration(course)}
+                    {humanizeDuration(course.totalDurationMinutes * 60 * 1000)}
                   </span>
                   <div className="flex items-center gap-2">
                     {isDone && (

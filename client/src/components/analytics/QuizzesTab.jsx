@@ -114,12 +114,6 @@ const QuizzesTab = ({ quizHistory, quizLoading, navigate }) => {
                       year: 'numeric',
                     })}
                   </span>
-                  <button
-                    onClick={() => navigate(`/quiz/${attempt.courseId}/${attempt.chapterId}`)}
-                    className="text-xs px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition"
-                  >
-                    Retake
-                  </button>
                 </div>
               </div>
             )

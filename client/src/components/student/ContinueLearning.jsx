@@ -39,7 +39,7 @@ const ContinueLearning = () => {
       }
     }
     fetchProgress()
-  }, [user, enrolledCourses])
+  }, [user, enrolledCourses, getToken, backendUrl])
 
   // Only render for logged-in users with enrolled courses
   if (!user || enrolledCourses.length === 0) return null
@@ -78,7 +78,7 @@ const ContinueLearning = () => {
         >
           {display.map((course) => {
             const prog = progressMap[course._id]
-            const total = prog?.total || 0
+            const total = course.totalLectures || 0
             const completed = prog?.completed || 0
             const pct = total > 0 ? Math.round((completed / total) * 100) : 0
             const isDone = pct === 100

@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth, useUser } from '@clerk/clerk-react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AppContext = createContext()
 
 export const AppContextProvider = ({ children }) => {

@@ -50,8 +50,6 @@ const Player = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       if (data.success) {
-        console.log('Fetched course data:', data.courseData)
-        console.log('User rating for this course:', data.userRating)
         setCourseData(data.courseData)
         setInitialRating(data.userRating || 0)
       } else {
