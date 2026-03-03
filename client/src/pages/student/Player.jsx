@@ -17,8 +17,7 @@ const QUIZ_GROUP_CONFIG = {
 }
 
 const Player = () => {
-  const { enrolledCourses, backendUrl, getToken, userData, fetchUserEnrolledCourses, navigate } =
-    useContext(AppContext)
+  const { backendUrl, getToken, fetchUserEnrolledCourses, navigate } = useContext(AppContext)
 
   const { courseId } = useParams()
   const [courseData, setCourseData] = useState(null)
@@ -44,13 +43,23 @@ const Player = () => {
     localStorage.setItem(`lastPlayed_${courseId}`, JSON.stringify(lectureEntry))
   }
 
-  const getCourseData = () => {
-    if (!Array.isArray(enrolledCourses) || !userData?._id) return
-    const course = enrolledCourses.find((c) => c._id === courseId)
-    if (!course) return
-    setCourseData(course)
-    const userRating = course.courseRatings.find((r) => r.userId === userData._id)
-    if (userRating) setInitialRating(userRating.rating)
+  const getCourseData = async () => {
+    try {
+      const token = await getToken()
+      const { data } = await axios.get(backendUrl + `/api/user/enrolled-courses/${courseId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (data.success) {
+        console.log('Fetched course data:', data.courseData)
+        console.log('User rating for this course:', data.userRating)
+        setCourseData(data.courseData)
+        setInitialRating(data.userRating || 0)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   const markLectureAsCompleted = async (lectureId) => {
@@ -103,10 +112,7 @@ const Player = () => {
   }
 
   useEffect(() => {
-    if (Array.isArray(enrolledCourses) && enrolledCourses.length > 0) getCourseData()
-  }, [enrolledCourses]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
+    getCourseData()
     getCourseProgress()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -207,7 +213,7 @@ const Player = () => {
   if (!courseData) return <Loading />
 
   const completedCount = progressData?.lectureCompleted?.length || 0
-  const totalLectures = courseData.courseContent.reduce((s, c) => s + c.chapterContent.length, 0)
+  const totalLectures = courseData.totalLectures || 0
   const progressPct = totalLectures > 0 ? Math.round((completedCount / totalLectures) * 100) : 0
 
   return (
@@ -296,7 +302,7 @@ const Player = () => {
                 />
               </div>
               <p className="text-xs text-gray-400 mt-1.5">
-                {completedCount} of {totalLectures} lectures completed
+                {completedCount} of {courseData.totalLectures} lectures completed
               </p>
             </div>
 

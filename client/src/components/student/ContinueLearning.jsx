@@ -1,18 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { useUser } from '@clerk/clerk-react'
 import axios from 'axios'
+import humanizeDuration from 'humanize-duration'
 import { AppContext } from '../../context/AppContext'
 
 const ContinueLearning = () => {
   const { user } = useUser()
-  const {
-    enrolledCourses,
-    calculateNoOfLectures,
-    calculateCourseDuration,
-    backendUrl,
-    getToken,
-    navigate,
-  } = useContext(AppContext)
+  const { enrolledCourses, backendUrl, getToken, navigate } = useContext(AppContext)
 
   const [progressMap, setProgressMap] = useState({})
   const [loading, setLoading] = useState(false)
@@ -30,12 +24,11 @@ const ContinueLearning = () => {
               { courseId: course._id },
               { headers: { Authorization: `Bearer ${token}` } }
             )
-            const total = calculateNoOfLectures(course)
             const completed = data.progressData ? data.progressData.lectureCompleted.length : 0
             const updatedAt = data.progressData?.updatedAt
               ? new Date(data.progressData.updatedAt)
               : null
-            return [course._id, { total, completed, updatedAt }]
+            return [course._id, { completed, updatedAt }]
           })
         )
         setProgressMap(Object.fromEntries(entries))
@@ -96,14 +89,14 @@ const ContinueLearning = () => {
                 className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
               >
                 <img
-                  src={course.courseThumbnail}
+                  src={course.thumbnail}
                   alt=""
                   className="w-full aspect-video object-cover cursor-pointer"
                   onClick={() => navigate('/player/' + course._id)}
                 />
                 <div className="p-4 flex flex-col flex-1">
                   <h3 className="text-sm font-medium text-gray-800 dark:text-gray-100 line-clamp-2 mb-3 flex-1">
-                    {course.courseTitle}
+                    {course.title}
                   </h3>
 
                   {loading || !prog ? (
@@ -112,7 +105,7 @@ const ContinueLearning = () => {
                     <div className="mb-4">
                       <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                         <span>
-                          {completed} / {total} lectures
+                          {completed} / {course.totalLectures} lectures
                         </span>
                         <span className="font-semibold text-gray-700 dark:text-gray-200">
                           {pct}%
@@ -128,7 +121,11 @@ const ContinueLearning = () => {
                   )}
 
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-400">{calculateCourseDuration(course)}</span>
+                    <span className="text-xs text-gray-400">
+                      {humanizeDuration(course.totalDurationMinutes * 60 * 1000, {
+                        units: ['h', 'm'],
+                      })}
+                    </span>
                     <button
                       onClick={() => navigate('/player/' + course._id)}
                       className="px-3 py-1.5 bg-teal-600 text-white text-xs rounded-lg hover:bg-teal-700 transition font-medium"

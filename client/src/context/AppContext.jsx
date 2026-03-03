@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import humanizeDuration from 'humanize-duration'
 import { useAuth, useUser } from '@clerk/clerk-react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -59,41 +58,6 @@ export const AppContextProvider = ({ children }) => {
     }
   }
 
-  //calculate course rating
-  const calculateRating = (course) => {
-    if (course.courseRatings.length === 0) return 0
-    const total = course.courseRatings.reduce((sum, r) => sum + r.rating, 0)
-    return Math.floor(total / course.courseRatings.length)
-  }
-
-  //Function to calculate course chapter time
-  const calculateChapterTime = (chapter) => {
-    const time = chapter.chapterContent.reduce((sum, lec) => sum + lec.lectureDuration, 0)
-    return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] })
-  }
-
-  //Function to calculate course duration
-  const calculateCourseDuration = (course) => {
-    const time = course.courseContent.reduce(
-      (sum, chapter) => sum + chapter.chapterContent.reduce((s, lec) => s + lec.lectureDuration, 0),
-      0
-    )
-    return humanizeDuration(time * 60 * 1000, { units: ['h', 'm'] })
-  }
-
-  //Function to calculate number of lectures in course
-  const calculateNoOfLectures = (course) => {
-    let totalLectures = 0
-
-    course.courseContent.forEach((chapter) => {
-      if (Array.isArray(chapter.chapterContent)) {
-        totalLectures += chapter.chapterContent.length
-      }
-    })
-
-    return totalLectures
-  }
-
   //Fetch Educator Application Status
   const fetchApplicationStatus = async () => {
     try {
@@ -144,21 +108,17 @@ export const AppContextProvider = ({ children }) => {
   }, [user])
 
   const value = {
-    allCourses,
     navigate,
-    calculateRating,
     isEducator,
     isAdmin,
-    calculateChapterTime,
-    calculateCourseDuration,
-    calculateNoOfLectures,
+    getToken,
+    userData,
+    setUserData,
+    allCourses,
+    fetchAllCourses,
     enrolledCourses,
     fetchUserEnrolledCourses,
     backendUrl,
-    userData,
-    setUserData,
-    getToken,
-    fetchAllCourses,
     applicationStatus,
     setApplicationStatus,
   }

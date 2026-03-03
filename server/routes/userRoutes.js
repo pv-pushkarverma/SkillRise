@@ -2,6 +2,8 @@ import express from 'express'
 import { requireAuth } from '@clerk/express'
 import {
   addUserRating,
+  generateCertificate,
+  getEnrolledCourseData,
   getUserCourseProgress,
   getUserData,
   purchaseCourse,
@@ -24,11 +26,13 @@ userRouter.use(requireAuth())
 
 userRouter.get('/data', getUserData)
 userRouter.get('/enrolled-courses', userEnrolledCourses)
+userRouter.get('/enrolled-courses/:courseId', getEnrolledCourseData)
 userRouter.get('/analytics', getAnalytics)
 userRouter.post('/purchase', purchaseCourse)
 
 userRouter.post('/update-course-progress', updateUserCourseProgress)
 userRouter.post('/get-course-progress', getUserCourseProgress)
+userRouter.post('/generate-certificate', generateCertificate)
 userRouter.post('/add-rating', addUserRating)
 userRouter.post('/track-time', trackTime)
 userRouter.post('/generate-personal-roadmap', generatePersonalRoadmap)

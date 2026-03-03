@@ -4,12 +4,11 @@ import Course from '../models/Course.js'
 export const getAllCourse = async (req, res) => {
   try {
     const courses = await Course.find({ isPublished: true })
-      .select(['-courseContent', '-enrolledStudents'])
+      .select(['-courseContent', '-courseRatings', '-enrolledStudents'])
       .populate({ path: 'educatorId', select: 'name imageUrl' })
 
-    const safeCourses = courses.map((c) => {
-      const obj = c.toObject()
-      obj.courseRatings = obj.courseRatings.map(({ rating }) => ({ rating }))
+    const safeCourses = courses.map((course) => {
+      const obj = course.toObject()
       return obj
     })
 
@@ -31,10 +30,12 @@ export const getCourseById = async (req, res) => {
   const { id } = req.params
 
   try {
-    const courseData = await Course.findById(id).populate({
-      path: 'educatorId',
-      select: 'name imageUrl',
-    })
+    const courseData = await Course.findById(id)
+      .select(['-courseRatings', '-enrolledStudents'])
+      .populate({
+        path: 'educatorId',
+        select: 'name imageUrl',
+      })
 
     if (!courseData) return res.json({ success: false, message: 'Course not found' })
 
@@ -46,12 +47,9 @@ export const getCourseById = async (req, res) => {
       })
     })
 
-    const courseObj = courseData.toObject()
-    courseObj.courseRatings = courseObj.courseRatings.map(({ rating }) => ({ rating }))
-
     res.json({
       success: true,
-      courseData: courseObj,
+      courseData,
     })
   } catch (error) {
     console.error(error)

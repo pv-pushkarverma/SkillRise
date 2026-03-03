@@ -1,13 +1,8 @@
-import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Star } from 'lucide-react'
-import { AppContext } from '../../context/AppContext'
 import { Badge } from '../ui/badge'
 
 const CourseCard = ({ course }) => {
-  const { calculateRating } = useContext(AppContext)
-
-  const rating = calculateRating(course)
   const educatorName =
     (course && typeof course.educatorId === 'object' && course.educatorId?.name) ||
     course?.educatorName ||
@@ -16,8 +11,6 @@ const CourseCard = ({ course }) => {
 
   const price =
     typeof course?.coursePrice === 'number' ? course.coursePrice : Number(course?.coursePrice ?? 0)
-
-  const fullStars = Math.floor(rating)
 
   return (
     <Link
@@ -36,21 +29,21 @@ const CourseCard = ({ course }) => {
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{educatorName}</p>
 
         <div className="flex items-center gap-1.5 mt-3">
-          <p className="text-sm font-medium text-gray-900 dark:text-white">{rating}</p>
+          <p className="text-sm font-medium text-gray-900 dark:text-white">
+            {course.averageRating}
+          </p>
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
                 className="w-3.5 h-3.5"
-                fill={i < fullStars ? '#f59e0b' : 'none'}
-                stroke={i < fullStars ? '#f59e0b' : '#d1d5db'}
+                fill={i < course.averageRating ? '#f59e0b' : 'none'}
+                stroke={i < course.averageRating ? '#f59e0b' : '#d1d5db'}
                 strokeWidth={1.5}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            ({course.courseRatings.length})
-          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">({course.totalRatings})</p>
         </div>
 
         <div className="mt-4 flex items-center justify-between">
