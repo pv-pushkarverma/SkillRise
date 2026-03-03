@@ -42,6 +42,65 @@ const VerifyRazorpayBodySchema = z.object({
   purchaseId: z.string().min(1),
 })
 
+const uploadPdfBuffer = async (buffer, publicId) =>
+  new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: 'skillrise/certificates',
+        public_id: publicId,
+        resource_type: 'raw',
+        format: 'pdf',
+      },
+      (error, result) => {
+        if (error) return reject(error)
+        resolve(result)
+      }
+    )
+
+    const pdfChunk = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer)
+    stream.end(pdfChunk)
+  })
+
+const getBackendPublicUrl = () =>
+  (
+    process.env.BACKEND_PUBLIC_URL ||
+    process.env.VITE_BACKEND_URL ||
+    'http://localhost:3000'
+  ).replace(/\/$/, '')
+
+const ensureCertificate = async ({ userId, courseId, courseTitle, studentName }) => {
+  const existing = await Certificate.findOne({ userId, courseId })
+  if (existing) return { certificate: existing, created: false }
+
+  const certificateId = uuidv4()
+  const issuedAt = new Date().toLocaleDateString()
+  const verificationUrl = `${getBackendPublicUrl()}/api/certificate/verify/${encodeURIComponent(certificateId)}`
+
+  const certificateHtml = generateCertificateHtml({
+    studentName,
+    courseTitle,
+    certificateId,
+    issuedAt,
+    verificationUrl,
+  })
+
+  const pdfBuffer = await generatePdfBuffer(certificateHtml)
+  const uploadResult = await uploadPdfBuffer(
+    pdfBuffer,
+    `${courseId}-${userId}-${certificateId.replace(/-/g, '')}`
+  )
+
+  const certificate = await Certificate.create({
+    userId,
+    courseId,
+    certificateId,
+    pdfUrl: uploadResult.secure_url,
+    issuedAt: new Date(),
+  })
+
+  return { certificate, created: true }
+}
+
 //Get User Data
 export const getUserData = async (req, res) => {
   try {
@@ -175,9 +234,46 @@ export const updateUserCourseProgress = async (req, res) => {
       }
     )
 
+    const course = await Course.findById(courseId).select(
+      'courseTitle totalLectures courseContent enrolledStudents'
+    )
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' })
+    }
+
+    const isEnrolled = course.enrolledStudents.some((studentId) => studentId === userId)
+    if (!isEnrolled) {
+      return res.status(403).json({ success: false, message: 'Course not purchased' })
+    }
+
+    const totalLectures = course.totalLectures
+    const completedCount = progressData.lectureCompleted.length
+    const isCourseCompleted = totalLectures > 0 && completedCount >= totalLectures
+    let certificateAvailable = false
+
+    if (isCourseCompleted) {
+      if (!progressData.completed) {
+        progressData.completed = true
+        await progressData.save()
+      }
+
+      const user = await User.findById(userId).select('name')
+      if (user) {
+        const certResult = await ensureCertificate({
+          userId,
+          courseId,
+          courseTitle: course.courseTitle,
+          studentName: user.name,
+        })
+        certificateAvailable = Boolean(certResult.certificate?.pdfUrl)
+      }
+    }
+
     res.json({
       success: true,
       message: 'Progress Updated',
+      isCourseCompleted,
+      certificateAvailable,
     })
   } catch (error) {
     console.error(error)
@@ -214,72 +310,99 @@ export const getUserCourseProgress = async (req, res) => {
   }
 }
 
-// Generate Certificate (PDF)
-export const generateCertificate = async (req, res) => {
+// Get existing certificate for completed course
+export const getCertificate = async (req, res) => {
   try {
     const userId = req.auth.userId
-    const { courseId } = req.body
+    const { courseId } = req.params
 
-    const course = await Course.findById(courseId)
+    const course = await Course.findById(courseId).select(
+      'courseTitle totalLectures courseContent enrolledStudents'
+    )
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' })
     }
 
-    const user = await User.findById(userId).select('name')
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' })
+    const isEnrolled = course.enrolledStudents.some((studentId) => studentId === userId)
+    if (!isEnrolled) {
+      return res.status(403).json({ success: false, message: 'Course not purchased' })
     }
 
     const progress = await CourseProgress.findOne({ userId, courseId })
-    if (!progress) {
-      return res.status(403).json({ success: false, message: 'Course not completed yet' })
+    const totalLectures = course.totalLectures
+
+    if (!progress || totalLectures === 0 || progress.lectureCompleted.length < totalLectures) {
+      return res.status(404).json({ success: false, message: 'Certificate not available yet' })
     }
 
-    const totalLectures = course.lectures.length // adjust if nested
-
-    if (progress.lectureCompleted.length !== totalLectures) {
-      return res.status(403).json({ success: false, message: 'Course not completed yet' })
+    if (!progress.completed) {
+      progress.completed = true
+      await progress.save()
     }
 
-    const existing = await Certificate.findOne({ userId, courseId })
-    if (existing) {
-      return res.json({
-        success: true,
-        message: 'Certificate already generated',
-        certificate: existing,
+    let certificate = await Certificate.findOne({ userId, courseId })
+
+    // Fallback self-heal: if the record was deleted after completion,
+    // regenerate the certificate on demand.
+    if (!certificate) {
+      const user = await User.findById(userId).select('name')
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' })
+      }
+
+      const certResult = await ensureCertificate({
+        userId,
+        courseId,
+        courseTitle: course.courseTitle,
+        studentName: user.name,
       })
+      certificate = certResult.certificate
     }
-
-    const certificateId = uuidv4()
-    const issuedAt = new Date().toLocaleDateString()
-
-    const certificateHtml = generateCertificateHtml({
-      studentName: user.name,
-      courseTitle: course.courseTitle,
-      certificateId,
-      issuedAt,
-    })
-
-    const pdfBuffer = await generatePdfBuffer(certificateHtml)
-
-    const uploadResult = await cloudinary.uploader.upload(pdfBuffer)
-
-    const certificate = await Certificate.create({
-      userId,
-      courseId,
-      certificateId,
-      pdfUrl: uploadResult.secure_url,
-      issuedAt: new Date(),
-    })
 
     return res.json({
       success: true,
-      message: 'Certificate generated successfully',
-      certificate,
+      message: 'Certificate fetched successfully',
+      pdfUrl: certificate.pdfUrl,
     })
   } catch (error) {
     console.error(error)
     res.status(500).json({ success: false, message: 'An unexpected error occurred' })
+  }
+}
+
+// Public endpoint for QR verification (no auth required)
+export const verifyCertificatePublic = async (req, res) => {
+  try {
+    const { certificateId } = req.params
+
+    const certificate = await Certificate.findOne({ certificateId }).lean()
+    if (!certificate) {
+      return res.status(404).json({
+        success: false,
+        valid: false,
+        message: 'Certificate not found',
+      })
+    }
+
+    const [user, course] = await Promise.all([
+      User.findById(certificate.userId).select('name').lean(),
+      Course.findById(certificate.courseId).select('courseTitle').lean(),
+    ])
+
+    return res.json({
+      success: true,
+      valid: true,
+      certificate: {
+        certificateId: certificate.certificateId,
+        studentName: user?.name || 'Unknown',
+        courseTitle: course?.courseTitle || 'Unknown',
+        completionDate: certificate.issuedAt,
+        issuedAt: certificate.issuedAt,
+      },
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, valid: false, message: 'Internal server error' })
   }
 }
 

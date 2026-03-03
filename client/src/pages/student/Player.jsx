@@ -26,6 +26,7 @@ const Player = () => {
   const [progressData, setProgressData] = useState(undefined)
   const [initialRating, setInitialRating] = useState(0)
   const [quizResultsMap, setQuizResultsMap] = useState({}) // chapterId -> last result
+  const [certificateLoading, setCertificateLoading] = useState(false)
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }))
@@ -61,6 +62,8 @@ const Player = () => {
   }
 
   const markLectureAsCompleted = async (lectureId) => {
+    if (progressData?.lectureCompleted?.includes(lectureId)) return
+
     try {
       const token = await getToken()
       const { data } = await axios.post(
@@ -70,10 +73,41 @@ const Player = () => {
       )
       if (data.success) {
         toast.success(data.message)
+        if (data.isCourseCompleted && data.certificateAvailable) {
+          toast.success('Course completed. Certificate ready.')
+        }
         getCourseProgress()
       } else toast.error(data.message)
     } catch (error) {
       toast.error(error.message)
+    }
+  }
+
+  const viewCertificate = async () => {
+    try {
+      setCertificateLoading(true)
+      const token = await getToken()
+      const { data } = await axios.get(`${backendUrl}/api/user/certificate/${courseId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      if (!data.success) {
+        toast.error(data.message)
+        return
+      }
+
+      toast.success(data.message)
+      if (data.pdfUrl) {
+        window.open(data.pdfUrl, '_blank', 'noopener,noreferrer')
+      }
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        toast.info(error?.response?.data?.message || 'Certificate not available yet')
+      } else {
+        toast.error(error.message)
+      }
+    } finally {
+      setCertificateLoading(false)
     }
   }
 
@@ -263,9 +297,10 @@ const Player = () => {
                 </div>
                 <button
                   onClick={() => markLectureAsCompleted(playerData.lectureId)}
+                  disabled={progressData?.lectureCompleted?.includes(playerData.lectureId)}
                   className={`shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition ${
                     progressData?.lectureCompleted?.includes(playerData.lectureId)
-                      ? 'bg-teal-50 text-teal-700 border border-teal-100 cursor-default'
+                      ? 'bg-teal-50 text-teal-700 border border-teal-100 cursor-not-allowed'
                       : 'bg-teal-600 hover:bg-teal-700 text-white'
                   }`}
                 >
@@ -303,6 +338,28 @@ const Player = () => {
                 {completedCount} of {courseData.totalLectures} lectures completed
               </p>
             </div>
+
+            {progressPct === 100 && (
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 mb-3">
+                <p className="text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                  Certificate
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                  View your course completion certificate.
+                </p>
+                <button
+                  onClick={viewCertificate}
+                  disabled={certificateLoading}
+                  className={`w-full py-2 rounded-lg text-sm font-semibold transition ${
+                    certificateLoading
+                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                      : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                  }`}
+                >
+                  {certificateLoading ? 'Opening...' : 'View Certificate'}
+                </button>
+              </div>
+            )}
 
             {/* Chapter list */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
