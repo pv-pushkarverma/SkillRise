@@ -5,15 +5,23 @@ export const generatePdfBuffer = async (htmlContent) => {
     headless: 'new',
   })
 
-  const page = await browser.newPage()
-  await page.setContent(htmlContent, { waitUntil: 'networkidle0' })
+  try {
+    const page = await browser.newPage()
+    await page.setContent(htmlContent, {
+      // Do not block certificate generation on external QR image/network calls.
+      waitUntil: 'domcontentloaded',
+      timeout: 15000,
+    })
 
-  const pdfBuffer = await page.pdf({
-    format: 'A4',
-    printBackground: true,
-  })
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      landscape: true,
+      printBackground: true,
+      preferCSSPageSize: true,
+    })
 
-  await browser.close()
-
-  return pdfBuffer
+    return pdfBuffer
+  } finally {
+    await browser.close()
+  }
 }
