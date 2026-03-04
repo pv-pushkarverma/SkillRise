@@ -297,7 +297,6 @@ const Player = () => {
                 </div>
                 <button
                   onClick={() => markLectureAsCompleted(playerData.lectureId)}
-                  disabled={progressData?.lectureCompleted?.includes(playerData.lectureId)}
                   className={`shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition ${
                     progressData?.lectureCompleted?.includes(playerData.lectureId)
                       ? 'bg-teal-50 text-teal-700 border border-teal-100 cursor-not-allowed'
