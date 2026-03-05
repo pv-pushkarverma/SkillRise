@@ -2,7 +2,9 @@ import express from 'express'
 import { requireAuth } from '@clerk/express'
 import {
   addUserRating,
+  checkCertificate,
   getCertificate,
+  generateCertificate,
   getEnrolledCourseData,
   getUserCourseProgress,
   getUserData,
@@ -32,6 +34,8 @@ userRouter.post('/purchase', purchaseCourse)
 
 userRouter.post('/update-course-progress', updateUserCourseProgress)
 userRouter.post('/get-course-progress', getUserCourseProgress)
+userRouter.get('/certificate/check/:courseId', checkCertificate)
+userRouter.post('/certificate/generate/:courseId', generateCertificate)
 userRouter.get('/certificate/:courseId', getCertificate)
 userRouter.post('/add-rating', addUserRating)
 userRouter.post('/track-time', trackTime)

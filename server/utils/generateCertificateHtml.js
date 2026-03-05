@@ -208,6 +208,14 @@ export const generateCertificateHtml = ({
             color: #3f5673;
           }
 
+          .verify-url {
+            margin: 1.5mm 0 0;
+            font-size: 10px;
+            color: #0f766e;
+            font-family: "Courier New", Courier, monospace;
+            word-break: break-all;
+          }
+
           .qr-wrap {
             text-align: center;
           }
@@ -327,8 +335,9 @@ export const generateCertificateHtml = ({
                   <div>
                     <p class="verify-title">Certificate Authenticity</p>
                     <p class="verify-text">
-                      Scan QR to verify this certificate.
+                      Scan QR to verify this certificate. If QR is unavailable, use this URL:
                     </p>
+                    <p class="verify-url">${safe(verifyTarget)}</p>
                   </div>
                   <div class="qr-wrap">
                     <img class="qr" src="${qrUrl}" alt="Certificate verification QR" />

@@ -27,6 +27,7 @@ const Player = () => {
   const [initialRating, setInitialRating] = useState(0)
   const [quizResultsMap, setQuizResultsMap] = useState({}) // chapterId -> last result
   const [certificateLoading, setCertificateLoading] = useState(false)
+  const [hasFetchedCertificate, setHasFetchedCertificate] = useState(false)
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }))
@@ -62,6 +63,7 @@ const Player = () => {
   }
 
   const markLectureAsCompleted = async (lectureId) => {
+    if (!lectureId) return
     if (progressData?.lectureCompleted?.includes(lectureId)) return
 
     try {
@@ -73,13 +75,12 @@ const Player = () => {
       )
       if (data.success) {
         toast.success(data.message)
-        if (data.isCourseCompleted && data.certificateAvailable) {
-          toast.success('Course completed. Certificate ready.')
-        }
+        if (data.isCourseCompleted)
+          toast.success('Course completed. You can now get your certificate.')
         getCourseProgress()
       } else toast.error(data.message)
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error?.response?.data?.message || error.message)
     }
   }
 
@@ -87,27 +88,58 @@ const Player = () => {
     try {
       setCertificateLoading(true)
       const token = await getToken()
-      const { data } = await axios.get(`${backendUrl}/api/user/certificate/${courseId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      const { data } = hasFetchedCertificate
+        ? await axios.get(`${backendUrl}/api/user/certificate/${courseId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+        : await axios.post(
+            `${backendUrl}/api/user/certificate/generate/${courseId}`,
+            {},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
 
       if (!data.success) {
         toast.error(data.message)
         return
       }
 
+      if (!hasFetchedCertificate && data.created)
+        toast.success('Certificate generated successfully.')
       toast.success(data.message)
+      setHasFetchedCertificate(true)
       if (data.pdfUrl) {
         window.open(data.pdfUrl, '_blank', 'noopener,noreferrer')
       }
     } catch (error) {
       if (error?.response?.status === 404) {
-        toast.info(error?.response?.data?.message || 'Certificate not available yet')
+        toast.info(
+          error?.response?.data?.message ||
+            (hasFetchedCertificate
+              ? 'Certificate not found. Try generating again.'
+              : 'Certificate not available yet')
+        )
       } else {
-        toast.error(error.message)
+        toast.error(error?.response?.data?.message || error.message)
       }
     } finally {
       setCertificateLoading(false)
+    }
+  }
+
+  const checkCertificate = async () => {
+    try {
+      const token = await getToken()
+      const { data } = await axios.get(`${backendUrl}/api/user/certificate/check/${courseId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+
+      if (data.success) {
+        setHasFetchedCertificate(Boolean(data.certificateExists))
+      }
+    } catch {
+      // Silent fallback: keep default CTA and let on-demand generation handle it.
     }
   }
 
@@ -147,6 +179,21 @@ const Player = () => {
     getCourseData()
     getCourseProgress()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!courseData || progressData === undefined) return
+
+    const totalLectures = courseData.totalLectures || 0
+    const completedCount = progressData?.lectureCompleted?.length || 0
+    const isCompleted = totalLectures > 0 && completedCount >= totalLectures
+
+    if (!isCompleted) {
+      setHasFetchedCertificate(false)
+      return
+    }
+
+    checkCertificate()
+  }, [courseData, progressData, courseId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Fetch all quiz results for this course once on mount
   useEffect(() => {
@@ -297,6 +344,11 @@ const Player = () => {
                 </div>
                 <button
                   onClick={() => markLectureAsCompleted(playerData.lectureId)}
+                  disabled={
+                    !playerData?.lectureId ||
+                    progressData === undefined ||
+                    progressData?.lectureCompleted?.includes(playerData.lectureId)
+                  }
                   className={`shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition ${
                     progressData?.lectureCompleted?.includes(playerData.lectureId)
                       ? 'bg-teal-50 text-teal-700 border border-teal-100 cursor-not-allowed'
@@ -344,7 +396,7 @@ const Player = () => {
                   Certificate
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                  View your course completion certificate.
+                  Get your course completion certificate.
                 </p>
                 <button
                   onClick={viewCertificate}
@@ -355,7 +407,11 @@ const Player = () => {
                       : 'bg-indigo-600 hover:bg-indigo-700 text-white'
                   }`}
                 >
-                  {certificateLoading ? 'Opening...' : 'View Certificate'}
+                  {certificateLoading
+                    ? 'Opening...'
+                    : hasFetchedCertificate
+                      ? 'View Certificate'
+                      : 'Get Certificate'}
                 </button>
               </div>
             )}
