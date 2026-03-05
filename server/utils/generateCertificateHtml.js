@@ -4,6 +4,7 @@ export const generateCertificateHtml = ({
   certificateId,
   issuedAt,
   verificationUrl,
+  qrDataUrl,
 }) => {
   const safe = (value) =>
     String(value)
@@ -40,7 +41,7 @@ export const generateCertificateHtml = ({
 
   const verifyTarget =
     verificationUrl || `https://skillrise.app/verify/${encodeURIComponent(certificateId)}`
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=0&data=${encodeURIComponent(verifyTarget)}`
+  const qrSrc = qrDataUrl
 
   return `
     <html>
@@ -340,7 +341,7 @@ export const generateCertificateHtml = ({
                     <p class="verify-url">${safe(verifyTarget)}</p>
                   </div>
                   <div class="qr-wrap">
-                    <img class="qr" src="${qrUrl}" alt="Certificate verification QR" />
+                    <img class="qr" src="${qrSrc}" alt="Certificate verification QR" />
                     <p class="qr-caption">Scan to verify</p>
                   </div>
                 </div>

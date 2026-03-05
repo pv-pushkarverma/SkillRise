@@ -11,6 +11,7 @@ import {
 import { completePurchase } from '../services/payments/order.service.js'
 import { generateCertificateHtml } from '../utils/generateCertificateHtml.js'
 import { generatePdfBuffer } from '../utils/generatePdf.js'
+import QRCode from 'qrcode'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import { ca } from 'zod/v4/locales'
@@ -61,6 +62,15 @@ const uploadPdfBuffer = async (buffer, publicId) =>
     stream.end(pdfChunk)
   })
 
+const toQrDataUrl = async (verificationUrl) => {
+  return QRCode.toDataURL(verificationUrl, {
+    type: 'image/png',
+    margin: 0,
+    width: 180,
+    errorCorrectionLevel: 'M',
+  })
+}
+
 const ensureCertificate = async ({ userId, courseId, courseTitle, studentName }) => {
   const existing = await Certificate.findOne({ userId, courseId })
   if (existing) return { certificate: existing, created: false }
@@ -69,6 +79,10 @@ const ensureCertificate = async ({ userId, courseId, courseTitle, studentName })
   const issuedAt = new Date().toLocaleDateString()
   const backendUrl = (process.env.BACKEND_URL || 'http://localhost:3000').replace(/\/$/, '')
   const verificationUrl = `${backendUrl}/api/certificate/verify/${encodeURIComponent(certificateId)}`
+  const qrDataUrl = await toQrDataUrl(verificationUrl)
+  if (!qrDataUrl) {
+    throw new Error('QR code generation failed')
+  }
 
   const certificateHtml = generateCertificateHtml({
     studentName,
@@ -76,6 +90,7 @@ const ensureCertificate = async ({ userId, courseId, courseTitle, studentName })
     certificateId,
     issuedAt,
     verificationUrl,
+    qrDataUrl,
   })
 
   const pdfBuffer = await generatePdfBuffer(certificateHtml)
