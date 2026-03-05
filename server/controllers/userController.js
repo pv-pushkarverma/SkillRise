@@ -61,20 +61,14 @@ const uploadPdfBuffer = async (buffer, publicId) =>
     stream.end(pdfChunk)
   })
 
-const getBackendPublicUrl = () =>
-  (
-    process.env.BACKEND_PUBLIC_URL ||
-    process.env.VITE_BACKEND_URL ||
-    'http://localhost:3000'
-  ).replace(/\/$/, '')
-
 const ensureCertificate = async ({ userId, courseId, courseTitle, studentName }) => {
   const existing = await Certificate.findOne({ userId, courseId })
   if (existing) return { certificate: existing, created: false }
 
   const certificateId = uuidv4()
   const issuedAt = new Date().toLocaleDateString()
-  const verificationUrl = `${getBackendPublicUrl()}/api/certificate/verify/${encodeURIComponent(certificateId)}`
+  const backendUrl = (process.env.BACKEND_URL || 'http://localhost:3000').replace(/\/$/, '')
+  const verificationUrl = `${backendUrl}/api/certificate/verify/${encodeURIComponent(certificateId)}`
 
   const certificateHtml = generateCertificateHtml({
     studentName,
@@ -223,17 +217,6 @@ export const updateUserCourseProgress = async (req, res) => {
     }
     const { courseId, lectureId } = bodyResult.data
 
-    const progressData = await CourseProgress.findOneAndUpdate(
-      { userId, courseId },
-      {
-        $addToSet: { lectureCompleted: lectureId },
-      },
-      {
-        new: true,
-        upsert: true,
-      }
-    )
-
     const course = await Course.findById(courseId).select(
       'courseTitle totalLectures courseContent enrolledStudents'
     )
@@ -246,26 +229,33 @@ export const updateUserCourseProgress = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Course not purchased' })
     }
 
-    const totalLectures = course.totalLectures
+    const lectureIds = course.courseContent.flatMap((chapter) =>
+      chapter.chapterContent.map((lecture) => lecture.lectureId)
+    )
+
+    if (!lectureIds.includes(lectureId)) {
+      return res.status(400).json({ success: false, message: 'Invalid lecture for this course' })
+    }
+
+    const progressData = await CourseProgress.findOneAndUpdate(
+      { userId, courseId },
+      {
+        $addToSet: { lectureCompleted: lectureId },
+      },
+      {
+        new: true,
+        upsert: true,
+      }
+    )
+
+    const totalLectures = course.totalLectures || lectureIds.length
     const completedCount = progressData.lectureCompleted.length
     const isCourseCompleted = totalLectures > 0 && completedCount >= totalLectures
-    let certificateAvailable = false
 
     if (isCourseCompleted) {
       if (!progressData.completed) {
         progressData.completed = true
         await progressData.save()
-      }
-
-      const user = await User.findById(userId).select('name')
-      if (user) {
-        const certResult = await ensureCertificate({
-          userId,
-          courseId,
-          courseTitle: course.courseTitle,
-          studentName: user.name,
-        })
-        certificateAvailable = Boolean(certResult.certificate?.pdfUrl)
       }
     }
 
@@ -273,7 +263,6 @@ export const updateUserCourseProgress = async (req, res) => {
       success: true,
       message: 'Progress Updated',
       isCourseCompleted,
-      certificateAvailable,
     })
   } catch (error) {
     console.error(error)
@@ -310,14 +299,14 @@ export const getUserCourseProgress = async (req, res) => {
   }
 }
 
-// Get existing certificate for completed course
-export const getCertificate = async (req, res) => {
+// Check certificate availability without generating a new certificate
+export const checkCertificate = async (req, res) => {
   try {
     const userId = req.auth.userId
     const { courseId } = req.params
 
     const course = await Course.findById(courseId).select(
-      'courseTitle totalLectures courseContent enrolledStudents'
+      'totalLectures courseContent enrolledStudents'
     )
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' })
@@ -328,22 +317,73 @@ export const getCertificate = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Course not purchased' })
     }
 
-    const progress = await CourseProgress.findOne({ userId, courseId })
-    const totalLectures = course.totalLectures
+    const totalLectures =
+      course.totalLectures ||
+      course.courseContent.reduce((acc, chapter) => acc + chapter.chapterContent.length, 0)
+    const progress = await CourseProgress.findOne({ userId, courseId }).select('lectureCompleted')
+    const completedCount = progress?.lectureCompleted?.length || 0
+    const eligible = totalLectures > 0 && completedCount >= totalLectures
 
-    if (!progress || totalLectures === 0 || progress.lectureCompleted.length < totalLectures) {
-      return res.status(404).json({ success: false, message: 'Certificate not available yet' })
+    if (!eligible) {
+      return res.json({ success: true, eligible: false, certificateExists: false })
     }
 
-    if (!progress.completed) {
-      progress.completed = true
-      await progress.save()
+    const certificate = await Certificate.findOne({ userId, courseId }).select('_id')
+    return res.json({
+      success: true,
+      eligible: true,
+      certificateExists: Boolean(certificate),
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
+  }
+}
+
+const getCertificateEligibility = async ({ userId, courseId }) => {
+  const course = await Course.findById(courseId).select(
+    'courseTitle totalLectures courseContent enrolledStudents'
+  )
+  if (!course) {
+    return { ok: false, status: 404, message: 'Course not found' }
+  }
+
+  const isEnrolled = course.enrolledStudents.some((studentId) => studentId === userId)
+  if (!isEnrolled) {
+    return { ok: false, status: 403, message: 'Course not purchased' }
+  }
+
+  const totalLectures =
+    course.totalLectures ||
+    course.courseContent.reduce((acc, chapter) => acc + chapter.chapterContent.length, 0)
+  const progress = await CourseProgress.findOne({ userId, courseId })
+
+  if (!progress || totalLectures === 0 || progress.lectureCompleted.length < totalLectures) {
+    return { ok: false, status: 404, message: 'Certificate not available yet' }
+  }
+
+  if (!progress.completed) {
+    progress.completed = true
+    await progress.save()
+  }
+
+  return { ok: true, course, progress }
+}
+
+// Generate certificate on demand (write endpoint)
+export const generateCertificate = async (req, res) => {
+  try {
+    const userId = req.auth.userId
+    const { courseId } = req.params
+
+    const eligibility = await getCertificateEligibility({ userId, courseId })
+    if (!eligibility.ok) {
+      return res.status(eligibility.status).json({ success: false, message: eligibility.message })
     }
 
+    const { course } = eligibility
     let certificate = await Certificate.findOne({ userId, courseId })
-
-    // Fallback self-heal: if the record was deleted after completion,
-    // regenerate the certificate on demand.
+    let created = false
     if (!certificate) {
       const user = await User.findById(userId).select('name')
       if (!user) {
@@ -357,6 +397,38 @@ export const getCertificate = async (req, res) => {
         studentName: user.name,
       })
       certificate = certResult.certificate
+      created = true
+    }
+
+    return res.json({
+      success: true,
+      created,
+      message: created ? 'Certificate generated successfully' : 'Certificate already exists',
+      pdfUrl: certificate.pdfUrl,
+    })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, message: 'An unexpected error occurred' })
+  }
+}
+
+// Read existing certificate only (no generation)
+export const getCertificate = async (req, res) => {
+  try {
+    const userId = req.auth.userId
+    const { courseId } = req.params
+
+    const eligibility = await getCertificateEligibility({ userId, courseId })
+    if (!eligibility.ok) {
+      return res.status(eligibility.status).json({ success: false, message: eligibility.message })
+    }
+
+    const certificate = await Certificate.findOne({ userId, courseId })
+    if (!certificate) {
+      return res.status(404).json({
+        success: false,
+        message: 'Certificate not generated yet. Click Get Certificate to generate it.',
+      })
     }
 
     return res.json({
