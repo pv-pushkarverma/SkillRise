@@ -3,3 +3,10 @@ node_modules
 *.md
 .git
 .gitignore
+Dockerfile
+docker-compose.yml
+.env
+logs
+uploads
+tmp
+*.log

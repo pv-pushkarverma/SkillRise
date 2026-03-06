@@ -26,6 +26,7 @@ jobs:
                   context: ./server
                   file: ./server/Dockerfile
                   push: true
+                  no-cache: true
                   tags: pushkarverma/skillrise-server:latest
 
     build-and-push-client:
@@ -48,6 +49,7 @@ jobs:
                   context: ./client
                   file: ./client/Dockerfile
                   push: true
+                  no-cache: true
                   tags: pushkarverma/skillrise-client:latest
                   build-args: |
                       VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}

@@ -4,3 +4,9 @@ dist
 *.md
 .git
 .gitignore
+Dockerfile
+docker-compose.yml
+logs
+uploads
+tmp
+*.log
