@@ -2,23 +2,32 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install Chromium runtime deps required by Puppeteer in Alpine
-RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont
+# Install Chromium and required libraries
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
 
-# Create non-root user and group early
+# Prevent Puppeteer from downloading Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
+# Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
-
-# Install dependencies
+# Install dependencies first (better Docker caching)
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
-# Copy source code with correct ownership
+# Copy project files
 COPY --chown=appuser:appgroup . .
 
-# Switch to non-root user
+# Use non-root user
 USER appuser
 
 EXPOSE 3000
+
 CMD ["node", "server.js"]

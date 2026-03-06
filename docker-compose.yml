@@ -6,6 +6,11 @@ services:
     env_file:
       - ./server/.env
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   client:
     image: pushkarverma/skillrise-client:latest
@@ -14,3 +19,8 @@ services:
     depends_on:
       - server
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
